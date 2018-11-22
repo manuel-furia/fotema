@@ -1,0 +1,52 @@
+body{
+    display: flex;
+    flex-direction: column;
+}
+
+
+.responsive {
+    padding: 0 6px;
+    float: left;
+    width: 50%;
+    height: 50%;
+    margin: auto;
+}
+
+div.gallery {
+    border: 1px solid #ccc;
+}
+
+div.gallery:hover {
+    border: 1px solid #777;
+    background-color: rgba(93, 93, 93, 0.32);
+}
+
+div.gallery img {
+    width: 100%;
+    height: auto;
+}
+
+div.desc {
+    padding: 15px;
+    text-align: center;
+    font-size: large;
+    font-weight: bold;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.desc .description{
+    display: flex;
+    flex: 100%;
+    text-align: left;
+}
+
+.desc .likes, .comments{
+    color: #f0f8ff;
+}
+
+
+
