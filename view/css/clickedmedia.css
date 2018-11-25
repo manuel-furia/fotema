@@ -1,0 +1,157 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.header .sign{
+    flex: 20%;
+    margin-left: 3%;
+    float: right;
+    visibility: visible !important;
+}
+
+.header .sign a{
+    margin-left: 2%;
+
+}
+
+.header .dropdown{
+    flex: 5%;
+    float: left;
+    margin-right: 10px;
+}
+
+.header .upload, .header .dropdown{
+    visibility: hidden !important;
+}
+
+
+
+.clickmedia{
+    padding-top: 80px;
+    padding-bottom: 60px;
+    overflow: auto;
+    display: flex;
+    width: 90%;
+    margin: auto;
+    flex-direction: column;
+    /*visibility: hidden;*/
+}
+
+div.gallery a{
+    width: 100%;
+}
+
+.responsive {
+    padding: 6px;
+    float: left;
+    margin: auto;
+}
+
+
+div.gallery {
+    border: 1px solid #ccc;
+}
+
+div.gallery:hover {
+    border: 2px solid #535353;
+    background-color: rgba(210, 210, 210, 0.53);
+}
+
+div.gallery img {
+    width: 100%;
+    height: auto;
+}
+
+div.gallery a{
+    width: 100%;
+}
+
+div.desc {
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    text-align: center;
+    font-size: 17px;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    background-color: rgb(83, 83, 83);
+}
+
+div.desc:hover{
+    background-color: #858585;
+}
+
+.desc .description{
+    display: flex;
+    flex: 100%;
+    text-align: left;
+}
+
+.desc .likes, .comments{
+    color: #f0f8ff;
+}
+
+.writecomment{
+    padding: 10px;
+    background-color: gray;
+    margin: 20px 0;
+}
+
+.writecomment form{
+    display: flex;
+    flex-direction: column;
+}
+
+.writecomment label{
+    font-weight: bold;
+    font-size: medium;
+    margin-bottom: 5px;
+}
+
+.writecomment input[type="text"]{
+    font-size: medium;
+    font-weight: normal;
+    line-height: 18px;
+    padding: 5px;
+}
+
+.writecomment input[type="submit"]{
+    font-size: 16px;
+    font-weight: bold;
+    padding: 5px;
+    width: 80px;
+    margin-top: 3px;
+    margin-left: 50%;
+}
+
+.usercomments{
+    background-color: rgb(83, 83, 83);
+    color: beige;
+    padding: 10px;
+    border: 1px solid beige;
+    position: relative;
+    margin-top: 10px;
+}
+
+.commentername{
+    font-weight: bold;
+    color: #cdc5c9;
+}
+
+.commenttime{
+    font-weight: bold;
+    right: 10px;
+    top: 10px;
+    position: absolute;
+    color: #cdc5c9;
+}
+
+.commentcontent{
+    margin-top: 15px;
+}

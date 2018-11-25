@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title of the media</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/css/signin.css">
+    <link rel="stylesheet" type="text/css" href="/css/signup.css">
+    <link rel="stylesheet" type="text/css" href="/css/myfotema.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <link rel="stylesheet" type="text/css" href="/css/clickedmedia.css">
+
+    <script src="/js/popup.js"></script>
+    <script src="/js/index.js"></script>
+
+</head>
+
+
+
+<body>
+
+
+<div class="header" id="header">
+
+    <div class="logo">
+        <a href="/html/index.html"> FOTEMA <!--<img src="/image/slogo14.PNG">--></a>
+    </div>
+
+    <div class="upload" id="upload">
+        <a href="/html/upload.html"><!--<i class="fa fa-upload"></i>--> upload</a>
+    </div>
+
+    <div class="search-container">
+        <form action="/search">
+            <input type="text" placeholder="Search.." name="search">
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+
+    <div class="sign">
+        <a class="signin" href="javascript:popup('showsignin');">sign in</a>
+        <a class="signup" href="javascript:popup('showsignup');"> sign up</a>
+    </div>
+
+    <div class="dropdown">
+        <button class="dropbtn"><!--<i class="fa fa-plus"></i>-->more <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+            <a class="myfotema" href="/html/myfotema.html">my fotema</a>
+            <a class="settings" href="/html/settings.html">settings</a>
+            <a class="signout" href="/html/signout.html">sign out </a>
+        </div>
+    </div>
+
+</div>
+
+<div class="form-popup" id="form-popup">
+
+    <div class="signin-popup" id="signin-popup">
+        <form name="signin" action="signin" method="post">
+            <div class="row">
+                <a id="cancelsignin" href="javascript:popup('hidesignin');"><i class="fa fa-times"></i></a>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label>Username</label>
+                </div>
+                <div class="col-75">
+                    <input type = "text" name = "username" required placeholder="required">
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-25">
+                    <label>Password</label>
+                </div>
+                <div class="col-75">
+                    <input type = "password" name = "password" required placeholder="required">
+                </div>
+            </div>
+            <div class="row">
+                <input id="signin" type="submit" name="submit" value="sign in">
+            </div>
+
+            <a href="javascript:popup('showsignup');">no account yet?</a>
+
+        </form><br />
+
+    </div>
+
+
+    <div class="signup-popup" id="signup-popup">
+        <form name="login" action="signup" method="post">
+
+            <div class="row">
+                <a id="cancelsignup" href="javascript:popup('hidesignup');"><i class="fa fa-times"></i></a>
+            </div>
+            <div class="row">
+                <div class="col-25">
+                    <label>Username</label>
+                </div>
+                <div class="col-75">
+                    <input type = "text" name = "username" required placeholder="required">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-25">
+                    <label>Email</label>
+                </div>
+                <div class="col-75">
+                    <input type = "email" name = "email" required placeholder="required and must be valid" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-25">
+                    <label>Password</label>
+                </div>
+                <div class="col-75">
+                    <input type = "password" name = "password" required placeholder="required">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-25">
+                    <label>Repeat Password</label>
+                </div>
+                <div class="col-75">
+                    <input type = "password" name = "password" required placeholder="required">
+                </div>
+            </div>
+
+            <div class="row">
+                <input type="submit" name="submit" value="sign up">
+            </div>
+
+            <a href="javascript:popup('showsignin');">already have an account?</a>
+
+        </form><br />
+
+    </div>
+</div>
+
+<div class="clickmedia">
+
+    <div class="responsive">
+        <div class="gallery">
+            <a target="_blank" href="/image/CUTLtuC.jpg">
+                <img src="/image/CUTLtuC.jpg" width="" height="">
+            </a>
+            <div class="desc">
+                <p class="description">description</p>
+                <p class="likes"><i class="fa fa-heart"></i> 200</p>
+                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
+            </div>
+        </div>
+
+        <div class="writecomment">
+            <form action="/comment" id="commentform">
+                <label>Write a comment</label>
+                <input type="text" name="your-comment" maxlength="140" placeholder="your comment here">
+                <input type="submit" id="submitComments">
+            </form>
+
+        </div>
+
+        <div class="usercomments">
+            <p class="commentername">commenter name</p>
+            <p class="commenttime">4 hr </p>
+            <p class="commentcontent">this is great!!</p>
+
+        </div>
+        <div class="actiononcomment" >
+
+            <div class="replycomment">
+                <form action="/comment" >
+                    <input type="submit"  value="reply">
+                    <input type="text" name="your-comment" maxlength="140" placeholder="your comment here">
+                </form>
+            </div>
+
+            <button class="likecomment"><i class="fa fa-thumbs-up"></i>5k</button>
+            <button class="dislikecomment"><i class="fa fa-thumbs-down"></i>120</button>
+        </div>
+        <br>
+
+        <div class="usercomments">
+            <p class="commentername">commenter name</p>
+            <p class="commenttime">4 hr </p>
+            <p class="commentcontent">this is great!!</p>
+        </div>
+        <div class="actiononcomment" >
+
+            <div class="replycomment">
+                <form action="/comment" >
+                    <input type="submit"  value="reply">
+                    <input type="text" name="your-comment" maxlength="140" placeholder="your comment here">
+                </form>
+            </div>
+
+            <button class="likecomment"><i class="fa fa-thumbs-up"></i>5k</button>
+            <button class="dislikecomment"><i class="fa fa-thumbs-down"></i>120</button>
+        </div>
+        <br>
+
+        <div class="usercomments">
+            <p class="commentername">commenter name</p>
+            <p class="commenttime">4 hr </p>
+            <p class="commentcontent">this is great!!</p>
+        </div>
+        <div class="actiononcomment" >
+
+            <div class="replycomment">
+                <form action="/comment" >
+                    <input type="submit"  value="reply">
+                    <input type="text" name="your-comment" maxlength="140" placeholder="your comment here">
+                </form>
+            </div>
+
+            <button class="likecomment"><i class="fa fa-thumbs-up"></i>5k</button>
+            <button class="dislikecomment"><i class="fa fa-thumbs-down"></i>120</button>
+        </div>
+        <br>
+
+    </div>
+
+</div>
+
+<div class="footer" id="footer">
+    <p><i class="fa fa-copyright"></i> FOTEMA</p>
+    <a class="about" href="/html/about.html"> about </a>
+    <a class="rules" href="/html/rules.html"> rules </a>
+    <a class="report" href="/html/report.html">report </a>
+</div>
+
+
+</body>
+</html>

@@ -75,7 +75,25 @@ div.desc:hover{
     color: #f0f8ff;
 }
 
+.morecontent{
+    display: none;
+}
 
+.viewmorecontent{
+    width: 100px;
+    height: 30px;
+    margin-left: 45%;
+    margin-bottom: 3%;
+    background-color: #b10000;
+    border: 1px gray;
+    border-radius: 5px;
+    color: white;
+    font-size: large;
+}
+
+.viewmorecontent:hover{
+    background-color: green;
+}
 
 
 /**********************************************************************************************************************/
