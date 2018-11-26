@@ -1,3 +1,4 @@
+//hide footer on scroll down
 let prevScrollpos = window.pageYOffset;
 window.onscroll = function() {
     const currentScrollPos = window.pageYOffset;
@@ -10,7 +11,7 @@ window.onscroll = function() {
 };
 
 
-
+//click vire more button to load more content
 const viewMore = () => {
     let moreContent = document.getElementById("morecontent");
     let btnViewMore = document.getElementById("btnViewMore");
@@ -23,3 +24,9 @@ const viewMore = () => {
         moreContent.style.display = "block";
     }
 };
+
+
+
+//TODO
+//for the menu buttons, if user has signed in, show myfotema and upload
+//else show signin and sign up

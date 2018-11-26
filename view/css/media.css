@@ -101,6 +101,7 @@ div.desc:hover{
 
     .mediacontent{
         padding-top: 120px;
+        margin-left: 10%;
     }
 
     .responsive {
@@ -114,6 +115,7 @@ div.desc:hover{
 
     .mediacontent{
         padding-top: 100px;
+        margin: auto;
     }
 
 
@@ -141,54 +143,5 @@ div.desc:hover{
 }
 
 
-/*.mediacontent ul{*/
-    /*list-style: none;*/
-    /*display: flex;*/
-    /*flex: 100%;*/
-    /*flex-direction: row;*/
-    /*flex-wrap: wrap;*/
-    /*justify-content: space-evenly;*/
-/*}*/
 
-/*.mediacontent ul li{*/
-    /*display: inline;*/
-    /*max-width: 16%;*/
-    /*max-height: 16%;*/
-    /*margin: 2%;*/
-/*}*/
-
-/*.mediacontent ul li figure{*/
-    /*display: inline;*/
-    /*max-width: 16%;*/
-    /*max-height: 16%;*/
-    /*margin: 2%;*/
-/*}*/
-
-/*.mediacontent ul li figure a img{*/
-
-/*}*/
-
-/*.mediacontent .feedback{*/
-    /*display: flex;*/
-    /*flex-direction: row;*/
-    /*flex-wrap: wrap;*/
-    /*font-size: large;*/
-    /*font-weight: bold;*/
-    /*color: white;*/
-/*}*/
-
-/*.mediacontent .feedback .description{*/
-    /*display: flex;*/
-    /*flex: 100%;*/
-/*}*/
-
-/*.mediacontent .feedback p{*/
-    /*padding: 5px;*/
-/*}*/
-
-/*.mediacontent .feedback:hover{*/
-    /*background-color: red;*/
-
-
-/*}*/
 

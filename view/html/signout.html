@@ -2,9 +2,82 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>signout</title>
+    <title>sign out</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <link rel="stylesheet" type="text/css" href="/css/signout.css">
+
+    <script src="/js/index.js"></script>
+
 </head>
 <body>
+
+
+
+<div class="header" id="header">
+
+    <div class="logo">
+        <a href="/html/index.html"> FOTEMA <!--<img src="/image/slogo14.PNG">--></a>
+    </div>
+
+    <div class="search-container">
+        <form action="/search">
+            <input type="text" placeholder="Search.." name="search">
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+
+
+</div>
+
+
+
+<div class="signin-popup" id="signin-popup">
+    <form name="signin" action="signin" method="post">
+
+        <div class="row">
+            <div class="col-25">
+                <label>Username</label>
+            </div>
+            <div class="col-75">
+                <input type = "text" name = "username" required placeholder="required">
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-25">
+                <label>Password</label>
+            </div>
+            <div class="col-75">
+                <input type = "password" name = "password" required placeholder="required">
+            </div>
+        </div>
+        <div class="row">
+            <input id="signin" type="submit" name="submit" value="sign in">
+        </div>
+
+    </form><br />
+
+</div>
+
+
+
+<div class="footer" id="footer">
+    <p><i class="fa fa-copyright"></i> FOTEMA</p>
+    <a class="about" href="/html/about.html"> about </a>
+    <a class="rules" href="/html/rules.html"> rules </a>
+    <a class="report" href="/html/report.html">report </a>
+</div>
+
+
 
 </body>
 </html>
