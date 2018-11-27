@@ -1,6 +1,6 @@
 //hide footer on scroll down
 let prevScrollpos = window.pageYOffset;
-window.onscroll = function() {
+window.onscroll = ()=> {
     const currentScrollPos = window.pageYOffset;
     if (prevScrollpos > currentScrollPos) {
         document.getElementById("footer").style.bottom = "0px";
@@ -13,8 +13,8 @@ window.onscroll = function() {
 
 //click vire more button to load more content
 const viewMore = () => {
-    let moreContent = document.getElementById("morecontent");
-    let btnViewMore = document.getElementById("btnViewMore");
+    const moreContent = document.getElementById("morecontent");
+    const btnViewMore = document.getElementById("btnViewMore");
 
     if (moreContent.style.display === "block") {
         btnViewMore.innerHTML = "view more";

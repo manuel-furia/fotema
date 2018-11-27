@@ -1,8 +1,8 @@
 
 //show image after user has chosen one for new profile photo, before uploading
-function readURL(input) {
+const readURL = (input) => {
     if (input.files && input.files[0]) {
-        let reader = new FileReader();
+        const reader = new FileReader();
 
         reader.onload = function (e) {
             $('#newImage')
@@ -13,4 +13,4 @@ function readURL(input) {
 
         reader.readAsDataURL(input.files[0]);
     }
-}
+};
