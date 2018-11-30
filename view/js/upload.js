@@ -14,3 +14,14 @@ const readURL = (input) => {
         reader.readAsDataURL(input.files[0]);
     }
 };
+
+
+
+const showUploadForm = () =>{
+    if (window.location.href.indexOf("#uploadfile?show") !== -1) {
+        console.log('show upload dialog');
+        uploadfile.style.display = "block";
+    }
+};
+
+showUploadForm();

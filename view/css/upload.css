@@ -1,22 +1,26 @@
-.dropdown button{
-    margin-left: 40%;
-}
+/*.dropdown button{*/
+    /*margin-left: 40%;*/
+/*}*/
 
-.dropdown-content{
-    margin-right: 20%;
-    z-index: 9 !important;
-}
+/*.dropdown-content{*/
+    /*margin-right: 20%;*/
+    /*z-index: 9 !important;*/
+/*}*/
 
 .uploadfile{
+    display: none;
+    /*visibility: hidden;*/
     position: fixed;
     left: 5%;
     width: 50%;
     top: 15%;
     padding: 40px;
     color: beige;
+    z-index: 9;
+    background-color: #060006;
     /*background: #FBFBF0;*/
     /*border: solid red 2px;*/
-    /*box-shadow: 0 0 1000px 1000px rgba(0, 0, 0, 0.6)*/
+    box-shadow: 0 0 1000px 1000px rgba(0, 0, 0, 0.9)
 }
 
 .uploadfile h4{
@@ -149,13 +153,13 @@
 
 /**********************************************************************************************************************/
 
-@media only screen and (max-width: 768px) {
+/*@media only screen and (max-width: 768px) {
 
     .dropdown button{
         margin-left: 0;
     }
 
-}
+}*/
 
 
 @media only screen and (max-width: 600px) {
