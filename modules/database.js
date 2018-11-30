@@ -12,6 +12,9 @@ const connect = () =>{
 };
 
 
+
+
+
 //select query to display image, comments, likes, on front end
 const select = (connection, callback, res) => {
     connection.query(

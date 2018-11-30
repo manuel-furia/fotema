@@ -1,0 +1,68 @@
+Get user list:
+
+SELECT username
+FROM UserInfo;
+
+
+
+
+
+
+
+
+Get media from path:
+
+SELECT *
+FROM Media
+WHERE Media.path = <path>
+
+
+Get media from title:
+
+SELECT *
+FROM Media
+WHERE Media.title = <title>
+
+
+Get media info from ID:
+
+SELECT *
+FROM Media
+WHERE Media.id = <id>
+
+
+Get comment info from ID:
+
+SELECT *
+FROM Comment
+WHERE Comment.id = <id>
+
+
+Get user info from ID:
+
+SELECT *
+FROM UserInfo
+WHERE UserInfo.id = <id>
+
+
+Get comments of a media, with usernames of the authors and time of creation:
+
+SELECT Comment.text AS text, UserInfo.username AS username, UserAction.time AS time
+FROM Comment
+INNER JOIN Target ON Comment.id = Target.id
+INNER JOIN UserAction ON Target.id = UserAction.target
+INNER JOIN ActionType ON UserAction.actiontype = ActionType.id
+INNER JOIN UserInfo ON UserAction.actor = UserInfo.id
+INNER JOIN Media ON Media.id = Comment.target
+WHERE ActionType.name = "create" AND Media.id = <mediaid>;
+
+
+Get number of likes of image:
+
+SELECT Media.*, COUNT(*) AS likes
+FROM Media
+INNER JOIN Target ON Media.id = Target.id
+INNER JOIN UserAction ON Target.id = UserAction.target
+INNER JOIN ActionType ON UserAction.actiontype = ActionType.id
+WHERE ActionType.name = "like" AND Media.id = <mediaid>;
+
