@@ -1,6 +1,7 @@
 'use strict';
 
 const LocalStrategy = require('passport-local').Strategy;
+const db = require('./database');
 
 
   // used in authentication of the user login information. exported to index.js.

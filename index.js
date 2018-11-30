@@ -1,7 +1,4 @@
 'use strict';
-
-console.log("Hello World!");
-
 require('dotenv').config();
 
 const http = require('http');
@@ -49,15 +46,6 @@ app.use(session({
 }));
 
 
-/*const connection = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_DATABASE
-});*/
-
-
-app.use(express.static('public'));
 
 // - - - gets the login post. starting the authentication process.
 app.post('/login',
@@ -75,18 +63,60 @@ app.get('/', (req, res, next) =>{
   }else{
                                                         //--> user is not logged in, show basic homepage
   }
-  res.render('index');
-});
-
-app.get('/uploads/:name', (req, res)  =>{
-  res.sendFile('uploads/' + req.params.name, { root: __dirname });
 });
 
 
-app.post('/imgupload', upload.single('imagefile'),  (req, res, next) =>{
-  const path = req.file.path;
-  res.send(`File uploaded in ${path}`);
+// -  - - - - - - - - - -  F I L E  U P L O A D - - - - - - - - - - -   (requires a database connection)
+
+app.post('/upload', upload.single('mediafile'), (req, res, next) => {
+  next();
 });
+
+
+// create thumbnail
+app.use('/upload', (req, res, next) => {
+  resize.resize(req.file.path, 300,
+      './public/thumbs/' + req.file.filename + '_thumb', next);    //destination path/directory to be created/modified
+});
+
+// create medium image
+app.use('/upload', (req, res, next) => {
+  resize.resize(req.file.path, 640,
+      './public/medium/' + req.file.filename + '_medium', next); //destination path/directory created/modified
+});
+
+
+// insert to database
+app.use('/upload', (req, res, next) => {
+  console.log('insert is here');
+  const data = [
+    req.body.title,
+    req.body.tags,
+    req.body.details,
+    req.file.filename + '_thumb',
+    req.file.filename + '_medium',
+    req.file.filename,
+  ];
+  console.log('category:' + req.body.category);
+  console.log('title:' + req.body.title);
+  console.log('tags:' + req.body.tags);
+  console.log('details:' + req.body.details);
+  console.log('filename thumb:' + req.file.filename + '_thumb');
+  console.log('filename medium:' + req.file.filename + '_medium');
+  console.log('filename:' + req.file.filename);
+  db.insert(data, connection, next);
+});
+
+// get updated data form database and send to client
+app.use('/upload', (req, res) => {
+  console.log('upload middleware: select' );
+  db.select(connection, cb, res);
+});
+
+
+
+
+
 
 http.createServer((req, res)=>{
   console.log('creating http server on port: 8000');

@@ -11,4 +11,4 @@
  Files that are done:  (update as more gets done)
  clickedmedia.html
  index.html (add the script to add more content)
- myfotema.html 
+ myfotema.html
