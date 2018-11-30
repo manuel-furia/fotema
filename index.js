@@ -13,15 +13,18 @@ const multer  = require('multer');
 const upload = multer({ dest: 'uploads/' });   
 const fs = require('fs');
 const app = express();
+const db = require('./modules/database');
 const LocalStrategy = require('passport-local').Strategy;
 const sslkey = fs.readFileSync('/etc/pki/tls/private/ca.key');
 const sslcrt = fs.readFileSync('/etc/pki/tls/certs/ca.crt');
+
+const connection = database.connect();
+
 //const resize = resizeMod.resize;
 //const mysql = require('mysql2');
 
 // tell where the static files are located.
 app.use(express.static(__dirname + '/view'));
-
 
 
 const options ={
@@ -67,6 +70,10 @@ app.get('/', (req, res, next) =>{
 
 
 // -  - - - - - - - - - -  F I L E  U P L O A D - - - - - - - - - - -   (requires a database connection)
+const cb = (result, res) => {
+  //console.log(result);
+  res.send(result);
+};
 
 app.post('/upload', upload.single('mediafile'), (req, res, next) => {
   next();
@@ -113,8 +120,9 @@ app.use('/upload', (req, res) => {
   db.select(connection, cb, res);
 });
 
-
-
+app.get('/images', (req, res) => {
+  db.select(connection, cb, res);
+});
 
 
 
