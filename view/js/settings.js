@@ -8,7 +8,7 @@ const readURL = (input) => {
             $('#newImage')
                 .attr('src', e.target.result)
                 .width(80)
-                .height(auto);
+                .height('auto');
         };
 
         reader.readAsDataURL(input.files[0]);
