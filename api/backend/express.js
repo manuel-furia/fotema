@@ -33,6 +33,18 @@ app.get('/', function(req, res){
 
 
 
+//search
+app.get('/search/:value', (req, res)=>{
+    //const searchText = req.query.search;
+    const value = req.params.value.slice(1);
+    console.log('searchText: ' + value);
+    
+        db.search(value, connection, cb, res);
+   
+});
+
+
+
 
 // respond to post and save file
 app.post('/upload', upload.single('mediafile'), (req, res, next) => {
