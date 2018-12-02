@@ -31,60 +31,108 @@ const getDataFromAttribute = (connection, callback, res, tableName, attribute, v
     );
 }
 
-//Get the first limit medias ordered by the amount of likes
-const getMediasOrderedByLikes = (connection, callback, res, limit) => {
-    connection.execute(
-        [limit],
-        `SELECT Media.*, COUNT(T.liked) AS likes
-        FROM Media 
-        LEFT JOIN (SELECT Media.id, ActionType.id AS liked
-            FROM Media
-	        INNER JOIN Target ON Media.id = Target.id
-	        LEFT JOIN UserAction ON Target.id = UserAction.target
-	        LEFT JOIN ActionType ON UserAction.actiontype = ActionType.id
-	        WHERE ActionType.name = "like") AS T
-        ON T.id = Media.id
-        INNER JOIN MediaType ON Media.type = MediaType.id
-        WHERE MediaType.name != "thumbnail"
-        GROUP BY Media.id
-        ORDER BY likes DESC
-        LIMIT ?;`,
-        queryResult
-    );
-}
-
 //Get the number of likes of a media
 const getLikesFromMedia = (connection, callback, res, id) => {
     connection.execute(
         [id],
-       `SELECT Media.*, COUNT(*) AS likes
-        FROM Media
-        INNER JOIN Target ON Media.id = Target.id
-        INNER JOIN UserAction ON Target.id = UserAction.target
-        INNER JOIN ActionType ON UserAction.actiontype = ActionType.id
-        WHERE ActionType.name = "like" AND Media.id = ? ;`,
+       `SELECT Media.*, COUNT(Media.id) AS likes
+FROM Media
+LEFT JOIN MediaLike ON Media.id = MediaLike.media
+WHERE Media.id = ? ;`,
         queryResult
     );
 }
-
 
 //Get the number of comments of a media
 const getCommentsFromMedia = (connection, callback, res, id) => {
     connection.execute(
         [id],
-       `SELECT Media.*, COUNT(T.comment) AS comments
+       `SELECT Media.*, COUNT(Comment.id) AS comments
+FROM Media
+LEFT JOIN Comment ON Media.id = Comment.targetMedia
+WHERE Media.id = ? ;`,
+        queryResult
+}
+
+//Get tags from media
+const getMediaTags = (connection, callback, res, id) => {
+    connection.execute(
+        [id],
+       `SELECT Tag.name AS tags
         FROM Media
-        LEFT JOIN (SELECT Media.id, Comment.id AS comment
-            FROM Media
-            INNER JOIN Target ON Media.id = Target.id
-            LEFT JOIN Comment ON Target.id = Comment.target) AS T
-        ON Media.id = T.id
+        INNER JOIN Tagged ON Media.id = Tagged.mediaid
+        INNER JOIN Tag ON Tag.id = Tagged.tagid
         WHERE Media.id = ? ;`,
         queryResult
 }
 
 
+const getMediasOrderedByImpact = (connection, callback, res, start, limit) {
+    connection.execute(
+        [start, limit],
+        `
+SELECT L.*, C.comments, (L.likes + C.comments) AS impact
+FROM (
+    SELECT Media.*, COUNT(MediaLike.media) AS likes
+    FROM Media
+    INNER JOIN MediaType ON Media.type = MediaType.id
+    LEFT JOIN MediaLike ON Media.id = MediaLike.media
+    WHERE MediaType.name <> "thumbnail"
+    GROUP BY Media.id
+) AS L
+INNER JOIN (
+    SELECT Media.id, COUNT(Comment.id) AS comments
+    FROM Media
+    INNER JOIN MediaType ON Media.type = MediaType.id
+    LEFT JOIN Comment ON Media.id = Comment.targetMedia
+    WHERE MediaType.name <> "thumbnail"
+    GROUP BY Media.id
+) AS C
+ON L.id = C.id
+ORDER BY impact DESC
+LIMIT ?, ? ;
+`,
+    queryResult)
+}
 
+const getUserFavouriteMedias = (connection, callback, res, userid, start, end) => {
+    connection.execute(
+        [userid, userid, start, end],
+        `SELECT Media.*, IFNULL(L.likes, 0) AS likes, IFNULL(C.comments, 0) AS comments, IFNULL(L.likes + C.comments, 0) AS impact
+FROM Media
+LEFT JOIN (
+    SELECT Media.*, COUNT(MediaLike.media) AS likes
+    FROM Media
+    INNER JOIN MediaType ON Media.type = MediaType.id
+    LEFT JOIN MediaLike ON Media.id = MediaLike.media
+    LEFT JOIN UserInfo ON MediaLike.user = UserInfo.id
+    WHERE UserInfo.id = ?
+    GROUP BY Media.id
+) AS L ON Media.id = L.id
+LEFT JOIN (
+    SELECT Media.id, COUNT(Comment.id) AS comments
+    FROM Media
+    INNER JOIN MediaType ON Media.type = MediaType.id
+    LEFT JOIN Comment ON Media.id = Comment.targetMedia
+    LEFT JOIN UserInfo ON Comment.user = UserInfo.id
+    WHERE UserInfo.id = ?
+    GROUP BY Media.id
+) AS C ON C.id = Media.id
+INNER JOIN MediaType ON MediaType.id = Media.type
+WHERE MediaType.name <> "thumbnail"
+ORDER BY impact DESC
+LIMIT ?, ? ;`,
+    queryResult
+}
+
+const getUserFavouriteTags = (connection, callback, res) => {
+    
+}
+
+
+
+
+//TODO: Remove old select and insert
 
 //select query to display image, comments, likes, on front end
 const select = (connection, callback, res) => {
@@ -110,26 +158,6 @@ const insert = (data, connection, callback) => {
         },
     );
 };
-
-
-
-const search = (searchText, connection, callback, res) =>{
-    const data = [
-        searchText,
-    ];
-
-    connection.query(
-        "SELECT * FROM images WHERE title LIKE '%" + searchText+ "%' OR tags LIKE '%" + searchText + "%' OR details LIKE '%" + searchText + "%'",
-        (err, results, fields) => {
-           if (err) console.log(err);
-            callback(results, res);
-        },
-    );
-
-};
-
-
-
 
 
 module.exports={

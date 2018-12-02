@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 30, 2018 at 01:18 PM
+-- Generation Time: Dec 02, 2018 at 08:59 PM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.2.12
 
@@ -25,48 +25,45 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ActionType`
---
-
-CREATE TABLE `ActionType` (
-  `id` int(11) NOT NULL,
-  `name` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `ActionType`
---
-
-INSERT INTO `ActionType` (`id`, `name`) VALUES
-(1, 'like'),
-(2, 'unlike'),
-(3, 'login'),
-(4, 'logout'),
-(5, 'create'),
-(6, 'update'),
-(7, 'delete');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `Comment`
 --
 
 CREATE TABLE `Comment` (
   `id` int(11) NOT NULL,
   `text` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `target` int(11) NOT NULL
+  `targetmedia` int(11) NOT NULL,
+  `user` int(11) NOT NULL,
+  `time` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `Comment`
 --
 
-INSERT INTO `Comment` (`id`, `text`, `target`) VALUES
-(7, 'Nice image!', 1),
-(8, 'Great!', 1),
-(9, 'Fantastic!', 6),
-(10, 'Nice!', 1);
+INSERT INTO `Comment` (`id`, `text`, `targetmedia`, `user`, `time`) VALUES
+(7, 'Nice image!', 1, 1, '2018-11-20 12:00:00'),
+(8, 'Great!', 1, 3, '2018-11-20 14:00:00'),
+(9, 'Fantastic!', 6, 1, '2018-11-23 12:00:00'),
+(10, 'Nice!', 1, 5, '2018-11-25 15:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `CommentLike`
+--
+
+CREATE TABLE `CommentLike` (
+  `user` int(11) NOT NULL,
+  `comment` int(11) NOT NULL,
+  `time` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `CommentLike`
+--
+
+INSERT INTO `CommentLike` (`user`, `comment`, `time`) VALUES
+(2, 9, '2018-12-25 12:00:00');
 
 -- --------------------------------------------------------
 
@@ -95,6 +92,27 @@ INSERT INTO `Media` (`id`, `path`, `title`, `description`, `type`, `thumbnail`, 
 (4, 'path/to/thumbs/3', '', '', 1, NULL, '2018-11-22 00:00:00'),
 (5, '/path/to/media/2', 'Nice dog!', 'This is a friendly dog!', 2, 3, '2018-11-23 00:00:00'),
 (6, '/path/to/media/3', 'Funny video!', 'This is a funny video.', 4, 4, '2018-11-20 11:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `MediaLike`
+--
+
+CREATE TABLE `MediaLike` (
+  `user` int(11) NOT NULL,
+  `media` int(11) NOT NULL,
+  `time` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `MediaLike`
+--
+
+INSERT INTO `MediaLike` (`user`, `media`, `time`) VALUES
+(1, 1, '2018-12-20 12:00:00'),
+(3, 1, '2018-12-20 13:00:00'),
+(5, 6, '2018-12-23 12:00:00');
 
 -- --------------------------------------------------------
 
@@ -190,38 +208,6 @@ INSERT INTO `Target` (`id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `UserAction`
---
-
-CREATE TABLE `UserAction` (
-  `id` int(11) NOT NULL,
-  `actor` int(11) NOT NULL,
-  `time` datetime NOT NULL,
-  `actiontype` int(11) NOT NULL,
-  `target` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `UserAction`
---
-
-INSERT INTO `UserAction` (`id`, `actor`, `time`, `actiontype`, `target`) VALUES
-(6, 1, '2018-11-27 11:00:00', 3, NULL),
-(7, 3, '2018-11-27 11:10:00', 3, NULL),
-(8, 1, '2018-11-27 11:30:00', 5, 7),
-(9, 1, '2018-11-27 11:31:00', 4, NULL),
-(10, 3, '2018-11-27 12:00:00', 5, 8),
-(11, 3, '2018-11-27 12:01:00', 1, 1),
-(12, 5, '2018-11-27 14:00:00', 3, NULL),
-(13, 5, '2018-11-27 14:03:00', 1, 1),
-(14, 5, '2018-11-27 14:10:00', 5, 9),
-(15, 5, '2018-11-27 15:00:00', 5, 10),
-(16, 5, '2018-11-27 16:00:00', 1, 6),
-(17, 5, '2018-11-27 16:01:00', 2, 6);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `UserInfo`
 --
 
@@ -249,17 +235,18 @@ INSERT INTO `UserInfo` (`id`, `username`, `email`, `passhash`, `profilepicture`)
 --
 
 --
--- Indexes for table `ActionType`
---
-ALTER TABLE `ActionType`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `Comment`
 --
 ALTER TABLE `Comment`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `target` (`target`);
+  ADD KEY `target` (`targetmedia`);
+
+--
+-- Indexes for table `CommentLike`
+--
+ALTER TABLE `CommentLike`
+  ADD KEY `user` (`user`),
+  ADD KEY `comment` (`comment`);
 
 --
 -- Indexes for table `Media`
@@ -268,6 +255,13 @@ ALTER TABLE `Media`
   ADD PRIMARY KEY (`id`),
   ADD KEY `type` (`type`),
   ADD KEY `thumbnail` (`thumbnail`);
+
+--
+-- Indexes for table `MediaLike`
+--
+ALTER TABLE `MediaLike`
+  ADD KEY `user` (`user`),
+  ADD KEY `media` (`media`);
 
 --
 -- Indexes for table `MediaType`
@@ -295,15 +289,6 @@ ALTER TABLE `Target`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `UserAction`
---
-ALTER TABLE `UserAction`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `actiontype` (`actiontype`),
-  ADD KEY `actor` (`actor`),
-  ADD KEY `target` (`target`);
-
---
 -- Indexes for table `UserInfo`
 --
 ALTER TABLE `UserInfo`
@@ -313,12 +298,6 @@ ALTER TABLE `UserInfo`
 --
 -- AUTO_INCREMENT for dumped tables
 --
-
---
--- AUTO_INCREMENT for table `ActionType`
---
-ALTER TABLE `ActionType`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `MediaType`
@@ -339,12 +318,6 @@ ALTER TABLE `Target`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT for table `UserAction`
---
-ALTER TABLE `UserAction`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
-
---
 -- AUTO_INCREMENT for table `UserInfo`
 --
 ALTER TABLE `UserInfo`
@@ -359,7 +332,14 @@ ALTER TABLE `UserInfo`
 --
 ALTER TABLE `Comment`
   ADD CONSTRAINT `Comment_ibfk_2` FOREIGN KEY (`id`) REFERENCES `Target` (`id`),
-  ADD CONSTRAINT `Comment_ibfk_3` FOREIGN KEY (`target`) REFERENCES `Target` (`id`);
+  ADD CONSTRAINT `Comment_ibfk_3` FOREIGN KEY (`targetmedia`) REFERENCES `Target` (`id`);
+
+--
+-- Constraints for table `CommentLike`
+--
+ALTER TABLE `CommentLike`
+  ADD CONSTRAINT `CommentLike_ibfk_1` FOREIGN KEY (`user`) REFERENCES `UserInfo` (`id`),
+  ADD CONSTRAINT `CommentLike_ibfk_2` FOREIGN KEY (`comment`) REFERENCES `Comment` (`id`);
 
 --
 -- Constraints for table `Media`
@@ -370,19 +350,18 @@ ALTER TABLE `Media`
   ADD CONSTRAINT `Media_ibfk_4` FOREIGN KEY (`id`) REFERENCES `Target` (`id`);
 
 --
+-- Constraints for table `MediaLike`
+--
+ALTER TABLE `MediaLike`
+  ADD CONSTRAINT `MediaLike_ibfk_1` FOREIGN KEY (`user`) REFERENCES `UserInfo` (`id`),
+  ADD CONSTRAINT `MediaLike_ibfk_2` FOREIGN KEY (`media`) REFERENCES `Media` (`id`);
+
+--
 -- Constraints for table `Tagged`
 --
 ALTER TABLE `Tagged`
   ADD CONSTRAINT `Tagged_ibfk_1` FOREIGN KEY (`mediaid`) REFERENCES `Media` (`id`),
   ADD CONSTRAINT `Tagged_ibfk_2` FOREIGN KEY (`tagid`) REFERENCES `Tag` (`id`);
-
---
--- Constraints for table `UserAction`
---
-ALTER TABLE `UserAction`
-  ADD CONSTRAINT `UserAction_ibfk_2` FOREIGN KEY (`actiontype`) REFERENCES `ActionType` (`id`),
-  ADD CONSTRAINT `UserAction_ibfk_4` FOREIGN KEY (`actor`) REFERENCES `UserInfo` (`id`),
-  ADD CONSTRAINT `UserAction_ibfk_5` FOREIGN KEY (`target`) REFERENCES `Target` (`id`);
 
 --
 -- Constraints for table `UserInfo`

@@ -4,12 +4,6 @@ SELECT username
 FROM UserInfo;
 
 
-
-
-
-
-
-
 Get media from path:
 
 SELECT *
@@ -47,66 +41,106 @@ WHERE UserInfo.id = <id>
 
 Get comments of a media, with usernames of the authors and time of creation:
 
-SELECT Comment.text AS text, UserInfo.username AS username, UserAction.time AS time
+SELECT Comment.text AS text, UserInfo.username AS username, Comment.time AS time
 FROM Comment
-INNER JOIN Target ON Comment.id = Target.id
-INNER JOIN UserAction ON Target.id = UserAction.target
-INNER JOIN ActionType ON UserAction.actiontype = ActionType.id
-INNER JOIN UserInfo ON UserAction.actor = UserInfo.id
-INNER JOIN Media ON Media.id = Comment.target
-WHERE ActionType.name = "create" AND Media.id = <mediaid>;
+INNER JOIN UserInfo ON Comment.user = UserInfo.id
+INNER JOIN Media ON Media.id = Comment.targetMedia
+WHERE Media.id = <mediaid>;
 
 
 Get number of likes of media:
 
-SELECT Media.*, COUNT(*) AS likes
+SELECT Media.*, COUNT(Media.id) AS likes
 FROM Media
-INNER JOIN Target ON Media.id = Target.id
-INNER JOIN UserAction ON Target.id = UserAction.target
-INNER JOIN ActionType ON UserAction.actiontype = ActionType.id
-WHERE ActionType.name = "like" AND Media.id = <mediaid>;
-
-Get number of comments by media:
-
-SELECT Media.*, COUNT(T.comment) AS comments
-FROM Media
-LEFT JOIN (SELECT Media.id, Comment.id AS comment
-    FROM Media
-    INNER JOIN Target ON Media.id = Target.id
-    LEFT JOIN Comment ON Target.id = Comment.target) AS T
-ON Media.id = T.id
+LEFT JOIN MediaLike ON Media.id = MediaLike.media
 WHERE Media.id = <id>;
 
-Get medias ordered by comment:
+Get number of comments of media:
 
-SELECT Media.*, COUNT(T.comment) AS comments
+SELECT Media.*, COUNT(Comment.id) AS comments
 FROM Media
-LEFT JOIN (SELECT Media.id, Comment.id AS comment
+LEFT JOIN Comment ON Media.id = Comment.targetMedia
+WHERE Media.id = <id>;
+
+
+Get medias ordered by impact:
+
+SELECT L.*, C.comments, (L.likes + C.comments) AS impact
+FROM (
+    SELECT Media.*, COUNT(MediaLike.media) AS likes
     FROM Media
-    INNER JOIN Target ON Media.id = Target.id
-    LEFT JOIN Comment ON Target.id = Comment.target) AS T
-ON Media.id = T.id
-INNER JOIN MediaType ON Media.type = MediaType.id
-WHERE MediaType.name != "thumbnail"
-GROUP BY Media.id
-ORDER BY comments DESC
-LIMIT <number>;
-
-
-Get images ordered by likes:
-
-SELECT Media.*, COUNT(T.liked) AS likes
-FROM Media 
-LEFT JOIN (SELECT Media.id, ActionType.id AS liked
+    INNER JOIN MediaType ON Media.type = MediaType.id
+    LEFT JOIN MediaLike ON Media.id = MediaLike.media
+    WHERE MediaType.name <> "thumbnail"
+    GROUP BY Media.id
+) AS L
+INNER JOIN (
+    SELECT Media.id, COUNT(Comment.id) AS comments
     FROM Media
-	INNER JOIN Target ON Media.id = Target.id
-	LEFT JOIN UserAction ON Target.id = UserAction.target
-	LEFT JOIN ActionType ON UserAction.actiontype = ActionType.id
-	WHERE ActionType.name = "like") AS T
-ON T.id = Media.id
-INNER JOIN MediaType ON Media.type = MediaType.id
-WHERE MediaType.name != "thumbnail"
-GROUP BY Media.id
-ORDER BY likes DESC
-LIMIT <number>;
+    INNER JOIN MediaType ON Media.type = MediaType.id
+    LEFT JOIN Comment ON Media.id = Comment.targetMedia
+    WHERE MediaType.name <> "thumbnail"
+    GROUP BY Media.id
+) AS C
+ON L.id = C.id
+ORDER BY impact DESC
+LIMIT <start>, <amount>;
 
+
+Get medias ordered by relevance (impact) for actions made by one user:
+
+SELECT Tag.name AS tag, IFNULL(L.likes, 0) AS likes, IFNULL(C.comments, 0) AS comments, IFNULL(L.likes + C.comments, 0) AS impact
+FROM Media
+LEFT JOIN (
+    SELECT Media.*, COUNT(MediaLike.media) AS likes
+    FROM Media
+    INNER JOIN MediaType ON Media.type = MediaType.id
+    LEFT JOIN MediaLike ON Media.id = MediaLike.media
+    LEFT JOIN UserInfo ON MediaLike.user = UserInfo.id
+    WHERE UserInfo.id = <userid>
+    GROUP BY Media.id
+) AS L ON Media.id = L.id
+LEFT JOIN (
+    SELECT Media.id, COUNT(Comment.id) AS comments
+    FROM Media
+    INNER JOIN MediaType ON Media.type = MediaType.id
+    LEFT JOIN Comment ON Media.id = Comment.targetMedia
+    LEFT JOIN UserInfo ON Comment.user = UserInfo.id
+    WHERE UserInfo.id = <userid>
+    GROUP BY Media.id
+) AS C ON C.id = Media.id
+INNER JOIN MediaType ON MediaType.id = Media.type
+INNER JOIN Tagged ON Tagged.mediaid = Media.id
+INNER JOIN Tag ON Tag.id = Tagged.tagid
+WHERE MediaType.name <> "thumbnail"
+GROUP BY Tag.name
+ORDER BY impact DESC;
+
+Get user favorite tags:
+
+SELECT Tag.name AS tag, SUM(IFNULL(L.likes, 0)) AS likes, SUM(IFNULL(C.comments, 0)) AS comments, SUM(IFNULL(L.likes, 0)) + SUM(IFNULL(C.comments, 0)) AS impact
+FROM Media
+LEFT JOIN (
+    SELECT Media.*, COUNT(MediaLike.media) AS likes
+    FROM Media
+    INNER JOIN MediaType ON Media.type = MediaType.id
+    LEFT JOIN MediaLike ON Media.id = MediaLike.media
+    LEFT JOIN UserInfo ON MediaLike.user = UserInfo.id
+    WHERE UserInfo.id = 5
+    GROUP BY Media.id
+) AS L ON Media.id = L.id
+LEFT JOIN (
+    SELECT Media.id, COUNT(Comment.id) AS comments
+    FROM Media
+    INNER JOIN MediaType ON Media.type = MediaType.id
+    LEFT JOIN Comment ON Media.id = Comment.targetMedia
+    LEFT JOIN UserInfo ON Comment.user = UserInfo.id
+    WHERE UserInfo.id = 5
+    GROUP BY Media.id
+) AS C ON C.id = Media.id
+INNER JOIN MediaType ON MediaType.id = Media.type
+INNER JOIN Tagged ON Tagged.mediaid = Media.id
+INNER JOIN Tag ON Tag.id = Tagged.tagid
+WHERE MediaType.name <> "thumbnail"
+GROUP BY Tag.name
+ORDER BY impact DESC;
