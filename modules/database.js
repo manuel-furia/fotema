@@ -112,6 +112,26 @@ const insert = (data, connection, callback) => {
 };
 
 
+
+const search = (searchText, connection, callback, res) =>{
+    const data = [
+        searchText,
+    ];
+
+    connection.query(
+        "SELECT * FROM images WHERE title LIKE '%" + searchText+ "%' OR tags LIKE '%" + searchText + "%' OR details LIKE '%" + searchText + "%'",
+        (err, results, fields) => {
+           if (err) console.log(err);
+            callback(results, res);
+        },
+    );
+
+};
+
+
+
+
+
 module.exports={
     connect: connect,
     select: select,

@@ -9,6 +9,8 @@
 
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
     <link class="jsbin" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
     <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
     <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
@@ -16,6 +18,8 @@
     <link rel="stylesheet" type="text/css" href="../css/myfotema.css">
     <link rel="stylesheet" type="text/css" href="../css/index.css">
     <link rel="stylesheet" type="text/css" href="../css/upload.css">
+    <link rel="stylesheet" type="text/css" href="../css/search.css">
+
 
     <!--<link rel="stylesheet" type="text/css" href="/css/media.css">-->
 
@@ -39,9 +43,9 @@
     </div>
 
     <div class="search-container">
-        <form action="/search">
+        <form  id="searchForm" action="/search"><!--action="/search/:value"-->
             <input type="text" placeholder="Search.." name="search">
-            <button type="submit"><i class="fa fa-search"></i></button>
+            <button type="submit" id="searchBtn" ><i class="fa fa-search"></i></button>
         </form>
     </div>
 
@@ -506,11 +510,155 @@
             <button class="likecomment"><i class="fa fa-thumbs-up"></i>5k</button>
             <button class="dislikecomment"><i class="fa fa-thumbs-down"></i>120</button>
         </div>
+    </div>
+</div>
 
+
+<div id="showSearchResults">
+
+    <a id="closeSearchResult"  onclick="document.getElementById('showSearchResults').style.display = 'none';" >
+        <i class="fa fa-times"></i> <!--href="javascript:history.back()"-->
+    </a>
+
+    <div class="responsive">
+        <div class="gallery">
+            <a target="_blank" href="../../image/slogo15.PNG">
+                <img src="../../image/slogo15.PNG" width="" height="">
+            </a>
+            <div class="desc">
+                <p class="description">description</p>
+                <p class="likes"><i class="fa fa-heart"></i> 200</p>
+                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
+            </div>
+        </div>
+    </div>
+    <div class="responsive">
+        <div class="gallery">
+            <a target="_blank" href="../../image/slogo15.PNG">
+                <img src="../../image/slogo15.PNG" width="" height="">
+            </a>
+            <div class="desc">
+                <p class="description">description</p>
+                <p class="likes"><i class="fa fa-heart"></i> 200</p>
+                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
+            </div>
+        </div>
+    </div>
+    <div class="responsive">
+        <div class="gallery">
+            <a target="_blank" href="../../image/slogo15.PNG">
+                <img src="../../image/slogo15.PNG" width="" height="">
+            </a>
+            <div class="desc">
+                <p class="description">description</p>
+                <p class="likes"><i class="fa fa-heart"></i> 200</p>
+                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
+            </div>
+        </div>
+    </div>
+    <div class="responsive">
+        <div class="gallery">
+            <a target="_blank" href="../../image/slogo15.PNG">
+                <img src="../../image/slogo15.PNG" width="" height="">
+            </a>
+            <div class="desc">
+                <p class="description">description</p>
+                <p class="likes"><i class="fa fa-heart"></i> 200</p>
+                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
+            </div>
+        </div>
+    </div>
+    <div class="responsive">
+        <div class="gallery">
+            <a target="_blank" href="../../image/slogo15.PNG">
+                <img src="../../image/slogo15.PNG" width="" height="">
+            </a>
+            <div class="desc">
+                <p class="description">description</p>
+                <p class="likes"><i class="fa fa-heart"></i> 200</p>
+                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
+            </div>
+        </div>
+    </div>
+    <div class="responsive">
+        <div class="gallery">
+            <a target="_blank" href="../../image/slogo15.PNG">
+                <img src="../../image/slogo15.PNG" width="" height="">
+            </a>
+            <div class="desc">
+                <p class="description">description</p>
+                <p class="likes"><i class="fa fa-heart"></i> 200</p>
+                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
+            </div>
+        </div>
+    </div>
+    <div class="responsive">
+        <div class="gallery">
+            <a target="_blank" href="../../image/slogo15.PNG">
+                <img src="../../image/slogo15.PNG" width="" height="">
+            </a>
+            <div class="desc">
+                <p class="description">description</p>
+                <p class="likes"><i class="fa fa-heart"></i> 200</p>
+                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
+            </div>
+        </div>
     </div>
 
+    <div class="responsive">
+        <div class="gallery">
+            <a target="_blank" href="../../image/slogo15.PNG">
+                <img src="../../image/slogo15.PNG" width="" height="">
+            </a>
+            <div class="desc">
+                <p class="description">description</p>
+                <p class="likes"><i class="fa fa-heart"></i> 200</p>
+                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="responsive">
+        <div class="gallery">
+            <a target="_blank" href="../../image/slogo15.PNG">
+                <img src="../../image/slogo15.PNG" width="" height="">
+            </a>
+            <div class="desc">
+                <p class="description">description</p>
+                <p class="likes"><i class="fa fa-heart"></i> 200</p>
+                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="responsive">
+        <div class="gallery">
+            <a target="_blank" href="../../image/slogo15.PNG">
+                <img src="../../image/slogo15.PNG" width="" height="">
+            </a>
+            <div class="desc">
+                <p class="description">description</p>
+                <p class="likes"><i class="fa fa-heart"></i> 200</p>
+                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="responsive">
+        <div class="gallery">
+            <a target="_blank" href="../../image/slogo15.PNG">
+                <img src="../../image/slogo15.PNG" width="" height="">
+            </a>
+            <div class="desc">
+                <p class="description">description</p>
+                <p class="likes"><i class="fa fa-heart"></i> 200</p>
+                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
+            </div>
+        </div>
+    </div>
 
 </div>
+
 
 <div class="footer" id="footer">
     <a class="about" href="about.html"> About </a>
@@ -523,9 +671,9 @@
 <script src="../js/myfotema.js"></script>
 <script src="../js/index.js"></script>
 <script src="../js/upload.js"></script>
-<script src="../js/main.js"></script>
 
-
+<!--<script src="../js/main.js"></script>-->
+<script src="../js/search.js"></script>
 
 
 </body>
