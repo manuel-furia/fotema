@@ -57,7 +57,7 @@ INNER JOIN Media ON Media.id = Comment.target
 WHERE ActionType.name = "create" AND Media.id = <mediaid>;
 
 
-Get number of likes of image:
+Get number of likes of media:
 
 SELECT Media.*, COUNT(*) AS likes
 FROM Media
@@ -65,4 +65,48 @@ INNER JOIN Target ON Media.id = Target.id
 INNER JOIN UserAction ON Target.id = UserAction.target
 INNER JOIN ActionType ON UserAction.actiontype = ActionType.id
 WHERE ActionType.name = "like" AND Media.id = <mediaid>;
+
+Get number of comments by media:
+
+SELECT Media.*, COUNT(T.comment) AS comments
+FROM Media
+LEFT JOIN (SELECT Media.id, Comment.id AS comment
+    FROM Media
+    INNER JOIN Target ON Media.id = Target.id
+    LEFT JOIN Comment ON Target.id = Comment.target) AS T
+ON Media.id = T.id
+WHERE Media.id = <id>;
+
+Get medias ordered by comment:
+
+SELECT Media.*, COUNT(T.comment) AS comments
+FROM Media
+LEFT JOIN (SELECT Media.id, Comment.id AS comment
+    FROM Media
+    INNER JOIN Target ON Media.id = Target.id
+    LEFT JOIN Comment ON Target.id = Comment.target) AS T
+ON Media.id = T.id
+INNER JOIN MediaType ON Media.type = MediaType.id
+WHERE MediaType.name != "thumbnail"
+GROUP BY Media.id
+ORDER BY comments DESC
+LIMIT <number>;
+
+
+Get images ordered by likes:
+
+SELECT Media.*, COUNT(T.liked) AS likes
+FROM Media 
+LEFT JOIN (SELECT Media.id, ActionType.id AS liked
+    FROM Media
+	INNER JOIN Target ON Media.id = Target.id
+	LEFT JOIN UserAction ON Target.id = UserAction.target
+	LEFT JOIN ActionType ON UserAction.actiontype = ActionType.id
+	WHERE ActionType.name = "like") AS T
+ON T.id = Media.id
+INNER JOIN MediaType ON Media.type = MediaType.id
+WHERE MediaType.name != "thumbnail"
+GROUP BY Media.id
+ORDER BY likes DESC
+LIMIT <number>;
 
