@@ -125,10 +125,37 @@ LIMIT ?, ? ;`,
     queryResult
 }
 
-const getUserFavouriteTags = (connection, callback, res) => {
-    
+const getUserFavouriteTags = (connection, callback, res, userid, start, end) => {
+    connection.execute(
+        [userid, userid, start, end],
+        `SELECT Tag.name AS tag, SUM(IFNULL(L.likes, 0)) AS likes, SUM(IFNULL(C.comments, 0)) AS comments, SUM(IFNULL(L.likes, 0)) + SUM(IFNULL(C.comments, 0)) AS impact
+FROM Media
+LEFT JOIN (
+    SELECT Media.*, COUNT(MediaLike.media) AS likes
+    FROM Media
+    INNER JOIN MediaType ON Media.type = MediaType.id
+    LEFT JOIN MediaLike ON Media.id = MediaLike.media
+    LEFT JOIN UserInfo ON MediaLike.user = UserInfo.id
+    WHERE UserInfo.id = ?
+    GROUP BY Media.id
+) AS L ON Media.id = L.id
+LEFT JOIN (
+    SELECT Media.id, COUNT(Comment.id) AS comments
+    FROM Media
+    INNER JOIN MediaType ON Media.type = MediaType.id
+    LEFT JOIN Comment ON Media.id = Comment.targetMedia
+    LEFT JOIN UserInfo ON Comment.user = UserInfo.id
+    WHERE UserInfo.id = ?
+    GROUP BY Media.id
+) AS C ON C.id = Media.id
+INNER JOIN MediaType ON MediaType.id = Media.type
+INNER JOIN Tagged ON Tagged.mediaid = Media.id
+INNER JOIN Tag ON Tag.id = Tagged.tagid
+WHERE MediaType.name <> "thumbnail"
+GROUP BY Tag.name
+ORDER BY impact DESC;`,
+    queryResult
 }
-
 
 
 
