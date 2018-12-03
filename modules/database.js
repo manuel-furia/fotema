@@ -20,6 +20,10 @@ const connect = () =>{
   });
 };
 
+/*
+ * GET QUERIES
+ */
+
 //Get the content of a table filtered by a value of an attribute
 const getDataFromAttribute = (connection, callback, res, tableName, attribute, value) => {
     connection.execute(
@@ -51,7 +55,7 @@ const getCommentsFromMedia = (connection, callback, res, id) => {
 FROM Media
 LEFT JOIN Comment ON Media.id = Comment.targetMedia
 WHERE Media.id = ? ;`,
-        queryResult
+        queryResult);
 }
 
 //Get tags from media
@@ -63,7 +67,7 @@ const getMediaTags = (connection, callback, res, id) => {
         INNER JOIN Tagged ON Media.id = Tagged.mediaid
         INNER JOIN Tag ON Tag.id = Tagged.tagid
         WHERE Media.id = ? ;`,
-        queryResult
+        queryResult);
 }
 
 
@@ -92,7 +96,7 @@ ON L.id = C.id
 ORDER BY impact DESC
 LIMIT ?, ? ;
 `,
-    queryResult)
+    queryResult);
 }
 
 const getUserFavouriteMedias = (connection, callback, res, userid, start, end) => {
@@ -122,7 +126,7 @@ INNER JOIN MediaType ON MediaType.id = Media.type
 WHERE MediaType.name <> "thumbnail"
 ORDER BY impact DESC
 LIMIT ?, ? ;`,
-    queryResult
+    queryResult);
 }
 
 const getUserFavouriteTags = (connection, callback, res, userid, start, end) => {
@@ -154,9 +158,37 @@ INNER JOIN Tag ON Tag.id = Tagged.tagid
 WHERE MediaType.name <> "thumbnail"
 GROUP BY Tag.name
 ORDER BY impact DESC;`,
-    queryResult
+    queryResult);
 }
 
+
+/*
+ * INSERT QUERIES
+ */
+/*
+//data contains imagepath, thumbpath, title, description, type, capturetime, uploadtime, userid, tags[]
+const uploadMedia = (connection, callback, res, data) => {
+
+    //Insert the thumbnail
+    connection.execute(
+        [data.thumbpath, data.title
+    
+
+    //First check that the tags exists
+    data.tags.forEach(tag => {
+        connection.execute(
+            [data.tag],
+            `INSERT INTO tag (fund_id, date, price)
+                VALUES (23, '2013-02-12', 22.43)
+                WHERE NOT EXISTS (
+                SELECT * 
+                FROM funds 
+                WHERE fund_id = 23
+                AND date = '2013-02-12'
+            );`
+        );
+    }
+}*/
 
 
 //TODO: Remove old select and insert
@@ -185,6 +217,8 @@ const insert = (data, connection, callback) => {
         },
     );
 };
+
+
 
 
 module.exports={
