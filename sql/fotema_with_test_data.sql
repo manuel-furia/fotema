@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 02, 2018 at 08:59 PM
+-- Generation Time: Dec 03, 2018 at 02:14 PM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.2.12
 
@@ -78,20 +78,21 @@ CREATE TABLE `Media` (
   `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `type` int(11) NOT NULL,
   `thumbnail` int(11) DEFAULT NULL,
-  `capturetime` datetime DEFAULT NULL
+  `capturetime` datetime DEFAULT NULL,
+  `user` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `Media`
 --
 
-INSERT INTO `Media` (`id`, `path`, `title`, `description`, `type`, `thumbnail`, `capturetime`) VALUES
-(1, '/path/to/media/1', 'Cute cat!', 'This is a cute cat!', 2, 2, '2018-11-14 00:00:00'),
-(2, 'path/to/thumbs/1', '', '', 1, NULL, NULL),
-(3, '/path/to/thumbs/2', '', '', 1, NULL, '2018-11-15 12:00:00'),
-(4, 'path/to/thumbs/3', '', '', 1, NULL, '2018-11-22 00:00:00'),
-(5, '/path/to/media/2', 'Nice dog!', 'This is a friendly dog!', 2, 3, '2018-11-23 00:00:00'),
-(6, '/path/to/media/3', 'Funny video!', 'This is a funny video.', 4, 4, '2018-11-20 11:00:00');
+INSERT INTO `Media` (`id`, `path`, `title`, `description`, `type`, `thumbnail`, `capturetime`, `user`) VALUES
+(1, '/path/to/media/1', 'Cute cat!', 'This is a cute cat!', 2, 2, '2018-11-14 00:00:00', 1),
+(2, 'path/to/thumbs/1', '', '', 1, NULL, NULL, 1),
+(3, '/path/to/thumbs/2', '', '', 1, NULL, '2018-11-15 12:00:00', 3),
+(4, 'path/to/thumbs/3', '', '', 1, NULL, '2018-11-22 00:00:00', 4),
+(5, '/path/to/media/2', 'Nice dog!', 'This is a friendly dog!', 2, 3, '2018-11-23 00:00:00', 3),
+(6, '/path/to/media/3', 'Funny video!', 'This is a funny video.', 4, 4, '2018-11-20 11:00:00', 4);
 
 -- --------------------------------------------------------
 
@@ -112,7 +113,8 @@ CREATE TABLE `MediaLike` (
 INSERT INTO `MediaLike` (`user`, `media`, `time`) VALUES
 (1, 1, '2018-12-20 12:00:00'),
 (3, 1, '2018-12-20 13:00:00'),
-(5, 6, '2018-12-23 12:00:00');
+(5, 6, '2018-12-23 12:00:00'),
+(5, 5, '2018-12-26 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -254,7 +256,8 @@ ALTER TABLE `CommentLike`
 ALTER TABLE `Media`
   ADD PRIMARY KEY (`id`),
   ADD KEY `type` (`type`),
-  ADD KEY `thumbnail` (`thumbnail`);
+  ADD KEY `thumbnail` (`thumbnail`),
+  ADD KEY `user` (`user`);
 
 --
 -- Indexes for table `MediaLike`
@@ -347,7 +350,8 @@ ALTER TABLE `CommentLike`
 ALTER TABLE `Media`
   ADD CONSTRAINT `Media_ibfk_2` FOREIGN KEY (`type`) REFERENCES `MediaType` (`id`),
   ADD CONSTRAINT `Media_ibfk_3` FOREIGN KEY (`thumbnail`) REFERENCES `Media` (`id`),
-  ADD CONSTRAINT `Media_ibfk_4` FOREIGN KEY (`id`) REFERENCES `Target` (`id`);
+  ADD CONSTRAINT `Media_ibfk_4` FOREIGN KEY (`id`) REFERENCES `Target` (`id`),
+  ADD CONSTRAINT `Media_ibfk_5` FOREIGN KEY (`user`) REFERENCES `UserInfo` (`id`);
 
 --
 -- Constraints for table `MediaLike`
