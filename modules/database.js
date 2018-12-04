@@ -71,7 +71,7 @@ const getMediaTags = (connection, callback, res, id) => {
 }
 
 
-const getMediasOrderedByImpact = (connection, callback, res, start, limit) {
+const getMediasOrderedByImpact = (connection, callback, res, start, limit) => {
     connection.execute(
         [start, limit],
         `

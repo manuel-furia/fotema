@@ -3,11 +3,13 @@ require('dotenv').config();
 
 const http = require('http');
 const https = require('https');
+const path = require('path');
 const passport = require('passport');
 const passportMod = require('./modules/passport');
 const resizeMod = require('./modules/resize');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const database = require('./modules/database');
 const express = require('express');
 const multer  = require('multer');
 const upload = multer({ dest: 'uploads/' });   
@@ -24,7 +26,7 @@ const connection = database.connect();
 //const mysql = require('mysql2');
 
 // tell where the static files are located.
-app.use(express.static(__dirname + '/view'));
+app.use(express.static(__dirname + '/frontend'));
 
 
 const options ={
@@ -55,19 +57,38 @@ app.post('/login',
   passport.authenticate('local', {successRedirect: '/node/', failureRedirect: '/loginfailedpage'})
 );
 
-//homepage!
 app.get('/', (req, res, next) =>{
+  res.writeHead(302, {'Location':'https://' + req.headers.host + '/node/anonwall/:start/:end'});
+  console.log('testi!');
+  res.end();
+});
+
+//homepage!
+app.get('/anonwall/:start/:end', (req, res, next) =>{
     //first we should check if the user is signed in or not, since that is how we present the context.
     //after knowing if the user is signed in or not, we give them the frontpage.
     // --> if signed in user gets modified front page
     // --> if not, then gets the normal frontpage.
-  if(req.user){                                         //--> user is signed in, show the custom homepage
+    res.sendFile('anonwall.html', { root: __dirname + "/frontend/html/" } );
 
-  }else{
-                                                        //--> user is not logged in, show basic homepage
-  }
 });
 
+app.get('/userwall/:user/:start/:end', (req, res, next) =>{
+
+
+});
+
+app.get('/search/:term/:start/:end', upload.single('mediafile'), (req, res, next) => {
+  next();
+});
+
+app.get('/comments/:imageID', (req, res, next) =>{
+
+});
+
+app.get('/media/:imageID', (req, res, next) =>{
+
+});
 
 // -  - - - - - - - - - -  F I L E  U P L O A D - - - - - - - - - - -   (requires a database connection)
 const cb = (result, res) => {

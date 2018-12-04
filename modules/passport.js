@@ -4,7 +4,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const db = require('./database');
 
 
-  // used in authentication of the user login information. exported to index.js.
+  // used in authentication of the user login information. exported to viewMore.js.
   const serializeUser = (user, done)=>{
     console.log('serializing user: ' + user.username);
     done(null, user);

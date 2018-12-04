@@ -15,18 +15,20 @@
 
     <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
 
-    <link rel="stylesheet" type="text/css" href="../css/index.css">
-    <link rel="stylesheet" type="text/css" href="../css/signin.css">
-    <link rel="stylesheet" type="text/css" href="../css/signup.css">
-    <link rel="stylesheet" type="text/css" href="../css/media.css">
-    <link rel="stylesheet" type="text/css" href="../css/search.css">
-    <link rel="stylesheet" type="text/css" href="../css/search.css">
+    <link rel="stylesheet" type="text/css" href="../../css/index.css">
+    <link rel="stylesheet" type="text/css" href="../../css/signin.css">
+    <link rel="stylesheet" type="text/css" href="../../css/signup.css">
+    <link rel="stylesheet" type="text/css" href="../../css/media.css">
+    <link rel="stylesheet" type="text/css" href="../../css/search.css">
+    <link rel="stylesheet" type="text/css" href="../../css/search.css">
+
+
 
 
 
 
     <!--<script src="../js/popup.js"></script>-->
-    <!--<script src="../js/index.js"></script>-->
+    <!--<script src="../js/viewMore.js"></script>-->
 
 
     <title>home</title>
@@ -38,7 +40,7 @@
 <div class="header" id="header">
 
     <div class="logo">
-        <a href="index.html"> FOTEMA <!--<img src="/image/slogo14.PNG">--></a>
+        <a href="anonwall.html"> FOTEMA <!--<img src="/image/slogo14.PNG">--></a>
     </div>
 
     <div class="upload">
@@ -163,7 +165,7 @@
 
     <div class="firstblock"> <!--show on page load, user can click view-more button to load more-->
 
-    <div class="responsive">
+    <div class="responsive" id="imageTarget">
         <div class="gallery">
             <a target="_blank" href="../../image/slogo15.PNG">
                 <img src="../../image/slogo15.PNG" width="" height="">
@@ -508,7 +510,7 @@
 
 </div>
 
-<button class="viewmorecontent" id="btnViewMore" onclick="viewMore()">view more</button>
+<button class="viewmorecontent" id="btnViewMore">view more</button>
 
 
 <div id="showSearchResults">
@@ -657,7 +659,6 @@
 </div>
 
 
-
 <div class="footer" id="footer">
     <p><i class="fa fa-copyright"></i> FOTEMA</p>
     <a class="about" href="about.html"> about </a>
@@ -665,12 +666,14 @@
     <a class="report" href="report.html">report </a>
 </div>
 <div w3-include-html="footer.html"></div>
+<script>
+    const page = 'anonwall';
+</script>
+<script src="../../js/popup.js"></script>
+<script src="../../js/eventHandler.js" type="module"></script>
 
-
-<script src="../js/index.js"></script>
-<script src="../js/popup.js"></script>
 <!--<script src="../js/main.js"></script>-->
-<script src="../js/search.js"></script>
+<script src="../../js/search.js"></script>
 
-</body>
+</body >
 </html>
