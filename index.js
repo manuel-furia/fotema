@@ -12,6 +12,8 @@ const session = require('express-session');
 const database = require('./modules/database');
 const express = require('express');
 const multer  = require('multer');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 const upload = multer({ dest: 'uploads/' });   
 const fs = require('fs');
 const app = express();
@@ -56,20 +58,53 @@ const cb = (result, res) => {
 };
 
 
+//homepage!
+app.get('/', (req, res, next) =>{
+  /* res.writeHead(302, {'Location':'https://' + req.headers.host + '/node/anonwall/:start/:end'});
+   console.log('testi!');
+   res.end();*/
+  res.sendFile('anonwall.html', { root: __dirname + "/frontend/html/" } );
+
+});
 
 // - - - gets the login post. starting the authentication process.
 app.post('/login',
   passport.authenticate('local', {successRedirect: '/node/', failureRedirect: '/loginfailedpage'})
 );
 
-//homepage!
-app.get('/', (req, res, next) =>{
- /* res.writeHead(302, {'Location':'https://' + req.headers.host + '/node/anonwall/:start/:end'});
-  console.log('testi!');
-  res.end();*/
-  res.sendFile('anonwall.html', { root: __dirname + "/frontend/html/" } );
+app.post('/signup',(req, res, next) =>{
+  let newUser = {};
+  console.log(req.params);
+  //TODO: query to check if the username and email already exist in the database
+  /*
+  if(database.checkUserName(req.body.username) &&
+      database.checkEmail(req.body.email)) {
+
+    newUser.username = req.body.username;
+    newUser.email = req.body.email;
+
+    //add a password hash for the user
+    bcrypt.genSalt(10, (err, salt) => {
+      if(err) return next(err);
+      bcrypt.hash(req.body.password, salt, (err, hash) => {
+        if(err) return next(err);
+        newUser.password = hash;
+      })
+    })
+
+    //now we have an object newUser which holds the username, email and hashed password.
+    //we can now do an insert query to the database.
+    //TODO: Insert query to the database inserting the userdata
+
+    //QUERY
+  }
+
+*/
+
 
 });
+
+
 
 app.get('/anonwall/:start/:end', (req, res, next) =>{
 

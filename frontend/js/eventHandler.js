@@ -7,6 +7,8 @@
 'use strict';
 import {getImages} from './api/get.js';
 import {showImages} from './renderer/renderer.js';
+import {uploadImages} from './api/post.js';
+import {postUserData} from './api/post.js';
 
 let start = 0;
 const amount = 30;
@@ -15,6 +17,9 @@ const mediaForm = document.querySelector('#mediaform');
 const uploadEvent = (event) => {
   console.log('starting the event chain for upload');
   event.preventDefault();
+//TODO:get the image data here, and pass it forward.
+  uploadImages()
+  //when you upload a photo, you post the form into /bla bla
 
 };
 
@@ -28,15 +33,16 @@ const search = () => {
   });
 };
 
+//function that runs on fresh page load
 function onPageLoad(t, obj) {
   console.log(t, obj);
   start = 0;
   getImages(t, start, amount, (json) => {
-    console.log(json + "kikkel");
     showImages(json);
   });
 };
 
+//function that runs when view more button is clicked
 function viewMoreLoad(t, obj) {
   start += amount;
   console.log(t, start, amount);
@@ -44,6 +50,25 @@ function viewMoreLoad(t, obj) {
       showImages(json);
   });
 };
+
+
+const signIn = (event)=> {
+  //first needs to check if given credentials are correct
+  event.preventDefault();
+  postUserData('signin', mediaForm);
+};
+
+const signUp = (event)=> {
+  event.preventDefault();
+  postUserData('signup', mediaForm);
+
+};
+
+
+document.getElementById('signin').addEventListener('submit', signIn);
+
+document.getElementById('signin').addEventListener('submit', signUp);
+
 
 if (mediaForm != null) mediaForm.addEventListener('submit', uploadEvent);
 
