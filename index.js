@@ -50,6 +50,11 @@ app.use(session({
   cookie: {secure:true},
 }));
 
+const cb = (result, res) => {
+  console.log(result);
+  res.send(result);
+};
+
 
 
 // - - - gets the login post. starting the authentication process.
@@ -57,19 +62,20 @@ app.post('/login',
   passport.authenticate('local', {successRedirect: '/node/', failureRedirect: '/loginfailedpage'})
 );
 
+//homepage!
 app.get('/', (req, res, next) =>{
-  res.writeHead(302, {'Location':'https://' + req.headers.host + '/node/anonwall/:start/:end'});
+ /* res.writeHead(302, {'Location':'https://' + req.headers.host + '/node/anonwall/:start/:end'});
   console.log('testi!');
-  res.end();
+  res.end();*/
+  res.sendFile('anonwall.html', { root: __dirname + "/frontend/html/" } );
+
 });
 
-//homepage!
 app.get('/anonwall/:start/:end', (req, res, next) =>{
-    //first we should check if the user is signed in or not, since that is how we present the context.
-    //after knowing if the user is signed in or not, we give them the frontpage.
-    // --> if signed in user gets modified front page
-    // --> if not, then gets the normal frontpage.
-    res.sendFile('anonwall.html', { root: __dirname + "/frontend/html/" } );
+
+   //you do the query for the pictures
+ database.select(connection, cb, res);
+
 
 });
 
@@ -91,10 +97,7 @@ app.get('/media/:imageID', (req, res, next) =>{
 });
 
 // -  - - - - - - - - - -  F I L E  U P L O A D - - - - - - - - - - -   (requires a database connection)
-const cb = (result, res) => {
-  //console.log(result);
-  res.send(result);
-};
+
 
 app.post('/upload', upload.single('mediafile'), (req, res, next) => {
   next();

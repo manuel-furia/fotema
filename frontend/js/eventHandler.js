@@ -6,6 +6,8 @@
 // 2. It acts according to whatever that event needs to do (post, get is pretty normal route for refreshing pictures after upload)
 'use strict';
 import {getImages} from './api/get.js';
+import {showImages} from './renderer/renderer.js';
+
 let start = 0;
 const amount = 30;
 //event listener function for fileupload
@@ -29,13 +31,18 @@ const search = () => {
 function onPageLoad(t, obj) {
   console.log(t, obj);
   start = 0;
-  getImages(t, start, amount);
+  getImages(t, start, amount, (json) => {
+    console.log(json + "kikkel");
+    showImages(json);
+  });
 };
 
 function viewMoreLoad(t, obj) {
   start += amount;
   console.log(t, start, amount);
-  getImages(t, start, amount);
+  getImages(t, start, amount, (json) =>{
+      showImages(json);
+  });
 };
 
 if (mediaForm != null) mediaForm.addEventListener('submit', uploadEvent);
