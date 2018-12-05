@@ -28,7 +28,7 @@ const cb = (result, res) => {
 
 //render index page onload, to be modified according to user data
 app.get('/', function(req, res){
-    res.render('public/html/index.html');
+    res.render('public/html/anonwall.html');
 });
 
 

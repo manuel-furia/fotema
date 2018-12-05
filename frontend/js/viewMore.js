@@ -11,6 +11,8 @@ window.onscroll = ()=> {
 };
 
 
+
+
 //click vire more button to load more content
 const viewMore = () => {
     const moreContent = document.getElementById("morecontent");

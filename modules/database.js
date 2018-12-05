@@ -314,8 +314,9 @@ const uploadMedia = (connection, res, data, callback) => {
 
 //select query to display image, comments, likes, on front end
 const select = (connection, callback, res) => {
+  console.log("teest");
     connection.query(
-        'SELECT * from images',
+        'SELECT * from Media',
         (error, results) =>{
             if (error)console.log(error);
             callback(results, res);

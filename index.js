@@ -3,13 +3,17 @@ require('dotenv').config();
 
 const http = require('http');
 const https = require('https');
+const path = require('path');
 const passport = require('passport');
 const passportMod = require('./modules/passport');
 const resizeMod = require('./modules/resize');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const database = require('./modules/database');
 const express = require('express');
 const multer  = require('multer');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 const upload = multer({ dest: 'uploads/' });   
 const fs = require('fs');
 const app = express();
@@ -24,7 +28,7 @@ const connection = db.connect();
 //const mysql = require('mysql2');
 
 // tell where the static files are located.
-app.use(express.static(__dirname + '/view'));
+app.use(express.static(__dirname + '/frontend'));
 
 
 const options ={
@@ -48,32 +52,87 @@ app.use(session({
   cookie: {secure:true},
 }));
 
+const cb = (result, res) => {
+  console.log(result);
+  res.send(result);
+};
 
+
+//homepage!
+app.get('/', (req, res, next) =>{
+  /* res.writeHead(302, {'Location':'https://' + req.headers.host + '/node/anonwall/:start/:end'});
+   console.log('testi!');
+   res.end();*/
+  res.sendFile('anonwall.html', { root: __dirname + "/frontend/html/" } );
+
+});
 
 // - - - gets the login post. starting the authentication process.
 app.post('/login',
   passport.authenticate('local', {successRedirect: '/node/', failureRedirect: '/loginfailedpage'})
 );
 
-//homepage!
-app.get('/', (req, res, next) =>{
-    //first we should check if the user is signed in or not, since that is how we present the context.
-    //after knowing if the user is signed in or not, we give them the frontpage.
-    // --> if signed in user gets modified front page
-    // --> if not, then gets the normal frontpage.
-  if(req.user){                                         //--> user is signed in, show the custom homepage
+app.post('/signup',(req, res, next) =>{
+  let newUser = {};
+  console.log(req.params);
+  //TODO: query to check if the username and email already exist in the database
+  /*
+  if(database.checkUserName(req.body.username) &&
+      database.checkEmail(req.body.email)) {
 
-  }else{
-                                                        //--> user is not logged in, show basic homepage
+    newUser.username = req.body.username;
+    newUser.email = req.body.email;
+
+    //add a password hash for the user
+    bcrypt.genSalt(10, (err, salt) => {
+      if(err) return next(err);
+      bcrypt.hash(req.body.password, salt, (err, hash) => {
+        if(err) return next(err);
+        newUser.password = hash;
+      })
+    })
+
+    //now we have an object newUser which holds the username, email and hashed password.
+    //we can now do an insert query to the database.
+    //TODO: Insert query to the database inserting the userdata
+
+    //QUERY
   }
+
+*/
+
+
 });
 
 
+
+app.get('/anonwall/:start/:end', (req, res, next) =>{
+
+   //you do the query for the pictures
+ database.select(connection, cb, res);
+
+
+});
+
+app.get('/userwall/:user/:start/:end', (req, res, next) =>{
+
+
+});
+
+app.get('/search/:term/:start/:end', upload.single('mediafile'), (req, res, next) => {
+  next();
+});
+
+app.get('/comments/:imageID', (req, res, next) =>{
+
+});
+
+app.get('/media/:imageID', (req, res, next) =>{
+
+});
+
 // -  - - - - - - - - - -  F I L E  U P L O A D - - - - - - - - - - -   (requires a database connection)
-const cb = (result, res) => {
-  //console.log(result);
-  res.send(result);
-};
+
 
 app.post('/upload', upload.single('mediafile'), (req, res, next) => {
   next();

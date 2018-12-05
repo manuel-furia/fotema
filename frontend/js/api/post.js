@@ -1,6 +1,6 @@
 'use strict';
 
-const uploadImages = (callback) => {
+export const uploadImages = (callback) => {
   const formData = new FormData(mediaForm);
   const settings = {
     method: 'post',
@@ -18,6 +18,18 @@ const uploadImages = (callback) => {
   console.log('uploading OK');
 };
 
-module.exports={
-  uploadImages:uploadImages,
+export const postUserData = (x, mediaForm) =>{
+  const formData = new FormData(mediaForm);
+  console.log(formData);
+  const settings = {
+    method: 'post',
+    body: formData,
+  };
+  if(x === 'signin') {
+    fetch('/signin', settings);
+  }else{
+    fetch('/signup', settings);
+  }
+
 };
+
