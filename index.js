@@ -18,7 +18,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const sslkey = fs.readFileSync('/etc/pki/tls/private/ca.key');
 const sslcrt = fs.readFileSync('/etc/pki/tls/certs/ca.crt');
 
-const connection = database.connect();
+const connection = db.connect();
 
 //const resize = resizeMod.resize;
 //const mysql = require('mysql2');

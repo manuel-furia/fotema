@@ -2,21 +2,49 @@
 
 const mysql = require('mysql2');
 
-//Function to be executed after a query has been run
-const queryResult = (error, result) => {
-    if (error)
+
+//Function to be executed after a select query has been run
+const queryResult = (connection, res, callback) => (error, result) => {
+    if (error) {
         console.log(error);
-    else
-        callback(results, res);
+        if (connection) connection.rollback((err) => {});
+    } else
+         callback(result, res);
+}
+
+//Execute multiple queries
+const multipleQueries = (connection, res, queries, params, callback) => {
+    const next = (queriesLeft, paramsLeft, prevResult) => {
+        
+        if (queriesLeft.length === 0) {connection.commit(); callback(prevResult, res)}
+        else {
+            const currentQuery = queriesLeft[0];
+            const currentParams = (paramsLeft != null && paramsLeft[0] != null) ? paramsLeft[0] : [];
+            paramsLeft.shift();
+            queriesLeft.shift();
+            connection.execute(
+                currentQuery, currentParams, (err, result) => {
+                    if (err) console.log(err)
+                    else next(queriesLeft, paramsLeft, prevResult);
+                }
+            )
+        }
+    }
+
+    connection.beginTransaction((err) => {
+        if (!err) next(queries.split(';').filter(x => x != '').map(x => x + ";"), params, {});
+    });
+    
 }
 
 
-const connect = () =>{
+const connect = () => {
     return mysql.createConnection({
       host: process.env.DB_HOST,
       user: process.env.DB_USER,
       database: process.env.DB_NAME,
-      password: process.env.DB_PASS
+      password: process.env.DB_PASS,
+      multipleStatements: true
   });
 };
 
@@ -25,56 +53,55 @@ const connect = () =>{
  */
 
 //Get the content of a table filtered by a value of an attribute
-const getDataFromAttribute = (connection, callback, res, tableName, attribute, value) => {
+const getDataFromAttribute = (connection, res, tableName, attribute, value, callback) => {
     connection.execute(
-        [value],
         `SELECT *
          FROM ${tableName}
          WHERE ${tableName}.${attribute} = ?`,
-        queryResult
+         [value],
+         queryResult(connection, res, callback)
     );
 }
 
 //Get the number of likes of a media
-const getLikesFromMedia = (connection, callback, res, id) => {
+const getLikesFromMedia = (connection, res, id, callback) => {
     connection.execute(
-        [id],
        `SELECT Media.*, COUNT(Media.id) AS likes
 FROM Media
 LEFT JOIN MediaLike ON Media.id = MediaLike.media
 WHERE Media.id = ? ;`,
-        queryResult
+        [id],
+        queryResult(connection, res, callback)
     );
 }
 
 //Get the number of comments of a media
-const getCommentsFromMedia = (connection, callback, res, id) => {
+const getCommentsFromMedia = (connection, res, id, callback) => {
     connection.execute(
-        [id],
-       `SELECT Media.*, COUNT(Comment.id) AS comments
+        `SELECT Media.*, COUNT(Comment.id) AS comments
 FROM Media
 LEFT JOIN Comment ON Media.id = Comment.targetMedia
 WHERE Media.id = ? ;`,
-        queryResult);
+        [id],
+        queryResult(connection, res, callback));
 }
 
 //Get tags from media
-const getMediaTags = (connection, callback, res, id) => {
+const getMediaTags = (connection, res, id, callback) => {
     connection.execute(
-        [id],
        `SELECT Tag.name AS tags
         FROM Media
         INNER JOIN Tagged ON Media.id = Tagged.mediaid
         INNER JOIN Tag ON Tag.id = Tagged.tagid
         WHERE Media.id = ? ;`,
-        queryResult);
+        [id],
+        queryResult(connection, res, callback));
 }
 
 
-const getMediasOrderedByImpact = (connection, callback, res, start, limit) {
+const getMediasOrderedByImpact = (connection, res, start, limit, callback) => {
     connection.execute(
-        [start, limit],
-        `
+       `
 SELECT L.*, C.comments, (L.likes + C.comments) AS impact
 FROM (
     SELECT Media.*, COUNT(MediaLike.media) AS likes
@@ -95,13 +122,12 @@ INNER JOIN (
 ON L.id = C.id
 ORDER BY impact DESC
 LIMIT ?, ? ;
-`,
-    queryResult);
+`, [start, limit],
+    queryResult(connection, res, callback));
 }
 
-const getUserFavouriteMedias = (connection, callback, res, userid, start, end) => {
+const getUserFavouriteMedias = (connection, res, userid, start, end, callback) => {
     connection.execute(
-        [userid, userid, start, end],
         `SELECT Media.*, IFNULL(L.likes, 0) AS likes, IFNULL(C.comments, 0) AS comments, IFNULL(L.likes + C.comments, 0) AS impact
 FROM Media
 LEFT JOIN (
@@ -126,12 +152,12 @@ INNER JOIN MediaType ON MediaType.id = Media.type
 WHERE MediaType.name <> "thumbnail"
 ORDER BY impact DESC
 LIMIT ?, ? ;`,
-    queryResult);
+    [userid, userid, start, end],
+    queryResult(connection, res, callback));
 }
 
-const getUserFavouriteTags = (connection, callback, res, userid, start, end) => {
+const getUserFavouriteTags = (connection, res, userid, start, end, callback) => {
     connection.execute(
-        [userid, userid, start, end],
         `SELECT Tag.name AS tag, SUM(IFNULL(L.likes, 0)) AS likes, SUM(IFNULL(C.comments, 0)) AS comments, SUM(IFNULL(L.likes, 0)) + SUM(IFNULL(C.comments, 0)) AS impact
 FROM Media
 LEFT JOIN (
@@ -157,38 +183,131 @@ INNER JOIN Tagged ON Tagged.mediaid = Media.id
 INNER JOIN Tag ON Tag.id = Tagged.tagid
 WHERE MediaType.name <> "thumbnail"
 GROUP BY Tag.name
-ORDER BY impact DESC;`,
-    queryResult);
+ORDER BY impact DESC
+LIMIT ?, ? ;`,
+    [userid, userid, start, end],
+    queryResult(connection, res, callback));
 }
 
+/*
+ * DELETE QUERIES
+ */
+const deleteMedia = (connection, res, mediaID, callback) => {
+
+    const deleteMediaElem = (id, done) => {
+        multipleQueries(connection,
+             res,
+           `DELETE FROM MediaLike WHERE media = ? ;
+            DELETE FROM Tagged WHERE mediaid = ? ;
+            DELETE FROM CommentLike WHERE comment = (
+                SELECT Comment.id 
+                FROM Comment 
+                INNER JOIN Media ON Media.id = Comment.targetmedia 
+                WHERE Comment.targetmedia = ? );
+            DELETE FROM Comment WHERE targetmedia = ? ;
+            DELETE FROM Media WHERE id = ? ;`,
+        [[id], [id], [id], [id], [id]],
+        (result, res) => {if (done) callback(result, res)});
+    }
+
+    const fetchedImage = (imageData) => {
+        
+        if (imageData != null && imageData.length > 0 && imageData[0].thumbnail != null){
+            deleteMediaElem(mediaID, false); //Delete the actual media
+            deleteMediaElem(imageData[0].thumbnail, true); //Then delete the thumbnail and finish (done = true)
+        } else {
+            deleteMediaElem(mediaID, true);
+        }
+        
+    }
+
+    getDataFromAttribute(connection, res, 'Media', 'id', mediaID, (result, res) => fetchedImage(result));
+        
+}
 
 /*
  * INSERT QUERIES
  */
-/*
+
 //data contains imagepath, thumbpath, title, description, type, capturetime, uploadtime, userid, tags[]
-const uploadMedia = (connection, callback, res, data) => {
+const uploadMedia = (connection, res, data, callback) => {
 
-    //Insert the thumbnail
-    connection.execute(
-        [data.thumbpath, data.title
-    
 
-    //First check that the tags exists
-    data.tags.forEach(tag => {
+    const next = (error, acc, name, results, from, callback) => {
+        if (error) {
+            console.log(error);
+            connection.rollback((err) => {});
+        } else {
+            acc[name] = results[from];
+            callback(acc);
+        }
+    }
+
+   const insertMedia = (acc, typeID, thumbID, nextID, nextCallback) => {
         connection.execute(
-            [data.tag],
-            `INSERT INTO tag (fund_id, date, price)
-                VALUES (23, '2013-02-12', 22.43)
-                WHERE NOT EXISTS (
-                SELECT * 
-                FROM funds 
-                WHERE fund_id = 23
-                AND date = '2013-02-12'
-            );`
+            `INSERT INTO Media (path, title, description, type, thumbnail, capturetime, uploadtime, user)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
+            [data.imagepath, data.title, data.description, typeID, thumbID, data.capturetime, data.uploadtime, data.userid],
+            (error, results) => {
+                next(error, acc, nextID, results, 'insertId', nextCallback);
+            });
+    }
+
+    //Step 6 (final)
+    const createdTag = (acc) => {
+        connection.execute(
+            `INSERT INTO Tagged (mediaid, tagid)
+             VALUES (?, ?);`,
+            [acc.imageID, acc.tagID],
+            queryResult(connection, res, (result, res)=>{
+                    connection.commit()
+            })
         );
     }
-}*/
+    //Step 4
+    const insertedImage = (acc) => {
+        data.tags.forEach(tag => {
+        connection.execute(
+            'SELECT id, name FROM Tag WHERE name = ?;',
+            [tag],
+            (error, results) => { //Step 5
+                if (results.length === 0){
+                    connection.execute(
+                    `INSERT INTO Tag (name)
+                         VALUES (?);`,
+                    [tag],
+                    (error, results) => {
+                        next(error, acc, 'tagID', results, 'insertId', createdTag);
+                    })
+                } else {
+                    next(error, acc, 'tagID', results[0], 'id', createdTag);
+                }
+            })
+        })
+        
+    }
+
+    //Step 3
+    const insertedThumbnail = (acc) => {
+        insertMedia(acc, acc.typeID, acc.thumbID, 'imageID', insertedImage);
+    }
+
+    //Step 2
+    const gotType = (acc) => {
+        insertMedia(acc, 1, null, 'thumbID', insertedThumbnail);
+    }
+
+    //Step 1
+    connection.beginTransaction((err) => {
+        if (err) connection.rollback(function() {
+          console.log(err);
+        });
+        //First, get the typeid of the type of the media
+        getDataFromAttribute(connection, res, 'MediaType', 'name', data.type, (result, r) => {if (result && result.length > 0) {gotType({'typeID' : result[0].id})}})
+
+    });
+
+}
 
 
 //TODO: Remove old select and insert
@@ -225,6 +344,9 @@ module.exports={
     connect: connect,
     select: select,
     insert: insert,
+    uploadMedia: uploadMedia,
+    deleteMedia: deleteMedia,
+    getUserFavouriteTags: getUserFavouriteTags
 };
 
 

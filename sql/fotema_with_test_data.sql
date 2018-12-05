@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 03, 2018 at 02:14 PM
+-- Generation Time: Dec 04, 2018 at 07:18 PM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.2.12
 
@@ -79,6 +79,7 @@ CREATE TABLE `Media` (
   `type` int(11) NOT NULL,
   `thumbnail` int(11) DEFAULT NULL,
   `capturetime` datetime DEFAULT NULL,
+  `uploadtime` datetime NOT NULL,
   `user` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -86,13 +87,13 @@ CREATE TABLE `Media` (
 -- Dumping data for table `Media`
 --
 
-INSERT INTO `Media` (`id`, `path`, `title`, `description`, `type`, `thumbnail`, `capturetime`, `user`) VALUES
-(1, '/path/to/media/1', 'Cute cat!', 'This is a cute cat!', 2, 2, '2018-11-14 00:00:00', 1),
-(2, 'path/to/thumbs/1', '', '', 1, NULL, NULL, 1),
-(3, '/path/to/thumbs/2', '', '', 1, NULL, '2018-11-15 12:00:00', 3),
-(4, 'path/to/thumbs/3', '', '', 1, NULL, '2018-11-22 00:00:00', 4),
-(5, '/path/to/media/2', 'Nice dog!', 'This is a friendly dog!', 2, 3, '2018-11-23 00:00:00', 3),
-(6, '/path/to/media/3', 'Funny video!', 'This is a funny video.', 4, 4, '2018-11-20 11:00:00', 4);
+INSERT INTO `Media` (`id`, `path`, `title`, `description`, `type`, `thumbnail`, `capturetime`, `uploadtime`, `user`) VALUES
+(1, '/path/to/media/1', 'Cute cat!', 'This is a cute cat!', 2, 2, '2018-11-14 00:00:00', '2018-11-15 00:00:00', 1),
+(2, 'path/to/thumbs/1', '', '', 1, NULL, '2018-11-14 00:00:00', '2018-11-15 00:00:00', 1),
+(3, '/path/to/thumbs/2', '', '', 1, NULL, '2018-11-15 12:00:00', '2018-11-16 00:00:00', 3),
+(4, 'path/to/thumbs/3', '', '', 1, NULL, '2018-11-20 11:00:00', '2018-11-21 00:00:00', 4),
+(5, '/path/to/media/2', 'Nice dog!', 'This is a friendly dog!', 2, 3, '2018-11-15 00:00:00', '2018-11-16 00:00:00', 3),
+(6, '/path/to/media/3', 'Funny video!', 'This is a funny video.', 4, 4, '2018-11-20 11:00:00', '2018-11-21 00:00:00', 4);
 
 -- --------------------------------------------------------
 
@@ -184,32 +185,6 @@ INSERT INTO `Tagged` (`mediaid`, `tagid`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `Target`
---
-
-CREATE TABLE `Target` (
-  `id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `Target`
---
-
-INSERT INTO `Target` (`id`) VALUES
-(1),
-(2),
-(3),
-(4),
-(5),
-(6),
-(7),
-(8),
-(9),
-(10);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `UserInfo`
 --
 
@@ -241,7 +216,8 @@ INSERT INTO `UserInfo` (`id`, `username`, `email`, `passhash`, `profilepicture`)
 --
 ALTER TABLE `Comment`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `target` (`targetmedia`);
+  ADD KEY `user` (`user`),
+  ADD KEY `targetmedia` (`targetmedia`);
 
 --
 -- Indexes for table `CommentLike`
@@ -256,8 +232,8 @@ ALTER TABLE `CommentLike`
 ALTER TABLE `Media`
   ADD PRIMARY KEY (`id`),
   ADD KEY `type` (`type`),
-  ADD KEY `thumbnail` (`thumbnail`),
-  ADD KEY `user` (`user`);
+  ADD KEY `user` (`user`),
+  ADD KEY `thumbnail` (`thumbnail`);
 
 --
 -- Indexes for table `MediaLike`
@@ -286,12 +262,6 @@ ALTER TABLE `Tagged`
   ADD KEY `tagid` (`tagid`);
 
 --
--- Indexes for table `Target`
---
-ALTER TABLE `Target`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `UserInfo`
 --
 ALTER TABLE `UserInfo`
@@ -301,6 +271,18 @@ ALTER TABLE `UserInfo`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `Comment`
+--
+ALTER TABLE `Comment`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `Media`
+--
+ALTER TABLE `Media`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `MediaType`
@@ -313,12 +295,6 @@ ALTER TABLE `MediaType`
 --
 ALTER TABLE `Tag`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `Target`
---
-ALTER TABLE `Target`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `UserInfo`
@@ -334,8 +310,8 @@ ALTER TABLE `UserInfo`
 -- Constraints for table `Comment`
 --
 ALTER TABLE `Comment`
-  ADD CONSTRAINT `Comment_ibfk_2` FOREIGN KEY (`id`) REFERENCES `Target` (`id`),
-  ADD CONSTRAINT `Comment_ibfk_3` FOREIGN KEY (`targetmedia`) REFERENCES `Target` (`id`);
+  ADD CONSTRAINT `Comment_ibfk_2` FOREIGN KEY (`user`) REFERENCES `UserInfo` (`id`),
+  ADD CONSTRAINT `Comment_ibfk_3` FOREIGN KEY (`targetmedia`) REFERENCES `Media` (`id`);
 
 --
 -- Constraints for table `CommentLike`
@@ -349,9 +325,8 @@ ALTER TABLE `CommentLike`
 --
 ALTER TABLE `Media`
   ADD CONSTRAINT `Media_ibfk_2` FOREIGN KEY (`type`) REFERENCES `MediaType` (`id`),
-  ADD CONSTRAINT `Media_ibfk_3` FOREIGN KEY (`thumbnail`) REFERENCES `Media` (`id`),
-  ADD CONSTRAINT `Media_ibfk_4` FOREIGN KEY (`id`) REFERENCES `Target` (`id`),
-  ADD CONSTRAINT `Media_ibfk_5` FOREIGN KEY (`user`) REFERENCES `UserInfo` (`id`);
+  ADD CONSTRAINT `Media_ibfk_5` FOREIGN KEY (`user`) REFERENCES `UserInfo` (`id`),
+  ADD CONSTRAINT `Media_ibfk_6` FOREIGN KEY (`thumbnail`) REFERENCES `Media` (`id`);
 
 --
 -- Constraints for table `MediaLike`
@@ -364,8 +339,8 @@ ALTER TABLE `MediaLike`
 -- Constraints for table `Tagged`
 --
 ALTER TABLE `Tagged`
-  ADD CONSTRAINT `Tagged_ibfk_1` FOREIGN KEY (`mediaid`) REFERENCES `Media` (`id`),
-  ADD CONSTRAINT `Tagged_ibfk_2` FOREIGN KEY (`tagid`) REFERENCES `Tag` (`id`);
+  ADD CONSTRAINT `Tagged_ibfk_2` FOREIGN KEY (`tagid`) REFERENCES `Tag` (`id`),
+  ADD CONSTRAINT `Tagged_ibfk_3` FOREIGN KEY (`mediaid`) REFERENCES `Media` (`id`);
 
 --
 -- Constraints for table `UserInfo`
