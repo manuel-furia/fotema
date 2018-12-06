@@ -8,14 +8,16 @@
 
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
+    <script src="js/popup.js"></script>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
-    <link rel="stylesheet" type="text/css" href="../css/index.css">
-    <link rel="stylesheet" type="text/css" href="../css/signin.css">
-    <link rel="stylesheet" type="text/css" href="../css/signup.css">
-    <link rel="stylesheet" type="text/css" href="../css/media.css">
-    <link rel="stylesheet" type="text/css" href="../css/search.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/signin.css">
+    <link rel="stylesheet" type="text/css" href="css/signup.css">
+    <link rel="stylesheet" type="text/css" href="css/media.css">
+    <link rel="stylesheet" type="text/css" href="css/search.css">
 
 
     <title>home</title>
@@ -55,8 +57,8 @@
     </div>
 
     <div class="sign">
-        <button id="headerBtnSignIn" ><a class="signin" href="javascript:popup('showsignin');">sign in</a></button>
-        <button id="headerBtnSignup"><a class="signup"  href="javascript:popup('showsignup');"> sign up</a></button>
+        <button id="headerBtnSignIn" onclick="popup('showsignin')">sign in</button>
+        <button id="headerBtnSignup" onclick="popup('showsignup')">sign up</button>
     </div>
 
     <div class="profile" id="headerUserProfile">
@@ -107,7 +109,7 @@
 
 
     <div class="signup-popup" id="signup-popup">
-        <form name="login" action="signup" method="post">
+        <form name="login" action="signup" method="post" id="signup">
 
             <div class="row">
                 <a id="cancelsignup" href="javascript:popup('hidesignup');"><i class="fa fa-times"></i></a>
@@ -117,7 +119,7 @@
                     <label>Username</label>
                 </div>
                 <div class="col-75">
-                    <input type = "text" name = "username" required placeholder="required">
+                    <input type = "text" name = "username" required placeholder="required" class="signup">
                 </div>
             </div>
 
@@ -126,7 +128,7 @@
                     <label>Email</label>
                 </div>
                 <div class="col-75">
-                    <input type = "email" name = "email" required placeholder="required and must be valid" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+                    <input type = "email" name = "email" class="signup" required placeholder="required and must be valid" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
                 </div>
             </div>
 
@@ -135,7 +137,7 @@
                     <label>Password</label>
                 </div>
                 <div class="col-75">
-                    <input type = "password" name = "password" required placeholder="required">
+                    <input type = "password" name = "password" required placeholder="required" class="signup">
                 </div>
             </div>
 
@@ -162,7 +164,7 @@
 
 <div class="mediacontent">
 
-    <div class="firstblock-mediacontent"> <!--show on page load, user can click view-more button to load more-->
+    <div class="firstblock-mediacontent" id="imageTarget"> <!--show on page load, user can click view-more button to load more-->
 
 
 
@@ -263,6 +265,7 @@
 <script>
     const page = 'anonwall';
 </script>
+
 <script src="../js/popup.js"></script>
 <script src="../js/eventHandler.js" type="module"></script>
 

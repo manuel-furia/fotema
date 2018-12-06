@@ -9,18 +9,18 @@ export const showImages = (images) => {
         console.log('mymedia: ' + myMedia);
         myMedia.innerHTML +=
 
-        `<div class="responsive">
-          <div class="<galler></galler>y">
-            <a  target="_blank" href="uploads/${media.path}">
-            <img src='thumbs/${media.thumbnail}'>
-            </a>
-            <div class="desc">
-                <p class="description">${media.description}</p>
-                <p class="likes"><i class="fa fa-heart"></i> ${media.likes}</p>
-                <p class="comments"><i class="fa fa-commenting">${media.comments}</i></p>
-            </div>
-          </div>
-        </div>` ;
+        ` <div class="responsive" >
+              <div class="gallery">
+                  <a target="_blank" href=${media.path}>
+                      <img src=${media.path} width="" height="">
+                  </a>
+                  <div class="desc">
+                      <p class="description">${media.description}</p>
+                      <p class="likesnumber"><i class="fa fa-heart"></i> ${media.likeAmount}</p>
+                      <p class="commentsnumber"><i class="fa fa-commenting"></i> ${media.commentAmount}</p>
+                  </div>
+              </div>
+          </div>` ;
 
     });
   console.log('html: ' + myMedia.innerHTML);

@@ -53,7 +53,6 @@ app.use(session({
 }));
 
 const cb = (result, res) => {
-  console.log(result);
   res.send(result);
 };
 
@@ -73,8 +72,9 @@ app.post('/login',
 );
 
 app.post('/signup',(req, res, next) =>{
+  console.log('test!');
   let newUser = {};
-  console.log(req.params);
+  console.log(req.username);
   //TODO: query to check if the username and email already exist in the database
   /*
   if(database.checkUserName(req.body.username) &&
