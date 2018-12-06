@@ -44,10 +44,9 @@ model.uploadMedia(testdata);*/
 
 //model.deleteMedia(88);
 
-/*
-const p = model.getMediasByAnonRelevance(0, 30);
-p.then((res) => console.log(res));
-*/
+
+model.getMediasByAnonRelevance(0, 30).then((res) => console.log(res));
+
 
 
 //db.deleteMedia(connection, 86, ()=>{});

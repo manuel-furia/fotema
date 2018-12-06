@@ -116,10 +116,11 @@ const getTaggedMediasOrderedByImpact = (connection, tag, start, limit, callback)
        `
 SELECT L.*, C.comments, (L.likes + C.comments) AS impact
 FROM (
-    SELECT Media.*, COUNT(MediaLike.media) AS likes
+    SELECT Media.*, Thumbnails.path AS thumbpath, COUNT(MediaLike.media) AS likes
     FROM Media
     INNER JOIN MediaType ON Media.type = MediaType.id
     LEFT JOIN MediaLike ON Media.id = MediaLike.media
+    LEFT JOIN Media AS Thumbnails ON Media.thumbnail = Thumbnails.id
     WHERE MediaType.name <> "thumbnail"
     GROUP BY Media.id
 ) AS L
@@ -146,10 +147,11 @@ const getMediasOrderedByImpact = (connection, start, limit, callback) => {
        `
 SELECT L.*, C.comments, (L.likes + C.comments) AS impact
 FROM (
-    SELECT Media.*, COUNT(MediaLike.media) AS likes
+    SELECT Media.*, Thumbnails.path AS thumbpath, COUNT(MediaLike.media) AS likes
     FROM Media
     INNER JOIN MediaType ON Media.type = MediaType.id
     LEFT JOIN MediaLike ON Media.id = MediaLike.media
+    LEFT JOIN Media AS Thumbnails ON Media.thumbnail = Thumbnails.id
     WHERE MediaType.name <> "thumbnail"
     GROUP BY Media.id
 ) AS L
@@ -173,11 +175,12 @@ const getUserFavouriteMedias = (connection, userid, start, end, callback) => {
         `SELECT Media.*, IFNULL(L.likes, 0) AS likes, IFNULL(C.comments, 0) AS comments, IFNULL(L.likes + C.comments, 0) AS impact
 FROM Media
 LEFT JOIN (
-    SELECT Media.*, COUNT(MediaLike.media) AS likes
+    SELECT Media.*, Thumbnails.path AS thumbpath, COUNT(MediaLike.media) AS likes
     FROM Media
     INNER JOIN MediaType ON Media.type = MediaType.id
     LEFT JOIN MediaLike ON Media.id = MediaLike.media
     LEFT JOIN UserInfo ON MediaLike.user = UserInfo.id
+    LEFT JOIN Media AS Thumbnails ON Media.thumbnail = Thumbnails.id
     WHERE UserInfo.id = ?
     GROUP BY Media.id
 ) AS L ON Media.id = L.id
@@ -203,11 +206,12 @@ const getUserFavouriteTags = (connection, userid, start, end, callback) => {
         `SELECT Tag.name AS tag, SUM(IFNULL(L.likes, 0)) AS likes, SUM(IFNULL(C.comments, 0)) AS comments, SUM(IFNULL(L.likes, 0)) + SUM(IFNULL(C.comments, 0)) AS impact
 FROM Media
 LEFT JOIN (
-    SELECT Media.*, COUNT(MediaLike.media) AS likes
+    SELECT Media.*, Thumbnails.path AS thumbpath, COUNT(MediaLike.media) AS likes
     FROM Media
     INNER JOIN MediaType ON Media.type = MediaType.id
     LEFT JOIN MediaLike ON Media.id = MediaLike.media
     LEFT JOIN UserInfo ON MediaLike.user = UserInfo.id
+    LEFT JOIN Media AS Thumbnails ON Media.thumbnail = Thumbnails.id
     WHERE UserInfo.id = ?
     GROUP BY Media.id
 ) AS L ON Media.id = L.id
