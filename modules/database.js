@@ -1,17 +1,25 @@
 'use strict';
 
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
+
+const executePlainQuery = (connection, sql) => {
+    return connection.then((con) => con.query(sql)).then(([rows, fields]) => rows);
+};
 
 const executeQuery = (connection, sql, params) => {
-    return new Promise((resolve, reject) => {
-        connection.execute(sql, params, (err, result) => {
-            if (err) {
-                console.error(err.message);
-                reject(err);
-            }
-            resolve(result);
-        });
-    });
+    return connection.then((con) => con.execute(sql, params)).then(([rows, fields]) => rows);
+};
+
+const startTransaction = (connection) => {
+    return connection.then((con) => con.query('START TRANSACTION;')).then(([rows, fields]) => rows);
+};
+
+const commit = (connection) => {
+    return connection.then((con) => con.query('COMMIT')).then(([rows, fields]) => rows);
+};
+
+const rollback = (connection) => {
+    return connection.then((con) => con.query('ROLLBACK;')).then(([rows, fields]) => rows);
 };
 
 //Execute multiple queries
@@ -25,16 +33,11 @@ const multipleQueries = (connection, queries, params) => {
 
     const runnables = zipWith(queriesArr, filledParams, (query, param) => () => executeQuery(connection, query, param));
 
-    const start = new Promise((resolve, reject) => {
-        connection.beginTransaction((err) => {
-            if (!err) resolve()
-            else reject('Starting sql transaction failed.');
-        });
-    });
+    const start = startTransaction(connection);
 
     const transaction = runnables.reduce((p, fn) => p.then(fn), start);
 
-    return transaction.then(() => connection.commit());
+    return transaction.then(() => commit(connection));
 };
 
 
@@ -263,18 +266,19 @@ const deleteMedia = (connection, mediaID) => {
 //data contains imagepath, thumbpath, title, description, type, capturetime, uploadtime, userid, tags[]
 const uploadMedia = (connection, data) => {
 
-   const insertMedia = (typeID, thumbID) => {
+   const insertMedia = (path, typeID, thumbID) => {
+        //console.log([data.imagepath, data.title, data.description, typeID, thumbID, data.capturetime, data.uploadtime, data.userid]);
         return executeQuery(connection,
             `INSERT INTO Media (path, title, description, type, thumbnail, capturetime, uploadtime, user)
              VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
-            [data.imagepath, data.title, data.description, typeID, thumbID, data.capturetime, data.uploadtime, data.userid]);
+            [path, data.title, data.description, typeID, thumbID, data.capturetime, data.uploadtime, data.userid]);
     }
 
-    const tagMedia = (mediaID, tag) => {
+    const tagMedia = (mediaID, tagID) => {
         return executeQuery(connection,
             `INSERT INTO Tagged (mediaid, tagid)
              VALUES (?, ?);`,
-            [acc.imageID, acc.tagID]
+            [mediaID, tagID]
         );
     }
 
@@ -283,39 +287,31 @@ const uploadMedia = (connection, data) => {
             const tagIDPresent = executeQuery(connection, 'SELECT id, name FROM Tag WHERE name = ?;', [tag]);
             const tagID = tagIDPresent.then((results) => {
                 if (results.length === 0){
-                    return executeQuery(connection,
-                    `INSERT INTO Tag (name)
-                         VALUES (?);`,
-                    [tag]).then((result) => result.insertId);
+                    return executeQuery(connection, 'INSERT INTO Tag (name) VALUES (?);', [tag]).then((result) => result.insertId);
                 } else {
-                    return results[0];
+                    return results[0].id;
                 }
             });
-            return tagID.then((tagID) => tagMedia(mediaID, tag));
+            return tagID.then((tagID) => tagMedia(mediaID, tagID));
         });
     }
 
-    const start = new Promise((resolve, reject) => {
-        connection.beginTransaction((err) => {
-            if (!err) resolve({})
-            else reject('Starting sql transaction failed.');
-        });
-    });
-
+    //Start the transaction
+    const start = startTransaction(connection)
     //Get the typeid of the type of the media
     const getTypeID = start.then(() => getDataFromAttribute(connection, 'MediaType', 'name', data.type)).then((result) => result[0].id);
     //Get the type id of the type 'thumbnail'
-    const getThumbTypeID = getTypeID.then(() => getDataFromAttribute(connection, 'MediaType', 'name', 'thumbnail')).then((result) => result[0].id);
+    const getThumbTypeID = start.then(() => getDataFromAttribute(connection, 'MediaType', 'name', 'thumbnail')).then((result) => result[0].id);
     //Create the thumbnail    
-    const createThumb = getThumbTypeID.then((thumbTypeID) => insertMedia(thumbTypeID, null)).then((result) => result.insertId);
+    const createThumb = getThumbTypeID.then((thumbTypeID) => insertMedia(data.thumbpath, thumbTypeID, null)).then((result) => result.insertId);
     //Create the media    
-    const createMedia = Promise.all([getTypeID, createThumb]).then(([typeID, thumbID]) => insertMedia(typeID, thumbID)).then((result) => result.insertId);
+    const createMedia = Promise.all([getTypeID, createThumb]).then(([typeID, thumbID]) => insertMedia(data.imagepath, typeID, thumbID)).then((result) => result.insertId);
     //Add all the tags to the media
-    const addAllTags = createMedia.then((mediaID) => insertTags(mediaID));
-    //Commit transaction
-    const commit = addAllTags.then(() => connection.commit());
+    const addAllTags = createMedia.then((mediaID) => Promise.all(insertTags(mediaID)));
+    //Commit the transaction
+    const committed = addAllTags.then(() => commit(connection));
 
-    return commit;
+    return committed;
 
 }
 
