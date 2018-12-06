@@ -58,7 +58,7 @@ const uploadMediaAndGetData(req, res)
         capturetime: exifData.time,
         uploadtime: time,
         userid: 2, //TODO: Fetch the user from the DB
-        tags: ['cats','fur','play']};
+        tags: tags};
     });
 
 }
