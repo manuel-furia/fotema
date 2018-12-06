@@ -10,6 +10,7 @@ import {showImages} from './renderer/renderer.js';
 import {uploadImages} from './api/post.js';
 import {postUserData} from './api/post.js';
 
+
 let start = 0;
 const amount = 30;
 //event listener function for fileupload
@@ -59,15 +60,21 @@ const signIn = (event)=> {
 };
 
 const signUp = (event)=> {
+  const signUpForm = document.querySelectorAll('.signup');
   event.preventDefault();
-  postUserData('signup', mediaForm);
-
+  //console.log(signUpForm);
+  const test = Array.prototype.slice.call(signUpForm);
+  let result = {};
+  test.forEach(elem =>{
+    Object.assign(result, {[elem.name]: elem.value});
+  });
+  postUserData('signup', result);
 };
 
 
 document.getElementById('signin').addEventListener('submit', signIn);
 
-document.getElementById('signin').addEventListener('submit', signUp);
+document.getElementById('signup').addEventListener('submit', signUp);
 
 
 if (mediaForm != null) mediaForm.addEventListener('submit', uploadEvent);
