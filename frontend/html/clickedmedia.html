@@ -5,20 +5,16 @@
     <title>Title of the media</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
-    <link rel="stylesheet" type="text/css" href="../css/signin.css">
-    <link rel="stylesheet" type="text/css" href="../css/signup.css">
-    <link rel="stylesheet" type="text/css" href="../css/myfotema.css">
+
     <link rel="stylesheet" type="text/css" href="../css/index.css">
     <link rel="stylesheet" type="text/css" href="../css/clickedmedia.css">
     <link rel="stylesheet" type="text/css" href="../css/search.css">
-
-
-
-    <!--<script src="../js/popup.js"></script>-->
-    <!--<script src="../js/viewMore.js"></script>-->
+    <link rel="stylesheet" type="text/css" href="../css/signin.css">
+    <link rel="stylesheet" type="text/css" href="../css/signup.css">
 
 </head>
 
@@ -30,11 +26,11 @@
 <div class="header" id="header">
 
     <div class="logo">
-        <a href="anonwall.html"> FOTEMA <!--<img src="/image/slogo14.PNG">--></a>
+        <a href="index.html"> FOTEMA <!--<img src="/image/slogo14.PNG">--></a>
     </div>
 
-    <div class="upload" id="uploadMenuBtn">
-        <a href="myfotema.html#uploadfile?show"><!--<i class="fa fa-upload"></i>--> upload</a>
+    <div class="upload" >
+        <button id="headerBtnUpload"><a href="myfotema.html#uploadfile?show"> upload</a></button>
     </div>
 
     <div class="search-container">
@@ -44,19 +40,29 @@
         </form>
     </div>
 
-    <div class="sign">
-        <a class="signin" href="javascript:popup('showsignin');">sign in</a>
-        <a class="signup" href="javascript:popup('showsignup');"> sign up</a>
-    </div>
+    <button id="btnSearchMobile" onclick="showSearchContainerOnMobile()"><i class="fa fa-search"></i></button>
 
-    <div class="dropdown">
-        <button class="dropbtn"><!--<i class="fa fa-plus"></i>-->more <i class="fa fa-caret-down"></i>
+
+    <div class="dropdown" id="headerBtnMore">
+        <button class="dropbtn">more <i class="fa fa-caret-down"></i>
         </button>
         <div class="dropdown-content">
             <a class="myfotema" href="myfotema.html">my fotema</a>
             <a class="settings" href="settings.html">settings</a>
             <a class="signout" href="signout.html">sign out </a>
         </div>
+    </div>
+
+    <div class="sign">
+        <button id="headerBtnSignIn" ><a class="signin" href="javascript:popup('showsignin');">sign in</a></button>
+        <button id="headerBtnSignup"><a class="signup"  href="javascript:popup('showsignup');"> sign up</a></button>
+    </div>
+
+    <div class="profile" id="headerUserProfile">
+        <a href="myfotema.html">
+            <img src="../image/f1.jpg" alt="photo">
+            <p class="username">username</p>
+        </a>
     </div>
 
 </div>
@@ -153,229 +159,131 @@
 <div class="clickmedia">
 
     <div class="responsive">
+
         <div class="gallery">
-            <a target="_blank" href="../../image/CUTLtuC.jpg">
-                <img src="/backend/public/view/imageimage/CUTLtuC.jpg" width="" height="">
+            <a target="_blank" href="../image/CUTLtuC.jpg">
+                <img src="../image/qRthE91.jpg" width="" height="">
             </a>
             <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
+                <p class="description">description description description hgeihgeihgiehgeighei</p>
+                <p class="likesnumber"><i class="fa fa-heart"></i> 200</p>
+                <p class="commentsnumber"><i class="fa fa-commenting"></i> 20</p>
             </div>
         </div>
 
-        <div class="writecomment">
+        <div class="editmedia" id="editmedia">
+            <div class="updatemedia">
+
+                <button id="btnUpdateMedia" onclick="showUpdateForm()"><i class="fa fa-pencil"></i></button>
+
+                <form id="updateForm" action="">
+
+                    <button id="cancelUpdate" onclick="cancelUpdate()"><i class="fa fa-times"></i></button>
+
+                    <div class="row">
+                        <label>title</label>
+                        <input type = "text" name = "title"  placeholder="title">
+                    </div>
+
+                    <div class="row">
+                        <label>tags</label>
+                        <input type = "text" name = "tags"  placeholder="#tags">
+                    </div>
+
+                    <div class="row">
+                        <label>details</label>
+                        <input type = "text" name = "details"  placeholder="details">
+                    </div>
+                    <button id="submitUpdate" >submit</button>
+                </form>
+            </div>
+
+            <div class="deletemedia">
+                <button id="btnDeleteMedia" onclick="deleteMedia()"><i class="fa fa-trash-o"></i></button>
+            </div>
+
+        </div>
+
+        <div class="writecomment" id="writeComment">
             <form action="/comment" id="commentform">
                 <label>Write a comment</label>
                 <input type="text" name="your-comment" maxlength="140" placeholder="your comment here">
-                <input type="submit" id="submitComments">
+                <input type="submit" id="submitComments" value="submit">
             </form>
-
         </div>
 
-        <div class="usercomments">
-            <p class="commentername">commenter name</p>
-            <p class="commenttime">4 hr </p>
-            <p class="commentcontent">this is great!!</p>
-
-        </div>
-        <div class="actiononcomment" >
-
-            <div class="replycomment">
-                <form action="/comment" >
-                    <input type="submit"  value="reply">
-                    <input type="text" name="your-comment" maxlength="140" placeholder="your comment here">
-                </form>
+        <div class="comments">
+            <div class="usercomments">
+                <p class="commentername">commenter name</p>
+                <button class="likecomment"><i class="fa fa-thumbs-up"></i>  5k </button>
+                <p class="commenttime">4 hr </p>
+                <p class="commentcontent">this is great!!</p>
             </div>
 
-            <button class="likecomment"><i class="fa fa-thumbs-up"></i>5k</button>
-            <button class="dislikecomment"><i class="fa fa-thumbs-down"></i>120</button>
-        </div>
-        <br>
-
-        <div class="usercomments">
-            <p class="commentername">commenter name</p>
-            <p class="commenttime">4 hr </p>
-            <p class="commentcontent">this is great!!</p>
-        </div>
-        <div class="actiononcomment" >
-
-            <div class="replycomment">
-                <form action="/comment" >
-                    <input type="submit"  value="reply">
-                    <input type="text" name="your-comment" maxlength="140" placeholder="your comment here">
-                </form>
+            <div class="usercomments">
+                <p class="commentername">commenter name</p>
+                <button class="likecomment"><i class="fa fa-thumbs-up"></i>  500 </button>
+                <p class="commenttime">4 hr </p>
+                <p class="commentcontent">this is great!! great great great great great great great great hitehitheitheihteihtiehighdigh hitehitheitheihteihtiehighdigh hitehitheitheihteihtiehighdigh</p>
             </div>
 
-            <button class="likecomment"><i class="fa fa-thumbs-up"></i>5k</button>
-            <button class="dislikecomment"><i class="fa fa-thumbs-down"></i>120</button>
-        </div>
-        <br>
-
-        <div class="usercomments">
-            <p class="commentername">commenter name</p>
-            <p class="commenttime">4 hr </p>
-            <p class="commentcontent">this is great!!</p>
-        </div>
-        <div class="actiononcomment" >
-
-            <div class="replycomment">
-                <form action="/comment" >
-                    <input type="submit"  value="reply">
-                    <input type="text" name="your-comment" maxlength="140" placeholder="your comment here">
-                </form>
+            <div class="usercomments">
+                <p class="commentername">commenter name</p>
+                <button class="likecomment"><i class="fa fa-thumbs-up"></i>  5k </button>
+                <p class="commenttime">4 hr </p>
+                <p class="commentcontent">this is great!!</p>
             </div>
 
-            <button class="likecomment"><i class="fa fa-thumbs-up"></i>5k</button>
-            <button class="dislikecomment"><i class="fa fa-thumbs-down"></i>120</button>
+            <div class="usercomments">
+                <p class="commentername">commenter name</p>
+                <button class="likecomment"><i class="fa fa-thumbs-up"></i>  105k</button>
+                <p class="commenttime">4 hr </p>
+                <p class="commentcontent">this is great!!</p>
+            </div>
         </div>
-        <br>
-
     </div>
-
 </div>
 
-<div id="showSearchResults">
+<div id="searchResults" class="search-results">
 
-    <a id="closeSearchResult"  onclick="document.getElementById('showSearchResults').style.display = 'none';" >
-        <i class="fa fa-times"></i> <!--href="javascript:history.back()"-->
+    <a id="hideSearchResult" onclick="document.getElementById('searchResults').style.display = 'none';" >
+        <i class="fa fa-times"></i>
     </a>
 
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/slogo15.PNG">
-                <img src="../../image/slogo15.PNG" width="" height="">
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
+    <div class="first-block-search-results" id="firstBlockSearchResults">
+
+        <div class="responsive">
+            <div class="gallery">
+                <a target="_blank" href="../../image/slogo15.PNG">
+                    <img src="../../image/slogo15.PNG" width="" height="">
+                </a>
+                <div class="desc">
+                    <p class="description">description</p>
+                    <p class="likesnumber"><i class="fa fa-heart"></i> 200</p>
+                    <p class="commentsnumber"><i class="fa fa-commenting"></i> 20</p>
+                </div>
             </div>
         </div>
+
     </div>
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/slogo15.PNG">
-                <img src="../../image/slogo15.PNG" width="" height="">
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
-            </div>
-        </div>
-    </div>
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/slogo15.PNG">
-                <img src="../../image/slogo15.PNG" width="" height="">
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
-            </div>
-        </div>
-    </div>
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/slogo15.PNG">
-                <img src="../../image/slogo15.PNG" width="" height="">
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
-            </div>
-        </div>
-    </div>
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/slogo15.PNG">
-                <img src="../../image/slogo15.PNG" width="" height="">
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
-            </div>
-        </div>
-    </div>
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/slogo15.PNG">
-                <img src="../../image/slogo15.PNG" width="" height="">
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
-            </div>
-        </div>
-    </div>
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/slogo15.PNG">
-                <img src="../../image/slogo15.PNG" width="" height="">
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
+
+    <div class="view-more-search-results" id="viewMoreSearchResults">
+        <div class="responsive">
+            <div class="gallery">
+                <a target="_blank" href="../../image/slogo15.PNG">
+                    <img src="../../image/slogo15.PNG" width="" height="">
+                </a>
+                <div class="desc">
+                    <p class="description">description</p>
+                    <p class="likesnumber"><i class="fa fa-heart"></i> 200</p>
+                    <p class="commentsnumber"><i class="fa fa-commenting"></i> 20</p>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/slogo15.PNG">
-                <img src="../../image/slogo15.PNG" width="" height="">
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/slogo15.PNG">
-                <img src="../../image/slogo15.PNG" width="" height="">
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/slogo15.PNG">
-                <img src="../../image/slogo15.PNG" width="" height="">
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/slogo15.PNG">
-                <img src="../../image/slogo15.PNG" width="" height="">
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
-            </div>
-        </div>
+    <div class="divbtnViewMoreSearchResults">
+        <button class="btnViewMoreSearchResults" id="btnViewMoreSearchResults" onclick="viewMoreSearchResults()">view more</button>
     </div>
 
 </div>

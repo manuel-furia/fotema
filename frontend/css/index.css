@@ -7,8 +7,8 @@
 body{
     font-family: sans-serif, Arial, Helvetica;
     background-size: cover;
-    background: #070006 no-repeat fixed center center;
-    background-image: linear-gradient(to bottom, #000000, #0e000d, #040004);
+    background: #5d5d5d no-repeat fixed center center;
+    /*background-image: linear-gradient(to bottom, #000000, #0e000d, #040004);*/
     width: 100%;
     height: 100%;
     /*overflow-x: hidden;*/
@@ -19,57 +19,57 @@ body{
 /************scroll bar************/
 /* width */
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 12px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px #0e051c;
+    box-shadow: inset 0 0 5px #0d0d0d;
     border-radius: 5px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #472d42;
+    background: grey;
     border-radius: 5px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: #af050f;
+    background: #363636;
 }
 
 
 
 .header {
     position: fixed;
+    z-index: 9;
     width: 100%;
-    background-color: #280024;
-    background-image: linear-gradient(to bottom, #1f001c,#4b0144,#4b0144, #1f001c);
-    /*background-image: linear-gradient(to right, #4b0144, #4b0144, #1f001c,#1f001c,#6b0161, #6b0161, #6b0161,#1f001c,#1f001c,#1f001c, #4b0144, #4b0144);*/
-    padding: 8px;
+    background-color: grey;
+    background-image: linear-gradient(to right, #3f3f3f, #7e7e7e, #3f3f3f);
+    /*background-image: linear-gradient(to right,  #040004, #1d001a, #040004);*/
+    padding: 5px 10px;
     display:flex;
     flex: 100%;
     flex-direction: row;
     flex-wrap: nowrap;
-    height: max-content;
+    /*height: max-content;*/
 }
 
 
 .header .logo {
-    margin: 0 1%;
-    background-color: #eb0715;
-    background-image: linear-gradient(to bottom,  #77030b,#d70613,#eb0715, #eb0715,#eb0715, #d70613,#77030b);
+    margin-right: 10px;
+    background-color: #3838c7;
+    /*background-image: linear-gradient(to bottom,  #77030b, #d70613, #eb0715, #eb0715,#eb0715, #d70613,#77030b);*/
     float: left;
     text-align: center;
     padding: 8px;
     border: none;
     border-radius: 8px;
-    /*justify-content: space-evenly;*/
 }
 
  .logo a {
-     flex: 10%;
+     flex: 15%;
      font-size: 20px;
      font-weight: bold;
      color: white;
@@ -78,27 +78,29 @@ body{
      line-height: 20px;
 }
 
+
 .header .logo:hover{
-    background-color: #cd3a07;
-    background-image: linear-gradient(to bottom, #eb0715, #6c030a, #6c030a, #eb0715);
-    color: white;
-    text-decoration: none;
+    background-color: rgba(0, 0, 255, 0.95);
+    background-image: linear-gradient(to bottom, #0000ec, #0000a9, #0000a4, #0000ec);
+
+    /*background-color: rgba(0, 0, 121, 0.9);*/
+    /*background-image: linear-gradient(to bottom, #eb0715, #6c030a, #6c030a, #eb0715);*/
 }
 
 
 
 .header .upload{
     float: left;
-    flex: 23%;
+    flex: 25%;
 }
 
 .header .upload a{
-    display: flex;
-    flex-direction: row;
-    float: left;
+    /*display: flex;*/
+    /*flex-direction: row;*/
+    /*float: left;*/
 }
 
-.header .upload a, .header .sign a, .dropbtn {
+.header .upload button, .header .sign button, .dropbtn {
     color: white;
     text-align: center;
     padding: 8px;
@@ -109,16 +111,26 @@ body{
     line-height: 20px;
     border: none;
     border-radius: 8px;
-    /*justify-content: space-evenly;*/
-    background-color: #d7380b;
-    background-image: linear-gradient(to bottom, #7b2006, #ea6101, #fb6801,#fb6801, #ea6101, #7b2006);
+    /*background-color: #d7380b;*/
+    background-color: #1fb72f;
 
 }
 
+.header .upload button, .header #headerBtnSignup {
+    background-color: #eb4208;
+}
 
-.header .upload a:hover, .header .sign a:hover, .header .dropdown .dropbtn:hover {
-    background-color: rgb(186, 52, 6);
-    background-image: linear-gradient(to bottom, #e93d0c, #8b2407, #e93d0c);
+.header .upload a, .header .sign a{
+    text-decoration: none;
+    color: white;
+}
+
+
+.header .upload button:hover, .header .sign button:hover, .header .dropdown .dropbtn:hover {
+    /*background-color: rgb(186, 52, 6);*/
+    /*background-image: linear-gradient(to bottom, #e93d0c, #8b2407, #e93d0c);*/
+    background-color: rgba(35, 208, 54, 0.99);
+    background-image: linear-gradient(to bottom, #00a800, green, #00a800);
 
 }
 
@@ -128,20 +140,20 @@ body{
 }
 
 .header .sign{
-    flex: 20%;
-    margin-left: 5%;
+    flex: 10%;
+    float: right;
     /*visibility: hidden;*/
 }
 
-.header .sign a{
-    margin-left: 3%;
+.header .sign button{
+    margin-left: 4%;
     float: right;
-
 }
+
 
 .header .dropdown{
     flex: 5%;
-    margin: 0 10px;
+    margin: 0;
 }
 
 .header .upload, .header .dropdown{
@@ -150,7 +162,7 @@ body{
 
 
 .search-container{
-    flex: 35%;
+    flex: 45%;
     display: flex;
     flex-direction: row;
 }
@@ -158,32 +170,36 @@ body{
 
 .search-container input[type=text] {
     width: 400px;
-    padding: 5px;
+    padding: 3px;
     border: 1px solid #eb0715;
     margin-top: 6px;
-    margin-right: 16px;
+    margin-right: 3px;
     font-size: 15px;
-    background-color: rgba(210, 186, 207, 0.99);
+    /*background-color: rgba(210, 186, 207, 0.99);*/
+    background-color: white;
 }
 
-.search-container button {
-    padding: 4px 6px;
+.search-container button, #btnSearchMobile {
+    padding: 3px 5px;
     margin-top: 6px;
     background: #eb4208;
     /*background-image: linear-gradient(to bottom, #7b2006, #e43b0c, #e43b0c, #7b2006);*/
-    background-image: linear-gradient(to bottom, #7b2006, #ea6101, #fb6801,#fb6801, #ea6101, #7b2006);
-    font-size: 17px;
+    font-size: 15px;
     border: none;
     cursor: pointer;
     color: white;
 }
 
 .search-container button:hover {
-    background: #ba3406;
-    background-image: linear-gradient(to bottom, #e93d0c, #8b2407, #e93d0c);
+    /*background: #ba3406;*/
+    /*background-image: linear-gradient(to bottom, #e93d0c, #8b2407, #e93d0c);*/
+    background-color: #1fb72f;
     color: white;
 }
 
+#btnSearchMobile{
+    display: none;
+}
 
 .dropdown {
     position: relative;
@@ -193,8 +209,7 @@ body{
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #33032d;
-    /*background-image: linear-gradient(to bottom, #500148, #5c175a,#6b1b69,#6b1b69,#6b1b69, #5c175a, #500148);*/
+    background-color: #474747;
     min-width: 130px;
     width: max-content;
     padding: 5px;
@@ -202,9 +217,10 @@ body{
     z-index: 9;
     border-radius: 5px;
     right: 2%;
+
 }
 
-.dropdown-content a {
+.dropdown-content a{
     color: white;
     padding: 12px 16px;
     font-size: 17px;
@@ -215,7 +231,7 @@ body{
 }
 
 .dropdown-content a:hover {
-    background-color: rgba(221, 221, 221, 0.53);
+    background-color: rgba(123, 123, 123, 0.82);
     border-radius: 5px;
 }
 
@@ -224,14 +240,50 @@ body{
 }
 
 
+.profile{
+    position: fixed;
+    right: 20px;
+    top: 10px;
+    overflow-x: hidden;
+    max-width: content-box;
+    width: 150px;
+    display: none;
+}
+
+.profile a{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    text-decoration: none;
+
+}
+
+.profile img{
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+}
+
+.profile .username{
+    float: right;
+    margin-left: 5px;
+    color: whitesmoke;
+    font-size: 20px;
+    font-family: Verdana, cursive;
+}
+
+
+
 .footer {
     position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
     height: 30px;
-    background-color: rgb(82, 1, 74);
-    background-image: linear-gradient(to right,  #040004, #1d001a, #040004);
+    /*background-color: rgb(82, 1, 74);*/
+    /*background-image: linear-gradient(to right,  #040004, #1d001a, #040004);*/
+    background-color: #676767;
+    background-image: linear-gradient(to right, #3f3f3f, #3f3f3f);
     text-align: center;
     transition: top 0.3s;
 }
@@ -260,9 +312,7 @@ body{
 
 @media only screen and (max-width: 1024px) {
     .header{
-        flex: none;
-        background-color: #0e000d;
-        background-image: linear-gradient(#0e000d, #230021,#0e000d);
+
     }
 
     .logo a {
@@ -274,15 +324,14 @@ body{
 
     .header .upload{
         position: fixed;
-        left: 13%;
+        left: 100px;
         /*visibility: hidden;*/
     }
 
     .header .dropdown{
         position: fixed;
-        left: 22%;
+        left: 180px;
         flex: none;
-        margin-left: 1%;
         /*visibility: hidden;*/
 
     }
@@ -290,21 +339,20 @@ body{
     .header .sign{
         position: fixed;
         display: flex;
-        flex-direction: row;
-        left: 10%;
+        flex-direction: row-reverse;
+        right: 15px;
         float: left;
         /*visibility: hidden;*/
     }
 
-    .header .sign a{
-        width: 90px;
+    .header .sign button{
+        width: 85px;
         margin-left: 3%;
     }
 
     .search-container{
         position: fixed;
-        top: 1%;
-        right: 6%;
+        left: 40%;
         flex: none;
         flex-wrap: nowrap;
     }
@@ -312,25 +360,21 @@ body{
     .search-container input[type=text] {
         width: 260px;
         padding: 2px;
-        border: 1px solid #eb0715;
-        margin-top: 0;
-        margin-right: 0;
         font-size: 14px;
-        background-color: rgba(210, 186, 207, 0.99);
+        /*background-color: rgba(203, 203, 203, 0.99);*/
     }
 
     .search-container button {
-        padding: 4px 6px;
-        margin-top: 6px;
-        background: #eb4208;
-        background-image: linear-gradient(to bottom, #7b2006, #ea6101, #fb6801,#fb6801, #ea6101, #7b2006);
         font-size: 14px;
-        border: none;
-        cursor: pointer;
-        color: white;
+    }
+
+    .profile {
     }
 
 
+    ::-webkit-scrollbar {
+        width: 0;
+    }
 
 }
 
@@ -339,8 +383,11 @@ body{
 @media only screen and (max-width: 768px) {
     .header{
         flex: none;
-        background-color: #0e000d;
-        background-image: linear-gradient(#0e000d, #230021,#0e000d);
+        display: inline-block;
+        margin: 0;
+        /*background-color: #0e000d;*/
+        /*background-image: linear-gradient(#0e000d, #230021,#0e000d);*/
+        /*background-image: none;*/
     }
 
     .logo a {
@@ -352,15 +399,14 @@ body{
 
     .header .upload{
         position: fixed;
-        left: 20%;
+        left: 100px;
         /*visibility: hidden;*/
     }
 
     .header .dropdown{
         position: fixed;
-        left: 35%;
+        left: 180px;
         flex: none;
-        margin-left: 1%;
         /*visibility: hidden;*/
 
     }
@@ -368,47 +414,44 @@ body{
     .header .sign{
         position: fixed;
         display: flex;
-        flex-direction: row;
-        left: 15%;
-        float: left;
+        flex-direction: row-reverse;
+        right: 15px;
+
         /*visibility: hidden;*/
     }
 
-    .header .sign a{
+    .header .sign button{
         width: 90px;
         margin-left: 3%;
     }
 
     .search-container{
         position: fixed;
-        top: 1%;
-        right: 4%;
+        left: 40%;
         flex: none;
         flex-wrap: nowrap;
     }
 
     .search-container input[type=text] {
-        width: 260px;
+        width: 220px;
         padding: 2px;
-        border: 1px solid #eb0715;
         margin-top: 0;
         margin-right: 0;
         font-size: 14px;
-        background-color: rgba(210, 186, 207, 0.99);
     }
 
     .search-container button {
         padding: 4px 6px;
         margin-top: 6px;
-        background: #eb4208;
-        background-image: linear-gradient(to bottom, #7b2006, #ea6101, #fb6801,#fb6801, #ea6101, #7b2006);
         font-size: 14px;
         border: none;
         cursor: pointer;
         color: white;
     }
 
-
+    ::-webkit-scrollbar {
+        width: 0;
+    }
 
 }
 
@@ -416,8 +459,16 @@ body{
 @media screen and (max-width: 600px) {
     .header{
         flex: none;
-        background-color: #0e000d;
-        background-image: linear-gradient(#0e000d, #230021,#0e000d);
+        height: 45px;
+        display: inline;
+        margin: 0;
+    }
+
+    .header .logo {
+        padding: 5px;
+        position: fixed;
+        top: 5px;
+        left: 5px;
     }
 
     .logo a {
@@ -427,77 +478,102 @@ body{
         line-height: 18px;
     }
 
-    .header .upload{
+   .header .upload button, .header .sign button, .dropbtn {
+        padding: 5px 0 !important;
+        width: 70px;
+       font-size: 14px;
+       font-weight: normal;
+    }
+
+    .header .upload, .header .dropdown, .header .sign{
         position: fixed;
-        left: 45%;
-        font-size: 13px;
-        font-weight: normal;
+        top: 5px;
+
         line-height: 16px;
+        flex: none;
+    }
+
+    .header .upload{
+        left: 85px;
         /*visibility: hidden;*/
     }
 
     .header .dropdown{
-        position: fixed;
-        left: 70%;
-        flex: none;
-        margin-left: 1%;
-        font-size: 13px;
-        font-weight: normal;
-        line-height: 16px;
+        left: 160px;
         /*visibility: hidden;*/
-
     }
 
     .header .sign{
-        position: fixed;
         display: flex;
         flex-direction: row;
-        left: 40%;
-        top: 1%;
-        margin-left: 1%;
-        font-size: 13px;
-        font-weight: normal;
-        line-height: 16px;
-        float: right;
-        /*visibility: hidden;*/
+        left: 75px;
+        visibility: hidden;
     }
 
-    .header .sign a{
-        margin-right: 3%;
-        width: 90px;
+    .header .sign button{
+        width: 63px;
+        padding: 5px 3px;
     }
+
+
+    #btnSearchMobile{
+        display: inline;
+        position: fixed;
+        left: 235px;
+        top: 3px;
+        padding: 2px 5px;
+        border-radius: 5px;
+    }
+
+    .profile .username{
+        display: none;
+    }
+
+    .profile img{
+        position: fixed;
+        right: 10px;
+        top: 10px;
+        width: 25px;
+        height: auto;
+        display: inline-block;
+    }
+
 
 
     .search-container{
+        /*visibility: hidden;*/
+        display: none;
         position: fixed;
-        top: 50px;
-        right: 4%;
         flex: none;
         flex-wrap: nowrap;
+        left: 12%;
+        top: 45px;
     }
 
     .search-container input[type=text] {
-        width: 260px;
+        width: 200px;
         padding: 2px;
-        border: 1px solid #eb0715;
-        margin-top: 0;
-        margin-right: 0;
         font-size: 14px;
-        background-color: rgba(210, 186, 207, 0.99);
+
     }
 
     .search-container button {
-        padding: 4px 6px;
-        margin-top: 6px;
-        background: #eb4208;
-        background-image: linear-gradient(to bottom, #7b2006, #ea6101, #fb6801,#fb6801, #ea6101, #7b2006);
+        padding: 3px 6px;
+        top: 8px;
         font-size: 14px;
         border: none;
         cursor: pointer;
         color: white;
+        border-radius: 5px;
     }
 
+    .footer{
+        display: none;
+    }
 
+    ::-webkit-scrollbar {
+        visibility: hidden;
+    }
 
 }
 
@@ -507,6 +583,33 @@ body{
 
 
 @media only screen and (orientation: landscape) {
+    @media screen and (max-width: 768px) {
+        .header{
+            display: inline-block;
+        }
+
+        .header .upload{
+            left: 100px;
+        }
+
+        .header .dropdown{
+            left: 170px;
+        }
+
+        #btnSearchMobile{
+            left: 250px;
+        }
+
+        .profile .username{
+            display: none;
+        }
+        .search-container{
+            display: none;
+        }
+
+    }
+
+
 
 }
 

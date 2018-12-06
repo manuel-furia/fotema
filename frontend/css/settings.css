@@ -2,68 +2,79 @@ body{
     overflow: auto;
 }
 
-.dropdown button{
-    margin-left: 40%;
+.header .dropdown{
+    flex: 15% !important;
+    margin: 0;
 }
 
-.dropdown-content{
-    margin-right: 20%;
-    z-index: 9 !important;
+.dropdown-content {
+    display: none;
+    left: -10%;
 }
 
+.sign{
+    display: none;
+    visibility: hidden;
+}
 
-.settings{
+.usersettings{
     display: flex;
     flex-direction: column;
     padding-top: 10%;
     margin: auto;
-    width: 50%;
-    color: whitesmoke;
+    width: 70%;
+    color: white;
 }
 
 
 
-.settings label {
+.usersettings label {
     padding: 8px;
-    margin-left: 10px;
+    margin-right: 20px;
     display: inline-block;
-    font-size: 16px;
+    font-size: 18px;
+    font-weight: normal;
+
 }
 
-.settings .row:after {
+.usersettings .row:after {
     content: "";
     display: table;
     clear: both;
 }
 
-.settings .col-25 {
+.usersettings .col-25 {
     float: left;
     width: 25%;
     margin-top: 8px;
+    text-align: right;
 }
 
 
-.settings .col-50 {
+.usersettings .col-75 {
     float: left;
     width: 50%;
     margin-top: 6px;
 }
 
-.settings input[type = submit]{
-    background-color: #7b0e55;
+.usersettings input[type = submit]{
+    background-color: #1dae2d;
     color: white;
     padding: 5px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    float: left;
-    margin-left: 5%;
     font-size: medium;
     text-align: center;
-    width: 80px;
+    width: 100px;
+    margin-left: 45%;
 }
 
-.settings form input{
+.usersettings input[type = submit]:hover{
+    background-color: #008c00;
+}
+
+.usersettings form input{
     width: 100%;
     padding: 5px;
     margin: 8px 0;
@@ -77,48 +88,42 @@ body{
 }
 
 
-/*.settings  button{*/
-    /*padding: 5px;*/
-    /*margin-left: 40%;*/
-    /*background-color: #b93009;*/
-    /*border: gray;*/
-    /*border-radius: 5px;*/
-    /*color: whitesmoke;*/
-    /*text-align: center;*/
-    /*width: max-content;*/
-    /*margin-top: 20px;*/
 
-/*}*/
-
-.settings input[type=file]{
+.usersettings input[type=file]{
+    padding: 3px;
 }
 
-.change-profile-photo img{
-    margin-left: 5%;
-
+.usersettings img{
+    display: block;
+    position: fixed;
+    left: 70%;
+    width: 50%;
+    height: auto;
+    max-width: 100px;
+    top: 25%;
+    z-index: -1;
+    border-radius: 5px;
 }
 
-.settings #cancel{
-    background-color: #a6a0a2;
-    /*margin: 1% 5%;*/
-    color: black;
-    border-radius: 4px;
+#deleteMyAccount{
+    background-color: #474747;
+    padding: 5px 8px;
+    color: white;
+    font-size: 16px;
     cursor: pointer;
-    float: right;
-    position: relative;
-    top: -15px;
-    right: 15px;
-    width: 25px;
-    height: 23px;
-    font-size: large;
+    width: fit-content;
     text-align: center;
+    border: 1px;
+    border-radius: 5px;
+    margin-top: 40px;
+    align-self: center;
 
 }
 
 
 
-.settings #cancel:hover {
-    background-color: red;
+#deleteMyAccount:hover {
+    background-color: #d60000;
     border: none;
 }
 
@@ -130,66 +135,65 @@ body{
 
 
 @media only screen and (max-width: 1024px) {
-    .dropdown button{
-        margin-left: 0;
+
+    .usersettings{
+        padding-top: 25%;
+        width: 80%;
     }
 
-    .settings{
-        padding-top: 25%;
+    .usersettings img{
+        left: 75%;
+        top: 20%;
     }
 
 }
 
 @media only screen and (max-width: 768px) {
-    .dropdown button{
-        margin-left: 0;
-    }
 
-    .settings{
+    .usersettings{
         padding-top: 25%;
-        padding-right: 1%;
-        width: 80%;
+        width: 90%;
     }
 
 }
 
 @media only screen and (max-width: 600px) {
-    .dropdown button{
-        margin-left: 0;
+    .usersettings{
+        padding-top: 25%;
+        width: 95%;
+        align-items: center;
+        float: left;
     }
 
-    .settings{
-        padding-top: 40%;
-        padding-right: 1%;
-        width: 85%;
-    }
 
-    .settings label {
-        padding: 1px;
-        margin-left: 1px;
+
+    .usersettings label {
+        padding: 0;
         display: inline-block;
-        font-size: 12px;
+        font-size: 14px;
     }
 
-    .settings form input{
-        width: 100%;
-        padding: 1px;
-        box-sizing: border-box;
-        background-color: beige;
-        color: black;
-        border: 2px solid #ccc;
-        border-radius: 4px;
-        font-size: 12px;
-        resize: vertical;
+    .usersettings form input{
+        padding: 3px;
+        font-size: 14px;
+        margin: 6px 0;
     }
 
-    .settings input[type = submit]{
-        color: white;
+    .usersettings input[type=file]{
         padding: 1px;
-        margin-left: 5%;
-        font-size: medium;
-        text-align: center;
-        width: 60px;
+    }
+
+    .usersettings .col-25 {
+        width: 90px;
+    }
+
+    .usersettings .col-75 {
+        width: 200px;
+    }
+
+
+    .usersettings img{
+        display: none;
     }
 
 }

@@ -4,33 +4,15 @@
     box-sizing: border-box;
 }
 
-
-.header .sign{
-    flex: 20%;
-    margin-left: 3%;
-    float: right;
-    visibility: visible !important;
+body{
+    overflow: auto;
 }
 
-.header .sign a{
-    margin-left: 2%;
-
-}
-
-.header .dropdown{
-    flex: 5%;
-    float: left;
-    margin-right: 10px;
-}
-
-.header .upload, .header .dropdown{
-    visibility: hidden !important;
-}
 
 
 
 .clickmedia{
-    padding-top: 80px;
+    padding-top: 90px;
     padding-bottom: 60px;
     overflow: auto;
     display: flex;
@@ -40,33 +22,43 @@
     /*visibility: hidden;*/
 }
 
-div.gallery a{
-    width: 100%;
-}
 
 .responsive {
     padding: 6px;
     float: left;
     margin: auto;
+    width: 50% !important;
+    height: auto;
+    overflow-x: hidden;
 }
 
 
 div.gallery {
+    display: block;
     border: 1px solid #ccc;
+    width: auto;
+    height: 100% !important;
+    margin-bottom: 10px;
+    text-align: center;
 }
 
 div.gallery:hover {
-    border: 2px solid #535353;
-    background-color: rgba(210, 210, 210, 0.53);
+    /*border: 2px solid #535353;*/
+    /*background-color: rgba(210, 210, 210, 0.53);*/
+    border: 1px solid #ccc !important;
+    background-color: unset;
 }
 
+
 div.gallery img {
-    width: 100%;
-    height: auto;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: scroll;
 }
 
 div.gallery a{
     width: 100%;
+    height: 100% !important;
 }
 
 div.desc {
@@ -91,20 +83,24 @@ div.desc:hover{
     display: flex;
     flex: 100%;
     text-align: left;
+    overflow: hidden;
+    max-height: 50%;
 }
 
-.desc .likes, .comments{
+.desc .likesnumber, .commentsnumber{
     color: #f0f8ff;
 }
 
 .writecomment{
+    display: block;
     padding: 10px;
-    background-color: gray;
-    margin: 20px 0;
+    background-color: #a3a3a3;
+    margin: 10px 0;
 }
 
 .writecomment form{
     display: flex;
+    flex: 100%;
     flex-direction: column;
 }
 
@@ -123,11 +119,25 @@ div.desc:hover{
 
 .writecomment input[type="submit"]{
     font-size: 16px;
-    font-weight: bold;
+    font-weight: normal;
     padding: 5px;
     width: 80px;
     margin-top: 3px;
-    margin-left: 50%;
+    margin-left: 45%;
+    border: 1px;
+    border-radius: 5px;
+    color: whitesmoke;
+    background-color: #1dac2c;
+
+}
+
+.writecomment input[type="submit"]:hover{
+    /*background-color: #9d0e04;*/
+    background-color: #008a00;
+}
+
+.comments{
+    display: block;
 }
 
 .usercomments{
@@ -136,12 +146,29 @@ div.desc:hover{
     padding: 10px;
     border: 1px solid beige;
     position: relative;
-    margin-top: 10px;
+    margin: 5px 0;
 }
 
 .commentername{
     font-weight: bold;
     color: #cdc5c9;
+    width: 80%;
+    float: left;
+}
+
+.likecomment{
+    background-color: #1fb72f;
+    border: 1px;
+    padding: 3px 5px;
+    float: right;
+    border-radius: 5px;
+    position: absolute;
+    top: 40px;
+    right: 5px;
+}
+
+.likecomment:hover{
+    background-color: #008a00;
 }
 
 .commenttime{
@@ -152,6 +179,195 @@ div.desc:hover{
     color: #cdc5c9;
 }
 
-.commentcontent{
+p.commentcontent{
+    width: 85%;
+    text-align: left;
     margin-top: 15px;
+    overflow: auto;
+    padding-right: 3px;
 }
+
+.editmedia{
+    display: block;
+    position: absolute;
+    top: 15%;
+    right: 25%;
+    padding: 10px;
+}
+
+
+#btnUpdateMedia, #btnDeleteMedia{
+    width: 30px;
+    height: 30px;
+    border: 1px solid darkgray;
+    font-size: 18px;
+    margin: 5px 0;
+    border-radius: 5px;
+}
+
+#cancelUpdate{
+    width: 25px;
+    height: 25px;
+    border: 1px solid darkgray;
+    font-size: 16px;
+    position: absolute;
+    right: 20px;
+    top: 5px;
+    border-radius: 5px;
+    margin-bottom: 3px;
+
+}
+
+.editmedia form{
+    display: none;
+    width: 500px;
+    position: absolute;
+    top: 15px;
+    right: 50px;
+    background-color: #4a5762;
+    padding: 30px 30px 10px 30px;
+    /*box-shadow: 0 0 1000px 1000px rgba(0, 0, 0, 0.9);*/
+
+}
+
+
+.editmedia form label {
+    padding: 2px;
+    margin-right: 5px;
+    display: inline;
+    font-size: 14px;
+    font-weight: bold;
+    float: left;
+    color: white;
+}
+
+.editmedia form input{
+    width: 80%;
+    padding: 2px;
+    margin: 2px 0;
+    box-sizing: border-box;
+    background-color: beige;
+    color: black;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    resize: vertical;
+    text-align: left;
+    float: right;
+
+}
+
+#submitUpdate{
+    background-color: #00a800;
+    color: white;
+    padding: 2px 4px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    width: 60px;
+    float: right;
+    margin-top: 5px;
+}
+
+#submitUpdate:hover, #btnUpdateMedia:hover{
+    background-color: #00df00;
+    color: white;
+    border: none;
+}
+
+#btnDeleteMedia:hover, #cancelUpdate:hover{
+    background-color: #ed0000;
+    border: none;
+}
+
+/**********************************************************************************************************************/
+/*media query*/
+/**********************************************************************************************************************/
+
+@media only screen and (max-width: 1024px) {
+    .clickmedia{
+        width: 80% !important;
+    }
+
+    .responsive {
+        padding: 6px;
+        float: left;
+        margin: auto;
+        width: 90% !important;
+        height: auto;
+        overflow: auto;
+    }
+
+    .editmedia {
+        top: 8%;
+        right: 10%;
+    }
+
+}
+
+@media only screen and (max-width: 768px) {
+    .clickmedia {
+        width: 85% !important;
+    }
+
+    .responsive {
+        width: 90% !important;
+    }
+
+
+    .editmedia {
+        top: 10%;
+        right: 6%;
+    }
+
+    .editmedia form{
+        width: 400px;
+        right: 60px;
+    }
+}
+
+
+@media only screen and (max-width: 600px) {
+    .clickmedia {
+        width: 90% !important;
+        padding-top: 50px;
+    }
+
+    .responsive {
+        width: 95% !important;
+    }
+
+
+    .editmedia {
+        /*background-color: #4a5762;*/
+        /*display: flex;*/
+        /*flex-direction: row-reverse;*/
+        padding: 0 2px;
+        top: 50px;
+        right: 2px;
+    }
+
+    #btnUpdateMedia, #btnDeleteMedia{
+        width: 25px;
+        height: 25px;
+        background-color: unset;
+        border: none;
+        color: white;
+        font-size: 18px;
+        margin: 5px 0;
+        border-radius: 5px;
+    }
+
+    .editmedia form{
+        width: 250px;
+        right: 30px;
+    }
+
+    .editmedia form input{
+        width: 100%;
+    }
+
+
+}
+
