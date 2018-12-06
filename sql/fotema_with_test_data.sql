@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 04, 2018 at 07:18 PM
+-- Generation Time: Dec 06, 2018 at 08:37 PM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.2.12
 
@@ -158,7 +158,9 @@ INSERT INTO `Tag` (`id`, `name`) VALUES
 (2, 'cats'),
 (3, 'dogs'),
 (4, 'nature'),
-(5, 'fun');
+(5, 'fun'),
+(6, 'fur'),
+(7, 'play');
 
 -- --------------------------------------------------------
 
@@ -193,6 +195,7 @@ CREATE TABLE `UserInfo` (
   `username` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `passhash` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `salt` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `profilepicture` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -200,12 +203,12 @@ CREATE TABLE `UserInfo` (
 -- Dumping data for table `UserInfo`
 --
 
-INSERT INTO `UserInfo` (`id`, `username`, `email`, `passhash`, `profilepicture`) VALUES
-(1, 'user1', 'user1@domain.com', 'aiucuigfyuaegfyu', NULL),
-(2, 'user2', 'user2@domain.com', 'bfacucfawftefused', NULL),
-(3, 'user3', 'user3@domain.com', 'cyugdyuagyucfayufckuk', NULL),
-(4, 'user4', 'user4@domain.com', 'dyugdyuagyucwfwfewe', NULL),
-(5, 'user5', 'user5@domain.com', 'eyugdyuagyucfayjkdciud', NULL);
+INSERT INTO `UserInfo` (`id`, `username`, `email`, `passhash`, `salt`, `profilepicture`) VALUES
+(1, 'user1', 'user1@domain.com', 'aiucuigfyuaegfyu', 'vsgtsgt', NULL),
+(2, 'user2', 'user2@domain.com', 'bfacucfawftefused', 'wegegrge', NULL),
+(3, 'user3', 'user3@domain.com', 'cyugdyuagyucfayufckuk', 'wergerg', NULL),
+(4, 'user4', 'user4@domain.com', 'dyugdyuagyucwfwfewe', 'fdgdfgdf', NULL),
+(5, 'user5', 'user5@domain.com', 'eyugdyuagyucfayjkdciud', 'ersfdgdfg', NULL);
 
 --
 -- Indexes for dumped tables
@@ -282,7 +285,7 @@ ALTER TABLE `Comment`
 -- AUTO_INCREMENT for table `Media`
 --
 ALTER TABLE `Media`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `MediaType`
@@ -294,7 +297,7 @@ ALTER TABLE `MediaType`
 -- AUTO_INCREMENT for table `Tag`
 --
 ALTER TABLE `Tag`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `UserInfo`
