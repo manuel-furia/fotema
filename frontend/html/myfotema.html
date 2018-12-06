@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>myfotema</title>
@@ -21,37 +22,35 @@
     <link rel="stylesheet" type="text/css" href="../css/search.css">
 
 
-    <!--<link rel="stylesheet" type="text/css" href="/css/media.css">-->
-
-
-
-    <!--<script src="../js/viewMore.js"></script>-->
-
-
 </head>
 
 
 <body>
+
+
+
 <div class="header" id="header">
 
     <div class="logo">
-        <a href="anonwall.html"> FOTEMA <!--<img src="/image/slogo14.PNG">--></a>
+        <a href="index.html"> FOTEMA </a>
     </div>
 
-    <div class="upload" id="upload" onclick="document.getElementById('uploadfile').style.display = 'block';">
-        <a href="#uploadfile">upload</a>
+    <div class="upload" >
+        <button id="headerBtnUpload" onclick="document.getElementById('uploadfile').style.display = 'block';"><a href="myfotema.html#uploadfile?show"> upload</a></button>
     </div>
 
     <div class="search-container">
-        <form  id="searchForm" action="/search"><!--action="/search/:value"-->
+        <form  id="searchForm"><!--action="/search/:value"-->
             <input type="text" placeholder="Search.." name="search">
-            <button type="submit" id="searchBtn" ><i class="fa fa-search"></i></button>
+            <button type="submit"><i class="fa fa-search"></i></button>
         </form>
     </div>
 
+    <button id="btnSearchMobile" onclick="showSearchContainerOnMobile()"><i class="fa fa-search"></i></button>
 
-    <div class="dropdown">
-        <button class="dropbtn"><!--<i class="fa fa-plus"></i>-->more <i class="fa fa-caret-down"></i>
+
+    <div class="dropdown" id="headerBtnMore">
+        <button class="dropbtn">more <i class="fa fa-caret-down"></i>
         </button>
         <div class="dropdown-content">
             <a class="myfotema" href="myfotema.html">my fotema</a>
@@ -60,17 +59,15 @@
         </div>
     </div>
 
-    <div class="profile">
-        <a href="myfotema.html"> <!--user's own homepage-->
-            <img src="../../image/f.png" alt="profilephoto">
-            <h4 class="username">username</h4>
+
+    <div class="profile" id="headerUserProfile">
+        <a href="myfotema.html">
+            <img src="../image/f1.jpg" alt="photo">
+            <p class="username">username</p>
         </a>
     </div>
 
 </div>
-
-
-
 
 
 <div class="uploadfile" id="uploadfile" >
@@ -78,7 +75,7 @@
     <form action="/upload" id="mediaform">
 
         <div class="row">
-            <h4>upload an image, audio or video </h4>
+            <h4> Upload Media Content </h4>
         </div>
 
 
@@ -139,7 +136,8 @@
             </div>
         </div>
 
-        <button type="submit" ><a id="uploadButton">upload</a></button>
+        <!--<button type="submit"><a id="uploadButton">upload</a></button>-->
+        <button type="submit" id="uploadButton">upload</button>
 
         <div class="row">
             <img id="newImage" src="" alt="new image" />
@@ -149,336 +147,9 @@
 
 </div>
 
-
-
-
-
-<div class="friendslist" id="friendslist">
-    <ul>
-        <li>
-        <a href="myfotema.html"> <!--friend's homepage-->
-            <img src="../../image/fotemaLogo2.PNG" alt="profilephoto">
-            <h4 class="username">Elias Koivula</h4>
-        </a>
-        </li>
-
-        <li>
-            <a href="myfotema.html"> <!--ufriend's  homepage-->
-                <img src="../../image/fotemaLogo1.PNG" alt="profilephoto">
-                <h4 class="username">Manuel Furia</h4>
-            </a>
-        </li>
-
-        <li>
-            <a href="myfotema.html"> <!--friend's homepage-->
-                <img src="../../image/f1.jpg" alt="profilephoto">
-                <h4 class="username">Elsa Phyllis Lassfolk</h4>
-            </a>
-        </li>
-
-        <li>
-            <a href="myfotema.html"> <!--friend's homepage-->
-                <img src="../../image/fotemaLogo2.PNG" alt="profilephoto">
-                <h4 class="username">Jenny Ivy Wang Xin Cui</h4>
-            </a>
-        </li>
-
-        <li>
-            <a href="myfotema.html"> <!--ufriend's  homepage-->
-                <img src="../../image/fotemaLogo1.PNG" alt="profilephoto">
-                <h4 class="username">friend B</h4>
-            </a>
-        </li>
-
-        <li>
-            <a href="myfotema.html"> <!--friend's homepage-->
-                <img src="../../image/f1.jpg" alt="profilephoto">
-                <h4 class="username">friend C</h4>
-            </a>
-        </li>
-
-
-        <li>
-            <a href="myfotema.html"> <!--friend's homepage-->
-                <img src="../../image/fotemaLogo2.PNG" alt="profilephoto">
-                <h4 class="username">friend A</h4>
-            </a>
-        </li>
-
-        <li>
-            <a href="myfotema.html"> <!--ufriend's  homepage-->
-                <img src="../../image/fotemaLogo1.PNG" alt="profilephoto">
-                <h4 class="username">friend B</h4>
-            </a>
-        </li>
-
-        <li>
-            <a href="myfotema.html"> <!--friend's homepage-->
-                <img src="../../image/f1.jpg" alt="profilephoto">
-                <h4 class="username">friend C</h4>
-            </a>
-        </li>
-
-
-        <li>
-            <a href="myfotema.html"> <!--friend's homepage-->
-                <img src="../../image/fotemaLogo2.PNG" alt="profilephoto">
-                <h4 class="username">friend A</h4>
-            </a>
-        </li>
-
-        <li>
-            <a href="myfotema.html"> <!--ufriend's  homepage-->
-                <img src="../../image/fotemaLogo1.PNG" alt="profilephoto">
-                <h4 class="username">friend B</h4>
-            </a>
-        </li>
-
-        <li>
-            <a href="myfotema.html"> <!--friend's homepage-->
-                <img src="../../image/f1.jpg" alt="profilephoto">
-                <h4 class="username">friend C</h4>
-            </a>
-        </li>
-
-
-        <li>
-            <a href="myfotema.html"> <!--friend's homepage-->
-                <img src="../../image/fotemaLogo2.PNG" alt="profilephoto">
-                <h4 class="username">friend A</h4>
-            </a>
-        </li>
-
-        <li>
-            <a href="myfotema.html"> <!--ufriend's  homepage-->
-                <img src="../../image/fotemaLogo1.PNG" alt="profilephoto">
-                <h4 class="username">friend B</h4>
-            </a>
-        </li>
-
-        <li>
-            <a href="myfotema.html"> <!--friend's homepage-->
-                <img src="../../image/f1.jpg" alt="profilephoto">
-                <h4 class="username">friend C</h4>
-            </a>
-        </li>
-
-        <li>
-            <a href="myfotema.html"> <!--friend's homepage-->
-                <img src="../../image/fotemaLogo2.PNG" alt="profilephoto">
-                <h4 class="username">friend A</h4>
-            </a>
-        </li>
-
-        <li>
-            <a href="myfotema.html"> <!--ufriend's  homepage-->
-                <img src="../../image/fotemaLogo1.PNG" alt="profilephoto">
-                <h4 class="username">friend B</h4>
-            </a>
-        </li>
-
-        <li>
-            <a href="myfotema.html"> <!--friend's homepage-->
-                <img src="../../image/f1.jpg" alt="profilephoto">
-                <h4 class="username">friend C</h4>
-            </a>
-        </li>
-
-
-        <li>
-            <a href="myfotema.html"> <!--friend's homepage-->
-                <img src="../../image/fotemaLogo2.PNG" alt="profilephoto">
-                <h4 class="username">friend A</h4>
-            </a>
-        </li>
-
-        <li>
-            <a href="myfotema.html"> <!--ufriend's  homepage-->
-                <img src="../../image/fotemaLogo1.PNG" alt="profilephoto">
-                <h4 class="username">friend B</h4>
-            </a>
-        </li>
-
-        <li>
-            <a href="myfotema.html"> <!--friend's homepage-->
-                <img src="../../image/f1.jpg" alt="profilephoto">
-                <h4 class="username">friend C</h4>
-            </a>
-        </li>
-
-
-        <li>
-            <a href="myfotema.html"> <!--friend's homepage-->
-                <img src="../../image/fotemaLogo2.PNG" alt="profilephoto">
-                <h4 class="username">friend A</h4>
-            </a>
-        </li>
-
-        <li>
-            <a href="myfotema.html"> <!--ufriend's  homepage-->
-                <img src="../../image/fotemaLogo1.PNG" alt="profilephoto">
-                <h4 class="username">friend B</h4>
-            </a>
-        </li>
-
-        <li>
-            <a href="myfotema.html"> <!--friend's homepage-->
-                <img src="../../image/f1.jpg" alt="profilephoto">
-                <h4 class="username">friend C</h4>
-            </a>
-        </li>
-
-
-        <li>
-            <a href="myfotema.html"> <!--friend's homepage-->
-                <img src="../../image/fotemaLogo2.PNG" alt="profilephoto">
-                <h4 class="username">justin maaneral</h4>
-            </a>
-        </li>
-
-        <li>
-            <a href="myfotema.html"> <!--ufriend's  homepage-->
-                <img src="../../image/fotemaLogo1.PNG" alt="profilephoto">
-                <h4 class="username">friend B</h4>
-            </a>
-        </li>
-
-        <li>
-            <a href="myfotema.html"> <!--friend's homepage-->
-                <img src="../../image/f1.jpg" alt="profilephoto">
-                <h4 class="username">friend C</h4>
-            </a>
-        </li>
-
-
-
-        <li>
-            <a href="myfotema.html"> <!--friend's homepage-->
-                <img src="../../image/f1.jpg" alt="profilephoto">
-                <h4 class="username">friend C</h4>
-            </a>
-        </li>
-
-        <li>
-            <a href="myfotema.html"> <!--friend's homepage-->
-                <img src="../../image/f1.jpg" alt="profilephoto">
-                <h4 class="username">friend C</h4>
-            </a>
-        </li>
-
-        <li>
-            <a href="myfotema.html"> <!--friend's homepage-->
-                <img src="../../image/f1.jpg" alt="profilephoto">
-                <h4 class="username">friend C</h4>
-            </a>
-        </li>
-    </ul>
-
-</div>
-
-
 <div class="my-media" id="myMedia">
 
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/slogo15.PNG">
-                <img src="../../image/CUTLtuC.jpg" width="" height="">
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
-            </div>
-        </div>
-
-        <div class="usercomments">
-            <p class="commentername">commenter name</p>
-            <p class="commenttime">4 hr </p>
-            <p class="commentcontent">this is great!!</p>
-        </div>
-
-        <div class="actiononcomment" id="actiononcomment">
-
-            <div class="replycomment">
-                <form action="/comment" id="replytocomment">
-                    <input type="submit" id="submitComments" value="reply">
-                    <input type="text" name="your-comment" maxlength="140" placeholder="your comment here">
-                </form>
-            </div>
-
-            <button class="likecomment"><i class="fa fa-thumbs-up"></i>100</button>
-            <button class="dislikecomment"><i class="fa fa-thumbs-down"></i>12</button>
-        </div>
-
-    </div>
-
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/f.png">
-                <img src="../../image/slogo15.PNG" width="" height="">
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
-            </div>
-        </div>
-
-        <div class="usercomments">
-            <p class="commentername">who commented</p>
-            <p class="commenttime">4 hr</p>
-            <p class="commentcontent">this is great!!</p>
-        </div>
-        <div class="actiononcomment">
-
-            <div class="replycomment">
-                <form action="/comment" >
-                    <input type="submit" value="reply">
-                    <input type="text" name="your-comment" maxlength="140" placeholder="your comment here">
-                </form>
-            </div>
-
-            <button class="likecomment"><i class="fa fa-thumbs-up"></i>40</button>
-            <button class="dislikecomment"><i class="fa fa-thumbs-down">3</i></button>
-        </div>
-    </div>
-
-
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/fotemaLogo1.PNG">
-                <img src="/backend/public/view/imageimage/CUTLtuC.jpg" width="" height="">
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
-            </div>
-        </div>
-
-        <div class="usercomments">
-            <p class="commentername">who commented</p>
-            <p class="commenttime">4 hr </p>
-            <p class="commentcontent">this is great!!</p>
-        </div>
-
-        <div class="actiononcomment" >
-
-            <div class="replycomment">
-                <form action="/comment" >
-                    <input type="submit" value="reply">
-                    <input type="text" name="your-comment" maxlength="140" placeholder="your comment here">
-                </form>
-            </div>
-
-            <button class="likecomment"><i class="fa fa-thumbs-up"></i>200</button>
-            <button class="dislikecomment"><i class="fa fa-thumbs-down"></i>13</button>
-        </div>
-
-
-
-    </div>
-
+<div class="my-media-first-block" id="myMediaFirstBlock">
 
     <div class="responsive">
         <div class="gallery">
@@ -487,174 +158,74 @@
             </a>
             <div class="desc">
                 <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
+                <p class="likesnumber"><i class="fa fa-heart"></i> 200</p>
+                <p class="commentsnumber"><i class="fa fa-commenting"></i> 20</p>
             </div>
-        </div>
-
-        <div class="usercomments">
-            <p class="commentername">who commented</p>
-            <p class="commenttime">4 hr </p>
-            <p class="commentcontent">this is great!!</p>
-        </div>
-
-        <div class="actiononcomment" >
-
-            <div class="replycomment">
-                <form action="/comment" >
-                    <input type="submit"  value="reply">
-                    <input type="text" name="your-comment" maxlength="140" placeholder="your comment here">
-                </form>
-            </div>
-
-            <button class="likecomment"><i class="fa fa-thumbs-up"></i>5k</button>
-            <button class="dislikecomment"><i class="fa fa-thumbs-down"></i>120</button>
         </div>
     </div>
 </div>
 
+<div class="viewmore-my-media" id="viewMoremyMedia">
 
-<div id="showSearchResults">
+    <div class="responsive">
+        <div class="gallery">
+            <a target="_blank" href="../image/slogo15.PNG">
+                <img src="../image/CUTLtuC.jpg" width="" height="">
+            </a>
+            <div class="desc">
+                <p class="description">description</p>
+                <p class="likesnumber"><i class="fa fa-heart"></i> 200</p>
+                <p class="commentsnumber"><i class="fa fa-commenting"></i> 20</p>
+            </div>
+        </div>
+    </div>
 
-    <a id="closeSearchResult"  onclick="document.getElementById('showSearchResults').style.display = 'none';" >
-        <i class="fa fa-times"></i> <!--href="javascript:history.back()"-->
+</div>
+
+</div>
+
+<button class="btnViewMoreMyMedia" id="btnViewMoreMyMedia" onclick="viewMoreMyMedia()">view more</button>
+
+<div id="searchResults" class="search-results">
+
+    <a id="hideSearchResult" onclick="document.getElementById('searchResults').style.display = 'none';" >
+        <i class="fa fa-times"></i>
     </a>
 
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/slogo15.PNG">
-                <img src="../../image/slogo15.PNG" width="" height="">
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
+    <div class="first-block-search-results" id="firstBlockSearchResults">
+
+        <div class="responsive">
+            <div class="gallery">
+                <a target="_blank" href="../../image/slogo15.PNG">
+                    <img src="../../image/slogo15.PNG" width="" height="">
+                </a>
+                <div class="desc">
+                    <p class="description">description</p>
+                    <p class="likesnumber"><i class="fa fa-heart"></i> 200</p>
+                    <p class="commentsnumber"><i class="fa fa-commenting"></i> 20</p>
+                </div>
             </div>
         </div>
+
     </div>
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/slogo15.PNG">
-                <img src="../../image/slogo15.PNG" width="" height="">
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
-            </div>
-        </div>
-    </div>
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/slogo15.PNG">
-                <img src="../../image/slogo15.PNG" width="" height="">
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
-            </div>
-        </div>
-    </div>
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/slogo15.PNG">
-                <img src="../../image/slogo15.PNG" width="" height="">
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
-            </div>
-        </div>
-    </div>
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/slogo15.PNG">
-                <img src="../../image/slogo15.PNG" width="" height="">
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
-            </div>
-        </div>
-    </div>
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/slogo15.PNG">
-                <img src="../../image/slogo15.PNG" width="" height="">
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
-            </div>
-        </div>
-    </div>
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/slogo15.PNG">
-                <img src="../../image/slogo15.PNG" width="" height="">
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
+
+    <div class="view-more-search-results" id="viewMoreSearchResults">
+        <div class="responsive">
+            <div class="gallery">
+                <a target="_blank" href="../../image/slogo15.PNG">
+                    <img src="../../image/slogo15.PNG" width="" height="">
+                </a>
+                <div class="desc">
+                    <p class="description">description</p>
+                    <p class="likesnumber"><i class="fa fa-heart"></i> 200</p>
+                    <p class="commentsnumber"><i class="fa fa-commenting"></i> 20</p>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/slogo15.PNG">
-                <img src="../../image/slogo15.PNG" width="" height="">
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/slogo15.PNG">
-                <img src="../../image/slogo15.PNG" width="" height="">
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/slogo15.PNG">
-                <img src="../../image/slogo15.PNG" width="" height="">
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/slogo15.PNG">
-                <img src="../../image/slogo15.PNG" width="" height="">
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> 200</p>
-                <p class="comments"><i class="fa fa-commenting"></i> 20</p>
-            </div>
-        </div>
+    <div class="divbtnViewMoreSearchResults">
+        <button class="btnViewMoreSearchResults" id="btnViewMoreSearchResults" onclick="viewMoreSearchResults()">view more</button>
     </div>
 
 </div>

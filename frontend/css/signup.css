@@ -56,15 +56,15 @@
 
 .signup-popup form input[type = submit]{
     color: white;
-    padding: 12px;
+    padding: 8px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     float: right;
-    width: 150px;
+    width: 90px;
     text-align: center;
     font-size: medium;
-    background-color: #7b0e55;
+    background-color: #1fb72f;
     margin: 2% 40% 0 0;
 }
 
@@ -133,9 +133,9 @@
     }
 
     .signup-popup form input[type = submit]{
-        width: 100px;
+        width: 80px;
         margin-top: 2%;
-        margin-right: 25%;
+        margin-right: 20%;
     }
 
     /*.signup-popup a{*/
@@ -192,9 +192,9 @@
     }
 
     .signup-popup form input[type = submit]{
-        margin-right: 20%;
+        margin-right: 12%;
         margin-top: 2%;
-        padding: 10px;
+        padding: 6px;
         width: 80px;
     }
 

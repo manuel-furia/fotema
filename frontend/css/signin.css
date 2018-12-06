@@ -54,15 +54,15 @@
 }
 
 .signin-popup form input[type = submit]{
-    background-color: #7b0e55;
+    background-color: #1fb72f;
     margin: 2% 40% 0 0;
     color: white;
-    padding: 12px;
+    padding: 8px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     float: right;
-    width: 150px;
+    width: 90px;
     font-size: medium;
     text-align: center;
 }
@@ -117,7 +117,7 @@
     }
 
     .signin-popup form input[type = submit]{
-        width: 100px;
+        width: 80px;
         margin-right: 25%;
     }
 
@@ -184,7 +184,7 @@
     .signin-popup form input[type = submit]{
         margin-right: 10%;
         margin-top: 2%;
-        padding: 10px;
+        padding: 6px;
         width: 80px;
     }
 

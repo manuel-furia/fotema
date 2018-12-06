@@ -1,108 +1,34 @@
-body{
-    display: flex;
-    flex-direction: column;
+
+.header .dropdown{
+    flex: 15% !important;
+    margin: 0;
 }
 
-.upload{
-    visibility: visible   !important;
+.dropdown-content {
+    display: none;
+    left: -10%;
 }
 
-.dropdown{
-    left: 2%;
-    visibility: visible   !important;
-
+.sign{
+    display: none !important;
 }
 
-
-.dropdown-content{
-    margin-right: 50px;
-}
-
-
-.profile{
-    padding-top: 2px;
-    flex-direction: column;
-    border: 1px red solid;
-    margin-right: 3%;
-}
-
-.profile:hover{
-    background-color: gray;
-}
-
-.profile img{
-    width: 30px;
-    height: 30px;
-    padding: 3px 1px 0 2px;
-}
-
-.profile .username{
-    float: right;
-    margin-left: 10px;
-    padding: 5px;
-    color: wheat;
-}
-
-div.friendslist{
-    position: fixed;
-    right: 10px;
-    top: 7%;
-    padding: 5px;
-    overflow: hidden;
-    width: 200px;
-    height: 100%;
-    z-index: 1;
-}
-
-div.friendslist:hover{
-    overflow-y: scroll;
-}
-
-.friendslist ul{
-    margin: auto;
-}
-
-.friendslist ul li{
-    list-style: none;
-
-}
-
-.friendslist a{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    text-decoration: none;
-    width: max-content;
-}
-
-.friendslist img{
-    width: 30px;
-    height: 30px;
-    padding: 3px 1px 0 2px;
-}
-
-
-.friendslist .username{
-    margin-left: 10px;
-    padding: 5px;
-    color: wheat;
-}
-
-.friendslist li:hover{
-    background-color: gray;
-}
-
-
-
-.my-media {
+.my-media{
     overflow: auto;
-    display: flex;
-    flex-direction: column;
+    display: block;
     width: 90%;
     margin: auto;
-    padding-top: 80px;
-    padding-bottom: 60px;
-    /*visibility: hidden;*/
+    padding-top: 70px;
+    padding-bottom: 20px;
+}
+
+.my-media-first-block, .viewmore-my-media {
+    overflow: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 90%;
+    margin: auto;
 }
 
 
@@ -110,6 +36,7 @@ div.friendslist:hover{
     padding: 6px;
     float: left;
     margin: auto;
+    width: 20%;
 }
 
 
@@ -155,131 +82,80 @@ div.desc:hover{
     text-align: left;
 }
 
-.desc .likes, .comments{
+.desc .likesnumber, .commentsnumber{
     color: #f0f8ff;
 }
 
-.usercomments{
-    margin-top: 10px;
-    background-color: rgb(6, 6, 6);
-    color: beige;
-    padding: 10px;
-    border: 1px solid beige;
-    position: relative;
+.viewmore-my-media{
+    display: none;
 }
 
- .commentername{
-    font-weight: bold;
-     color: #cdc5c9;
+#btnViewMoreMyMedia{
+    /*position: absolute;*/
+    width: 100px;
+    height: 40px;
+    margin: 20px 45%;
+    background-color: #eb4208;
+    border: 1px gray;
+    border-radius: 5px;
+    color: white;
+    font-size: large;
+    padding: 5px 8px;
+}
+
+#btnViewMoreMyMedia:hover{
+    background-color: green;
 }
 
 
- .commenttime{
-    font-weight: bold;
-    right: 10px;
-     top: 10px;
-     position: absolute;
-     color: #cdc5c9;
- }
 
- .commentcontent{
-     margin-top: 15px;
-}
-
- div.actiononcomment{
-     border: 1px solid whitesmoke;
-     display: flex;
-     flex-direction: row;
-     color: whitesmoke;
-     padding: 5px;
-     margin: auto;
-     margin-top: 5px;
- }
-
- .actiononcomment .likecomment, .actiononcomment .dislikecomment{
-     font-weight: normal;
-     font-size: medium;
-     padding: 1px;
-     margin-right: 10px;
- }
-
-
-
- .dislikecomment:hover, .likecomment:hover{
-     background-color: #aa2c09;
- }
-
- .replycomment{
-     flex: 70%;
- }
-
- .replycomment form{
-     flex-direction: row;
-    padding: 3px;
-
- }
-
-.replycomment label{
-    font-weight: bold;
-    font-size: medium;
-    margin-bottom: 5px;
-}
-
-.replycomment input[type="text"]{
-    font-size: 16px;
-    font-weight: normal;
-    padding: 1px;
-    width: 60%;
-}
-
-.replycomment input[type="submit"]{
-    font-size: 16px;
-    font-weight: bold;
-    padding: 1px;
-    width: 50px;
-}
 
 /**********************************************************************************************************************/
 /*media query*/
 /**********************************************************************************************************************/
 @media only screen and (max-width: 1024px) {
     .profile{
-        position: fixed;
-        left: 35%;
+        /*position: fixed;*/
+        /*left: 35%;*/
     }
 
     .my-media{
-        margin-right: 30%;
+        float: left;
+    }
+
+    .responsive {
+        width: 29%;
+        margin: auto;
     }
 }
 
 @media only screen and (max-width: 768px) {
     .profile{
-        display: none;
     }
 
     .my-media{
-        margin:auto;
+        float: left;
     }
 
-    .friendslist{
-        display: none;
+    .responsive {
+        width: 49%;
     }
+
 
 }
 
 
 @media screen and (max-width: 600px) {
     .profile{
-        display: none;
     }
 
-    .friendslist{
-        display: none;
-    }
 
     .my-media{
-        margin:auto;
+        float: none;
+    }
+
+    .responsive {
+        width: 100%;
     }
 
 

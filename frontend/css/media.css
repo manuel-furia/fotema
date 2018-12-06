@@ -7,22 +7,28 @@
 
 .mediacontent {
     overflow: auto;
-    /*background-color: #8396a9;*/
+    display: block;
+    width: 90%;
+    margin: auto;
+    padding-top: 70px;
+    padding-bottom: 20px;
+}
+
+
+.firstblock-mediacontent, .morecontent{
+    overflow: auto;
     display: flex;
     width: 90%;
     margin: auto;
-    padding-top: 80px;
-    padding-bottom: 60px;
     flex-direction: row;
     flex-wrap: wrap;
-    /*visibility: hidden;*/
 }
-
 
 .responsive {
     padding: 6px;
     float: left;
     width: 20%;
+    margin: auto;
 }
 
 
@@ -39,7 +45,7 @@ div.gallery:hover {
 
 div.gallery img {
     width: 100%;
-    height: 220px;
+    height: auto;
 }
 
 div.gallery a{
@@ -71,7 +77,7 @@ div.desc:hover{
     text-align: left;
 }
 
-.desc .likes, .comments{
+.desc .likesnumber, .commentsnumber{
     color: #f0f8ff;
 }
 
@@ -80,15 +86,16 @@ div.desc:hover{
 }
 
 .viewmorecontent{
+    position: absolute;
     width: 100px;
-    height: 30px;
-    margin-left: 45%;
-    margin-bottom: 3%;
-    background-color: #b10000;
+    height: 40px;
+    margin: 2% 45%;
+    background-color: #eb4208;
     border: 1px gray;
     border-radius: 5px;
     color: white;
     font-size: large;
+    padding: 5px 8px;
 }
 
 .viewmorecontent:hover{
@@ -100,8 +107,7 @@ div.desc:hover{
 @media only screen and (max-width: 1024px){
 
     .mediacontent{
-        padding-top: 120px;
-        margin-left: 10%;
+
     }
 
     .responsive {
@@ -114,7 +120,6 @@ div.desc:hover{
 @media only screen and (max-width: 768px) {
 
     .mediacontent{
-        padding-top: 100px;
         margin: auto;
     }
 
@@ -131,13 +136,12 @@ div.desc:hover{
     }
 }
 
-.clearfix:after {
-    content: "";
-    display: table;
-    clear: both;
-}
+
 
 @media screen and (max-width: 600px) {
+    .mediacontent{
+        margin: auto;
+    }
 
 
 }

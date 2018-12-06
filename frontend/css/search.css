@@ -4,14 +4,17 @@
     box-sizing: border-box;
 }
 
-#showSearchResults{
+.search-results{
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    margin: auto;
     position: fixed;
     overflow-y: scroll;
     z-index: 9;
     background-color: #4a5762;
     border: solid #000000 2px;
-    display: flex;
-    flex-wrap: wrap;
     width: 80%;
     padding: 1%;
     left: 10%;
@@ -22,6 +25,17 @@
     visibility: hidden;
 }
 
+.first-block-search-results, .view-more-search-results{
+    flex: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.view-more-search-results{
+    display: none;
+}
+
 
 .responsive {
     padding: 6px;
@@ -30,7 +44,7 @@
 }
 
 
-#closeSearchResult{
+#hideSearchResult{
     background-color: #a6a0a2;
     /*margin: 1% 5%;*/
     color: black;
@@ -46,7 +60,7 @@
     text-align: center;
 }
 
-#closeSearchResult:hover {
+#hideSearchResult:hover {
     background-color: red;
     border: none;
 }
@@ -96,6 +110,87 @@ div.desc:hover{
     text-align: left;
 }
 
-.desc .likes, .comments{
+.desc .likesnumber, .commentsnumber{
     color: #f0f8ff;
 }
+
+.divbtnViewMoreSearchResults{
+    flex: 100%;
+    display: block;
+}
+
+#btnViewMoreSearchResults{
+    width: 100px;
+    height: 40px;
+    margin: 3% 45%;
+    /*margin-bottom: 3%;*/
+    background-color: #eb4208;
+    border: 1px gray;
+    border-radius: 5px;
+    color: white;
+    font-size: large;
+    padding: 5px 8px;
+    display: block;
+}
+
+#btnViewMoreSearchResults:hover{
+    background-color: green;
+}
+
+/**********************************************************************************************************************/
+@media only screen and (max-width: 1024px){
+
+    #searchResults{
+        padding-top: 30px;
+        margin:auto;
+
+
+    }
+
+    .responsive {
+        width: 33%;
+        margin: auto;
+    }
+
+}
+
+@media only screen and (max-width: 768px) {
+
+    #searchResults{
+        padding-top: 30px;
+        margin: auto;
+    }
+
+
+    .responsive {
+        width: 49%;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+
+    #searchResults{
+        padding-top: 20px;
+        margin: auto;
+    }
+
+
+    .responsive {
+        width: 100%;
+    }
+}
+
+.clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+@media screen and (max-width: 600px) {
+
+
+}
+
+
+
+
