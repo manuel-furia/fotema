@@ -4,19 +4,19 @@ const mysql = require('mysql2');
 
 
 //Function to be executed after a select query has been run
-const queryResult = (connection, res, callback) => (error, result) => {
+const queryResult = (connection, callback) => (error, result) => {
     if (error) {
         console.log(error);
         if (connection) connection.rollback((err) => {});
     } else
-         callback(result, res);
+        callback(result);
 }
 
 //Execute multiple queries
-const multipleQueries = (connection, res, queries, params, callback) => {
+const multipleQueries = (connection, queries, params, callback) => {
     const next = (queriesLeft, paramsLeft, prevResult) => {
         
-        if (queriesLeft.length === 0) {connection.commit(); callback(prevResult, res)}
+        if (queriesLeft.length === 0) {connection.commit(); callback(prevResult)}
         else {
             const currentQuery = queriesLeft[0];
             const currentParams = (paramsLeft != null && paramsLeft[0] != null) ? paramsLeft[0] : [];
@@ -53,41 +53,41 @@ const connect = () => {
  */
 
 //Get the content of a table filtered by a value of an attribute
-const getDataFromAttribute = (connection, res, tableName, attribute, value, callback) => {
+const getDataFromAttribute = (connection, tableName, attribute, value, callback) => {
     connection.execute(
         `SELECT *
          FROM ${tableName}
          WHERE ${tableName}.${attribute} = ?`,
          [value],
-         queryResult(connection, res, callback)
+         queryResult(connection, callback)
     );
 }
 
 //Get the number of likes of a media
-const getLikesFromMedia = (connection, res, id, callback) => {
+const getLikesFromMedia = (connection, id, callback) => {
     connection.execute(
        `SELECT Media.*, COUNT(Media.id) AS likes
 FROM Media
 LEFT JOIN MediaLike ON Media.id = MediaLike.media
 WHERE Media.id = ? ;`,
         [id],
-        queryResult(connection, res, callback)
+        queryResult(connection, callback)
     );
 }
 
 //Get the number of comments of a media
-const getCommentsFromMedia = (connection, res, id, callback) => {
+const getCommentsFromMedia = (connection, id, callback) => {
     connection.execute(
         `SELECT Media.*, COUNT(Comment.id) AS comments
 FROM Media
 LEFT JOIN Comment ON Media.id = Comment.targetMedia
 WHERE Media.id = ? ;`,
         [id],
-        queryResult(connection, res, callback));
+        queryResult(connection, callback));
 }
 
 //Get tags from media
-const getMediaTags = (connection, res, id, callback) => {
+const getMediaTags = (connection, id, callback) => {
     connection.execute(
        `SELECT Tag.name AS tags
         FROM Media
@@ -95,11 +95,53 @@ const getMediaTags = (connection, res, id, callback) => {
         INNER JOIN Tag ON Tag.id = Tagged.tagid
         WHERE Media.id = ? ;`,
         [id],
-        queryResult(connection, res, callback));
+        queryResult(connection, callback));
 }
 
+const getNumberOfMediasByTag = (connection, tag, callback) => {
+    connection.execute(`
+SELECT COUNT(*) AS num
+FROM Media
+INNER JOIN Tagged ON Tagged.mediaid = Media.id
+INNER JOIN Tag ON Tagged.tagid = Tag.id
+INNER JOIN MediaType ON MediaType.id = Media.type
+WHERE MediaType.name != "thumbnail" && Tag.name = ?;
+`, 
+    [tag],
+    queryResult(conection, callback));
+}
 
-const getMediasOrderedByImpact = (connection, res, start, limit, callback) => {
+const getTaggedMediasOrderedByImpact = (connection, tag, start, limit, callback) => {
+    connection.execute(
+       `
+SELECT L.*, C.comments, (L.likes + C.comments) AS impact
+FROM (
+    SELECT Media.*, COUNT(MediaLike.media) AS likes
+    FROM Media
+    INNER JOIN MediaType ON Media.type = MediaType.id
+    LEFT JOIN MediaLike ON Media.id = MediaLike.media
+    WHERE MediaType.name <> "thumbnail"
+    GROUP BY Media.id
+) AS L
+INNER JOIN (
+    SELECT Media.id, COUNT(Comment.id) AS comments
+    FROM Media
+    INNER JOIN MediaType ON Media.type = MediaType.id
+    LEFT JOIN Comment ON Media.id = Comment.targetMedia
+    WHERE MediaType.name <> "thumbnail"
+    GROUP BY Media.id
+) AS C
+ON L.id = C.id
+INNER JOIN Tagged ON Tagged.mediaid = L.id
+INNER JOIN Tag ON Tagged.tagid = Tag.id
+WHERE Tag.name = ?
+ORDER BY impact DESC
+LIMIT ?, ? ;
+`, [tag, start, limit],
+    queryResult(connection, callback));
+}
+
+const getMediasOrderedByImpact = (connection, start, limit, callback) => {
     connection.execute(
        `
 SELECT L.*, C.comments, (L.likes + C.comments) AS impact
@@ -123,10 +165,10 @@ ON L.id = C.id
 ORDER BY impact DESC
 LIMIT ?, ? ;
 `, [start, limit],
-    queryResult(connection, res, callback));
+    queryResult(connection, callback));
 }
 
-const getUserFavouriteMedias = (connection, res, userid, start, end, callback) => {
+const getUserFavouriteMedias = (connection, userid, start, end, callback) => {
     connection.execute(
         `SELECT Media.*, IFNULL(L.likes, 0) AS likes, IFNULL(C.comments, 0) AS comments, IFNULL(L.likes + C.comments, 0) AS impact
 FROM Media
@@ -153,10 +195,10 @@ WHERE MediaType.name <> "thumbnail"
 ORDER BY impact DESC
 LIMIT ?, ? ;`,
     [userid, userid, start, end],
-    queryResult(connection, res, callback));
+    queryResult(connection, callback));
 }
 
-const getUserFavouriteTags = (connection, res, userid, start, end, callback) => {
+const getUserFavouriteTags = (connection, userid, start, end, callback) => {
     connection.execute(
         `SELECT Tag.name AS tag, SUM(IFNULL(L.likes, 0)) AS likes, SUM(IFNULL(C.comments, 0)) AS comments, SUM(IFNULL(L.likes, 0)) + SUM(IFNULL(C.comments, 0)) AS impact
 FROM Media
@@ -186,17 +228,16 @@ GROUP BY Tag.name
 ORDER BY impact DESC
 LIMIT ?, ? ;`,
     [userid, userid, start, end],
-    queryResult(connection, res, callback));
+    queryResult(connection, callback));
 }
 
 /*
  * DELETE QUERIES
  */
-const deleteMedia = (connection, res, mediaID, callback) => {
+const deleteMedia = (connection, mediaID, callback) => {
 
     const deleteMediaElem = (id, done) => {
         multipleQueries(connection,
-             res,
            `DELETE FROM MediaLike WHERE media = ? ;
             DELETE FROM Tagged WHERE mediaid = ? ;
             DELETE FROM CommentLike WHERE comment = (
@@ -207,7 +248,7 @@ const deleteMedia = (connection, res, mediaID, callback) => {
             DELETE FROM Comment WHERE targetmedia = ? ;
             DELETE FROM Media WHERE id = ? ;`,
         [[id], [id], [id], [id], [id]],
-        (result, res) => {if (done) callback(result, res)});
+        (result) => {if (done) callback(result)});
     }
 
     const fetchedImage = (imageData) => {
@@ -221,7 +262,7 @@ const deleteMedia = (connection, res, mediaID, callback) => {
         
     }
 
-    getDataFromAttribute(connection, res, 'Media', 'id', mediaID, (result, res) => fetchedImage(result));
+    getDataFromAttribute(connection, 'Media', 'id', mediaID, (result) => fetchedImage(result));
         
 }
 
@@ -230,7 +271,7 @@ const deleteMedia = (connection, res, mediaID, callback) => {
  */
 
 //data contains imagepath, thumbpath, title, description, type, capturetime, uploadtime, userid, tags[]
-const uploadMedia = (connection, res, data, callback) => {
+const uploadMedia = (connection, data, callback) => {
 
 
     const next = (error, acc, name, results, from, callback) => {
@@ -259,7 +300,7 @@ const uploadMedia = (connection, res, data, callback) => {
             `INSERT INTO Tagged (mediaid, tagid)
              VALUES (?, ?);`,
             [acc.imageID, acc.tagID],
-            queryResult(connection, res, (result, res)=>{
+            queryResult(connection, (result)=>{
                     connection.commit()
             })
         );
@@ -303,7 +344,7 @@ const uploadMedia = (connection, res, data, callback) => {
           console.log(err);
         });
         //First, get the typeid of the type of the media
-        getDataFromAttribute(connection, res, 'MediaType', 'name', data.type, (result, r) => {if (result && result.length > 0) {gotType({'typeID' : result[0].id})}})
+        getDataFromAttribute(connection, 'MediaType', 'name', data.type, (result, r) => {if (result && result.length > 0) {gotType({'typeID' : result[0].id})}})
 
     });
 

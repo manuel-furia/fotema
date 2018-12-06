@@ -22,6 +22,8 @@ const options = {
   key: sslkey,
   cert: sslcert
 };
+
+
 //data contains imagepath, thumbpath, title, description, type, capturetime, uploadtime, userid, tags[]
 /*const testdata = {
     imagepath: '/test/2',
@@ -33,14 +35,14 @@ const options = {
     uploadtime: '2018-11-22 02:00:00',
     userid: 2,
     tags: ['cats','fur','play']
-}*/
+}
 
-//db.uploadMedia(connection, null, testdata, () => {});
+db.uploadMedia(connection, testdata, () => {});*/
 
-//db.deleteMedia(connection, null, 82, ()=>{});
-
-db.getUserFavouriteTags(connection, null, 1, 0, 10, (result, res) => console.log(result));
-db.getUserFavouriteTags(connection, null, 2, 0, 10, (result, res) => console.log(result));
-db.getUserFavouriteTags(connection, null, 3, 0, 10, (result, res) => console.log(result));
-db.getUserFavouriteTags(connection, null, 4, 0, 10, (result, res) => console.log(result));
-db.getUserFavouriteTags(connection, null, 5, 0, 10, (result, res) => console.log(result));
+//db.deleteMedia(connection, 86, ()=>{});
+/*
+db.getUserFavouriteTags(connection, 1, 0, 10, (result, res) => console.log(result));
+db.getUserFavouriteTags(connection, 2, 0, 10, (result, res) => console.log(result));
+db.getUserFavouriteTags(connection, 3, 0, 10, (result, res) => console.log(result));
+db.getUserFavouriteTags(connection, 4, 0, 10, (result, res) => console.log(result));
+db.getUserFavouriteTags(connection, 5, 0, 10, (result, res) => console.log(result));*/
