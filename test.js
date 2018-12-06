@@ -26,7 +26,7 @@ const options = {
   cert: sslcert
 };
 
-/*
+
 //data contains imagepath, thumbpath, title, description, type, capturetime, uploadtime, userid, tags[]
 const testdata = {
     imagepath: '/test/2',
@@ -40,14 +40,14 @@ const testdata = {
     tags: ['cats','fur','play']
 }
 
-model.uploadMedia(testdata);*/
+model.uploadMedia(testdata).catch(err => console.log(err));
 
 //model.deleteMedia(88);
 
 
-model.getMediasByAnonRelevance(0, 30).then((res) => console.log(res));
+//model.getMediasByAnonRelevance(0, 30).then((res) => console.log(res));
 
-
+//model.getUserId('user1').then((id) => console.log(id)).catch(err => console.log(err));
 
 //db.deleteMedia(connection, 86, ()=>{});
 /*
