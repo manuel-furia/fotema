@@ -37,8 +37,8 @@ const showSearchResults = (images) => {
     document.getElementById('showSearchResults').style.visibility = 'visible';
 
 
-    const myMedia = document.querySelector('#showSearchResults');
-    myMedia.innerHTML =
+    const searchResults = document.querySelector('#firstBlockSearchResults');
+    searchResults.innerHTML =
 
         `<div class="responsive">
           <div class="gallery">
@@ -51,7 +51,7 @@ const showSearchResults = (images) => {
                 <p class="comments"><i class="fa fa-commenting">${image.comments}</i></p>
             </div>
           </div>
-        </div>` + myMedia.innerHTML;
+        </div>` + searchResults.innerHTML;
 
   });
 
