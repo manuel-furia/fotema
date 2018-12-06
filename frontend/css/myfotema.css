@@ -23,7 +23,7 @@
 }
 
 .my-media-first-block, .viewmore-my-media {
-    overflow: auto;
+    /*overflow: auto;*/
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -91,10 +91,12 @@ div.desc:hover{
 }
 
 #btnViewMoreMyMedia{
-    /*position: absolute;*/
+    position: absolute;
     width: 100px;
     height: 40px;
     margin: 20px 45%;
+    /*left: 45%;*/
+    /*bottom: 80px;*/
     background-color: #eb4208;
     border: 1px gray;
     border-radius: 5px;
@@ -120,7 +122,7 @@ div.desc:hover{
     }
 
     .my-media{
-        float: left;
+        /*float: left;*/
     }
 
     .responsive {
@@ -134,7 +136,7 @@ div.desc:hover{
     }
 
     .my-media{
-        float: left;
+        /*float: left;*/
     }
 
     .responsive {
