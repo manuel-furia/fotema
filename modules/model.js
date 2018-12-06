@@ -1,13 +1,37 @@
-const db = require('database')
+const db = require('./database')
 
-const getMediasByAnonRelevance = (connection, start, limit) => {
-    return new Promise((resolve, reject) => {
-        getMediasOrderedByImpact(connection, start, limit, {result} => resolve(result))
-    };
+let connection = null
+
+const checkConnect = () => {
+    if (connection === null || connection.status === 'disconnected'){
+        connection = db.connect();
+    }
 }
 
-const deleteMedia = (connection, id) => {
+const getMediasByAnonRelevance = (start, limit) => {
+    checkConnect();
     return new Promise((resolve, reject) => {
-        getMediasOrderedByImpact(connection, start, limit, {result} => resolve(result))
-    };
+        db.getMediasOrderedByImpact(connection, start, limit, (result) => resolve(result));
+    });
 }
+
+const deleteMedia = (id) => {
+    checkConnect();
+    return new Promise((resolve, reject) => {
+        db.deleteMedia(connection, id, (result) => resolve(result));
+    });
+}
+
+const uploadMedia = (data) => {
+    checkConnect();
+    return new Promise((resolve, reject) => {
+        db.uploadMedia(connection, data, (result) => resolve(result));
+    });
+
+}
+
+module.exports = {
+    getMediasByAnonRelevance: getMediasByAnonRelevance,
+    deleteMedia: deleteMedia,
+    uploadMedia: uploadMedia
+};

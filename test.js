@@ -13,8 +13,11 @@ const bodyParser = require('body-parser');
 const ExifImage = require('exif').ExifImage;
 const upload = multer({ dest: 'public/img/' })
 const app = express();
-const connection = db.connect();
-const rootPrefix = 'public/';;
+
+const model = require('./modules/model');
+
+//const connection = db.connect();
+const rootPrefix = 'public/';
 
 const sslkey  = fs.readFileSync('/etc/pki/tls/private/ca.key');
 const sslcert = fs.readFileSync('/etc/pki/tls/certs/ca.crt');
@@ -23,9 +26,9 @@ const options = {
   cert: sslcert
 };
 
-
+/*
 //data contains imagepath, thumbpath, title, description, type, capturetime, uploadtime, userid, tags[]
-/*const testdata = {
+const testdata = {
     imagepath: '/test/2',
     thumbpath: '/test/thumb/2',
     title: 'Test 3',
@@ -37,7 +40,15 @@ const options = {
     tags: ['cats','fur','play']
 }
 
-db.uploadMedia(connection, testdata, () => {});*/
+model.uploadMedia(testdata);*/
+
+//model.deleteMedia(88);
+
+/*
+const p = model.getMediasByAnonRelevance(0, 30);
+p.then((res) => console.log(res));
+*/
+
 
 //db.deleteMedia(connection, 86, ()=>{});
 /*

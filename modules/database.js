@@ -351,44 +351,22 @@ const uploadMedia = (connection, data, callback) => {
 }
 
 
-//TODO: Remove old select and insert
-
-//select query to display image, comments, likes, on front end
-const select = (connection, callback, res) => {
-  console.log("teest");
-    connection.query(
-        'SELECT * from Media',
-        (error, results) =>{
-            if (error)console.log(error);
-            callback(results, res);
-        });
-};
-
-//insert data into table image, to be modified later 
-const insert = (data, connection, callback) => {
-    // simple query
-    connection.execute(
-        'INSERT INTO images (category, title, tags, details,  thumbnail, image, original) VALUES (?, ?, ?, ?, ?, ?, ?)',
-        data,
-        (err, results, fields) => {
-            if (err) {
-                console.log(err);
-            }
-            callback();
-        },
-    );
-};
-
 
 
 
 module.exports={
     connect: connect,
-    select: select,
-    insert: insert,
-    uploadMedia: uploadMedia,
+    getDataFromAttribute: getDataFromAttribute,
+    getLikesFromMedia: getLikesFromMedia,
+    getCommentsFromMedia: getCommentsFromMedia,
+    getMediaTags: getMediaTags,
+    getNumberOfMediasByTag: getNumberOfMediasByTag,
+    getUserFavouriteMedias: getUserFavouriteMedias,
+    getUserFavouriteTags: getUserFavouriteTags,
     deleteMedia: deleteMedia,
-    getUserFavouriteTags: getUserFavouriteTags
+    uploadMedia: uploadMedia,
+    getMediasOrderedByImpact: getMediasOrderedByImpact
+    
 };
 
 
