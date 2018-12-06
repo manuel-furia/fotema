@@ -17,12 +17,11 @@ const saltRounds = 10;
 const upload = multer({ dest: 'uploads/' });   
 const fs = require('fs');
 const app = express();
-const db = require('./modules/database');
 const LocalStrategy = require('passport-local').Strategy;
 const sslkey = fs.readFileSync('/etc/pki/tls/private/ca.key');
 const sslcrt = fs.readFileSync('/etc/pki/tls/certs/ca.crt');
 
-const connection = db.connect();
+const model = require('./modules/model');
 
 //const resize = resizeMod.resize;
 //const mysql = require('mysql2');
@@ -107,11 +106,10 @@ app.post('/signup',(req, res, next) =>{
 
 
 app.get('/anonwall/:start/:end', (req, res, next) =>{
-
-   //you do the query for the pictures
- database.select(connection, cb, res);
-
-
+    const start = req.params.start;
+    const end = req.params.end;
+    const task = model.getMediasByAnonRelevance(start, end);
+    task.then((json) => res.send(json)).catch((err) => console.error(err));
 });
 
 app.get('/userwall/:user/:start/:end', (req, res, next) =>{

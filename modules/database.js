@@ -315,7 +315,11 @@ const uploadMedia = (connection, data) => {
 
 }
 
-
+const createUser = (connection, data) => {
+    executeQuery(connection,
+        'INSERT INTO UserInfo (username, email, passhash, profilepicture) VALUES (?, ?, ?, NULL);',
+        [data.username, data.email, data.passhash]);
+}
 
 
 
