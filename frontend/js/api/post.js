@@ -18,13 +18,12 @@ export const uploadImages = (callback) => {
   console.log('uploading OK');
 };
 
-export const postUserData = (x, mediaForm) =>{
-  const formData = new FormData(mediaForm);
-  console.log(formData);
+export const postUserData = (x, userData) =>{
   const settings = {
     method: 'post',
-    body: formData,
+    body: userData
   };
+
   if(x === 'signin') {
     fetch('/signin', settings);
   }else{
