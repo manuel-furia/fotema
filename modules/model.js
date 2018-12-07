@@ -84,7 +84,7 @@ const getUserIdFromEmail = (email) => {
     });
 }
 
-const hashPass(pass, salt) => {
+const hashPass = (pass, salt) => {
     return bcrypt.hash(pass, salt);
 }
 
