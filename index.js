@@ -95,9 +95,11 @@ app.post('/signup',  (req, res, next) =>{
   model.validUserEmailPair(userName, email).then(result => {
     if(result.valid){
       //both the username and password are not taken and usable --> return to the users own front-page.
-      console.log('testbooi');
-      //TODO: add a query to insert the data into the database
-      res.redirect('/node/' + userName + '/:start/:end')
+
+      model.createUser(userName, email, password);
+      console.log('success!');
+      res.redirect('/node/' + userName + '/:start/:end');
+
     }else if(result.userTaken){
       //the username was taken --> return to the signup page with specific message
       res.writeHead(200, {

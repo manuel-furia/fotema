@@ -31,8 +31,7 @@ export const postUserData = (x, userData) =>{
     fetch('/node/signup', settings).then((res) => {
       console.log('testi whattehel');
       if(res.ok){
-        let message = res.headers.get('Message');
-        alert(message);
+        console.log('creation successful!')
       }else{
         let message = res.headers.get('Message');
         alert(message);
