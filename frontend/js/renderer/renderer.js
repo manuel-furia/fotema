@@ -12,7 +12,7 @@ export const showImages = (images) => {
         ` <div class="responsive" >
               <div class="gallery">
                   <a target="_blank" href=${media.path}>
-                      <img src=${media.path} width="" height="">
+                      <img src=${media.thumbnail} width="" height="">
                   </a>
                   <div class="desc">
                       <p class="description">${media.description}</p>

@@ -19,15 +19,18 @@ export const uploadImages = (callback) => {
 };
 
 export const postUserData = (x, userData) =>{
-  const settings = {
-    method: 'post',
-    body: userData
+  const settings= {
+    method: 'POST',
+    body: JSON.stringify(userData),
+    headers: {
+      'Content-Type': 'application/json'
+    },
   };
 
   if(x === 'signin') {
     fetch('/signin', settings);
   }else{
-    fetch('/signup', settings);
+    fetch('/node/signup', settings);
   }
 
 };
