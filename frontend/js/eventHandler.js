@@ -62,7 +62,6 @@ const signIn = (event)=> {
 const signUp = (event)=> {
   const signUpForm = document.querySelectorAll('.signup');
   event.preventDefault();
-  //console.log(signUpForm);
   const test = Array.prototype.slice.call(signUpForm);
   let result = {};
   test.forEach(elem =>{
