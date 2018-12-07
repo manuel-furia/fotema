@@ -88,7 +88,7 @@ const hashPass(pass, salt) => {
     return bcrypt.hash(pass, salt);
 }
 
-const createUser = (username, email, pass, level, profilepicture = null) => {
+const createUser = (username, email, pass, profilepicture = null) => {
     const psalt = bcrypt.genSalt(saltRounds);
 
     const ppass = psalt.then((salt) => {
@@ -96,7 +96,7 @@ const createUser = (username, email, pass, level, profilepicture = null) => {
     });
 
     return Promise.all([psalt, ppass]).then(([salt, hash]) => {
-        db.createUser(connection, username, email, hash, salt, level, profilepicture);
+        db.createUser(connection, username, email, hash, salt, LVL_NORMAL, profilepicture);
     });
 }
 
