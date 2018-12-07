@@ -4,14 +4,44 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 let connection = null;
 
+const LVL_NONE = 0;
+const LVL_NORMAL = 1;
+const LVL_MOD = 2;
+const LVL_ADMIN = 3;
+
 const USR_NOT_FOUND = 'User not found';
 const EMAIL_NOT_FOUND = 'Email not found';
+const PERMISSION_DENIED = 'Permission denied';
+
+const executableAsUser = requiredlvl => f => (actorId, targetOwnerId, ...args) => {
+    return getPermissions(actorId).then(lvl => {
+        if (lvl >= requiredlvl(actorId, targetOwnerId)){
+            return f(...args);
+        } else {
+            reject(PERMISSION_DENIED);
+        }
+    });  
+}
+
+const normalAction = executableAsUser((actor, owner) => (actor === owner) ? LVL_NORMAL : LVL_MOD);
+const adminAction = executableAsUser((actor, owner) => (actor === owner) ? LVL_NORMAL : LVL_ADMIN);
+
 
 const checkConnect = f => (...args) => {
     if (connection === null || connection.status === 'disconnected'){
         connection = db.connect();
     }
     return f(...args);
+}
+
+const getPermissions = (userId) => {
+    return db.getDataFromAttribute(connection, 'UserInfo', 'id', userId).then(users => {
+        if (users.length == 1){
+            return users[0].level;
+        } else {
+            reject(USR_NOT_FOUND);
+        }
+    })
 }
 
 const getMediasByAnonRelevance = (start, limit) => {
@@ -54,8 +84,11 @@ const getUserIdFromEmail = (email) => {
     });
 }
 
+const hashPass(pass, salt) => {
+    return bcrypt.hash(pass, salt);
+}
 
-const createUser = (username, email, pass, profilepicture = null) => {
+const createUser = (username, email, pass, level, profilepicture = null) => {
     const psalt = bcrypt.genSalt(saltRounds);
 
     const ppass = psalt.then((salt) => {
@@ -63,7 +96,7 @@ const createUser = (username, email, pass, profilepicture = null) => {
     });
 
     return Promise.all([psalt, ppass]).then(([salt, hash]) => {
-        db.createUser(connection, username, email, hash, salt, profilepicture);
+        db.createUser(connection, username, email, hash, salt, level, profilepicture);
     });
 }
 
@@ -100,5 +133,7 @@ module.exports = {
     getMediasByUserRelevance: checkConnect(getMediasByUserRelevance),
     getUserIdFromEmail: checkConnect(getUserIdFromEmail),
     validUserEmailPair: checkConnect(validUserEmailPair),
-    getCommentsFromMedia: checkConnect(getCommentsFromMedia)
+    getCommentsFromMedia: checkConnect(getCommentsFromMedia),
+    actorDeleteMedia: normalAction(deleteMedia)
+    
 };

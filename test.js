@@ -28,7 +28,8 @@ const options = {
 };
 
 //data contains imagepath, thumbpath, title, description, type, capturetime, uploadtime, userid, tags[]
-/*const testdata = {
+/*
+const testdata = {
     imagepath: '/test/2',
     thumbpath: '/test/thumb/2',
     title: 'Test 3',
@@ -48,6 +49,8 @@ model.uploadMedia(testdata).catch(err => console.log(err));
 model.getMediasByAnonRelevance(0, 30).then((res) => console.log(res));
 
 model.validUserEmailPair('user1', 'user4@domain.com').then(res => console.log(res));;
+
+model.actorDeleteMedia(1, 2, 10).catch(err => console.log(err));
 
 //model.getUserId('user1').then((id) => console.log(id)).catch(err => console.log(err));
 

@@ -331,10 +331,10 @@ const uploadMedia = (connection, data) => {
 
 }
 
-const createUser = (connection, username, email, passhash, salt, profilepicture = null) => {
+const createUser = (connection, username, email, passhash, salt, level, profilepicture = null) => {
     executeQuery(connection,
-        'INSERT INTO UserInfo (username, email, passhash, salt, profilepicture) VALUES (?, ?, ?, ?, ?);',
-        [username, email, passhash, salt, profilepicture]);
+        'INSERT INTO UserInfo (username, email, passhash, salt, level, profilepicture) VALUES (?, ?, ?, ?, ?, ?);',
+        [username, email, passhash, salt, level, profilepicture]);
 }
 
 const createMessage = (connection, text, userID, time, targetMedia) => {
