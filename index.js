@@ -21,6 +21,9 @@ const sslcrt = fs.readFileSync('/etc/pki/tls/certs/ca.crt');
 
 const model = require('./modules/model');
 
+
+const handleError = (err) =>{console.error(err)};
+
 //const resize = resizeMod.resize;
 //const mysql = require('mysql2');
 
@@ -77,7 +80,7 @@ app.post('/signup',  (req, res, next) =>{
   let email = req.body.email;
   let password = req.body.password;
 
-  model.validUserEmailPair(userName, email
+  model.validUserEmailPair(userName, email).then(result => {console.log(result)}).catch(handleError);
   //now we have an object newUser which holds the username, email and hashed password.
   //we can now do an insert query to the database.
   //TODO: Insert query to the database inserting the userdata
@@ -104,7 +107,7 @@ app.get('/anonwall/:start/:end', (req, res, next) =>{
     const start = req.params.start;
     const end = req.params.end;
     const task = model.getMediasByAnonRelevance(start, end);
-    task.then((json) => res.send(json)).catch((err) => console.error(err));
+    task.then((json) => res.send(json)).catch(handleError );
 });
 
 app.get('/userwall/:user/:start/:end', (req, res, next) =>{
@@ -185,3 +188,6 @@ http.createServer((req, res)=>{
 }).listen(8000);
 
 https.createServer(options, app).listen(3000);
+
+
+//testi kikkeL

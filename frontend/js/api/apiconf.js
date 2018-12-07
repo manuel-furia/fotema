@@ -1,1 +1,1 @@
-export const apiroot = '/'
+export const apiroot = '/node/'

@@ -251,7 +251,7 @@ const getUserIDFromUsername = (connection, username) => {
 const getUserIDFromEmail = (connection, email) => {
     return executeQuery(connection,
         'SELECT UserInfo.id FROM UserInfo WHERE email = ?;',
-        [username]
+        [email]
     );
 }
 

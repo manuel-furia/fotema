@@ -58,11 +58,11 @@ const getCommentsFromMedia = (mediaID) => {
 
 
 const getUserIDFromUsername = (username) => {
-    return getUserIDFromUsername(connection, username);
+    return db.getUserIDFromUsername(connection, username);
 }
 
 const getUserIDFromEmail = (email) => {
-    return getUserIDFromEmail(email);
+    return db.getUserIDFromEmail(email);
 }
 
 const validUserEmailPair = (username, email) => {
