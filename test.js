@@ -47,6 +47,8 @@ model.uploadMedia(testdata).catch(err => console.log(err));
 
 model.getMediasByAnonRelevance(0, 30).then((res) => console.log(res));
 
+model.validUserEmailPair('user1', 'user4@domain.com').then(res => console.log(res));;
+
 //model.getUserId('user1').then((id) => console.log(id)).catch(err => console.log(err));
 
 //db.deleteMedia(connection, 86, ()=>{});

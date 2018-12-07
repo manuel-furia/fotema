@@ -2,7 +2,10 @@ const db = require('./database')
 const bcrypt = require('bcrypt');
 
 const saltRounds = 10;
-let connection = null
+let connection = null;
+
+const USR_NOT_FOUND = 'User not found';
+const EMAIL_NOT_FOUND = 'Email not found';
 
 const checkConnect = f => (...args) => {
     if (connection === null || connection.status === 'disconnected'){
@@ -35,10 +38,22 @@ const getUserId = (username) => {
             if (result != null && result.length > 0)   
                 resolve(result[0].id);
             else 
-                reject('User not found');
+                reject(USR_NOT_FOUND);
         });
     });
 }
+
+const getUserIdFromEmail = (email) => {
+    return new Promise((resolve, reject) => {
+        db.getDataFromAttribute(connection, 'UserInfo', 'email', email).then((result) => {
+            if (result != null && result.length > 0)   
+                resolve(result[0].id);
+            else 
+                reject(EMAIL_NOT_FOUND);
+        });
+    });
+}
+
 
 const createUser = (username, email, pass, profilepicture = null) => {
     const psalt = bcrypt.genSalt(saltRounds);
@@ -53,23 +68,26 @@ const createUser = (username, email, pass, profilepicture = null) => {
 }
 
 const getNumCommentsFromMedia = (mediaID) => {
-    return db.getCommentsFromMedia(connection, mediaID);
-}
-
-
-const getUserIDFromUsername = (username) => {
-    return db.getUserIDFromUsername(connection, username);
-}
-
-const getUserIDFromEmail = (email) => {
-    return db.getUserIDFromEmail(connection, email);
+    return db.getNumCommentsFromMedia(connection, mediaID);
 }
 
 const validUserEmailPair = (username, email) => {
-    const userExists = getUserIDFromUsername(username).then((res) => res.length > 0);
-    const emailExists = getUserIDFromEmail(email).then((res) => res.length > 0);
+    const userExists = getUserId(username).then(() => true).catch((err) => {
+        if (err == USR_NOT_FOUND)
+            return false;
+        throw new Error(err);    
+    });
+    const emailExists = getUserIdFromEmail(email).then(() => true).catch((err) => {
+        if (err == EMAIL_NOT_FOUND)
+            return false;
+        throw new Error(err);    
+    });
     
     return Promise.all([userExists, emailExists]).then(([u, e]) => {return {valid: !(u || e), userTaken: u, emailTaken: e};});
+}
+
+const getCommentsFromMedia = (mediaID) => {
+    return db.getCommentsFromMedia(connection, mediaID);
 }
 
 module.exports = {
@@ -80,7 +98,7 @@ module.exports = {
     createUser: checkConnect(createUser),
     getNumCommentsFromMedia: checkConnect(getNumCommentsFromMedia),
     getMediasByUserRelevance: checkConnect(getMediasByUserRelevance),
-    getUserIDFromUsername: checkConnect(getUserIDFromUsername),
-    getUserIDFromEmail: checkConnect(getUserIDFromEmail),
-    validUserEmailPair: checkConnect(validUserEmailPair)
+    getUserIdFromEmail: checkConnect(getUserIdFromEmail),
+    validUserEmailPair: checkConnect(validUserEmailPair),
+    getCommentsFromMedia: checkConnect(getCommentsFromMedia)
 };

@@ -89,12 +89,13 @@ WHERE Media.id = ? ;`,
 //Get the comments of a media
 const getCommentsFromMedia = (connection, mediaID) => {
     return executeQuery(connection,
-        `Comment.*, COUNT(CommentLike.comment) AS likes
+        `SELECT Comment.*, COUNT(CommentLike.comment) AS likes
 FROM Media
 INNER JOIN Comment ON Media.id = Comment.targetMedia
 LEFT JOIN CommentLike ON Comment.id = CommentLike.comment
 WHERE Media.id = ?
-GROUP BY Comment.id ;`,
+GROUP BY Comment.id
+ORDER BY time DESC;`,
         [mediaID]);
 }
 
@@ -241,18 +242,8 @@ LIMIT ?, ? ;`,
     [userid, userid, start, end]);
 }
 
-const getUserIDFromUsername = (connection, username) => {
-    return executeQuery(connection,
-        'SELECT UserInfo.id FROM UserInfo WHERE username = ?;',
-        [username]
-    );
-}
-
-const getUserIDFromEmail = (connection, email) => {
-    return executeQuery(connection,
-        'SELECT UserInfo.id FROM UserInfo WHERE email = ?;',
-        [email]
-    );
+const getMediasUploadedByUser = (connection, userID) => {
+    return executeQuery
 }
 
 /*
@@ -281,8 +272,7 @@ const deleteMedia = (connection, mediaID) => {
         } else {
             return deleteMediaElem(mediaID, true);
         }
-    });
-        
+    });    
 }
 
 /*
@@ -382,8 +372,6 @@ module.exports={
     createMessage: createMessage,
     likeMedia: likeMedia,
     likeComment: likeComment,
-    getUserIDFromUsername: getUserIDFromUsername,
-    getUserIDFromEmail: getUserIDFromEmail
 
 };
 
