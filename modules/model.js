@@ -1,5 +1,7 @@
 const db = require('./database')
+const bcrypt = require('bcrypt');
 
+const saltRounds = 10;
 let connection = null
 
 const checkConnect = f => (...args) => {
@@ -10,6 +12,11 @@ const checkConnect = f => (...args) => {
 }
 
 const getMediasByAnonRelevance = (start, limit) => {
+    return db.getMediasOrderedByImpact(connection, start, limit);
+}
+
+const getMediasByUserRelevance = (start, limit, user) => {
+    //TODO: Implement user specific relevance algorithm
     return db.getMediasOrderedByImpact(connection, start, limit);
 }
 
@@ -33,9 +40,47 @@ const getUserId = (username) => {
     });
 }
 
+const createUser = (username, email, pass, profilepicture = null) => {
+    const psalt = bcrypt.genSalt(saltRounds);
+
+    const ppass = psalt.then((salt) => {
+        return bcrypt.hash(pass, salt);
+    });
+
+    return Promise.all([psalt, ppass]).then(([salt, hash]) => {
+        db.createUser(connection, username, email, hash, salt, profilepicture);
+    });
+}
+
+const getCommentsFromMedia = (mediaID) => {
+    return db.getCommentsFromMedia(connection, mediaID);
+}
+
+
+const getUserIDFromUsername = (username) => {
+    return getUserIDFromUsername(connection, username);
+}
+
+const getUserIDFromEmail = (email) => {
+    return getUserIDFromEmail(email);
+}
+
+const validUserEmailPair = (username, email) => {
+    const userExists = getUserIDFromUsername(username).then((res) => res.length > 0);
+    const emailExists = getUserIDFromEmail(email).then((res) => res.length > 0);
+    
+    return Promise.all([userExists, emailExists]).then(([u, e]) => !(u || e));
+}
+
 module.exports = {
     getMediasByAnonRelevance: checkConnect(getMediasByAnonRelevance),
     deleteMedia: checkConnect(deleteMedia),
     uploadMedia: checkConnect(uploadMedia),
-    getUserId: checkConnect(getUserId)
+    getUserId: checkConnect(getUserId),
+    createUser: checkConnect(createUser),
+    getCommentsFromMedia: checkConnect(getCommentsFromMedia),
+    getMediasByUserRelevance: checkConnect(getMediasByUserRelevance),
+    getUserIDFromUsername: checkConnect(getUserIDFromUsername),
+    getUserIDFromEmail: checkConnect(getUserIDFromEmail),
+    validUserEmailPair: checkConnect(validUserEmailPair)
 };

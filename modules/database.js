@@ -229,6 +229,20 @@ LIMIT ?, ? ;`,
     [userid, userid, start, end]);
 }
 
+const getUserIDFromUsername = (connection, username) => {
+    return executeQuery(connection,
+        'SELECT UserInfo.id FROM UserInfo WHERE username = ?;',
+        [username]
+    );
+}
+
+const getUserIDFromEmail = (connection, email) => {
+    return executeQuery(connection,
+        'SELECT UserInfo.id FROM UserInfo WHERE email = ?;',
+        [username]
+    );
+}
+
 /*
  * DELETE QUERIES
  */
@@ -315,12 +329,29 @@ const uploadMedia = (connection, data) => {
 
 }
 
-const createUser = (connection, data) => {
+const createUser = (connection, username, email, passhash, salt, profilepicture = null) => {
     executeQuery(connection,
-        'INSERT INTO UserInfo (username, email, passhash, profilepicture) VALUES (?, ?, ?, NULL);',
-        [data.username, data.email, data.passhash]);
+        'INSERT INTO UserInfo (username, email, passhash, salt, profilepicture) VALUES (?, ?, ?, ?, ?);',
+        [username, email, passhash, salt, profilepicture]);
 }
 
+const createMessage = (connection, text, userID, time, targetMedia) => {
+    executeQuery(connection,
+        'INSERT INTO Comment (text, targetmedia, user, time) VALUES (?, ?, ?, ?);',
+        [text, targetMedia, userID, time]);
+}
+
+const likeMedia = (connection, mediaID, userID, time) => {
+    executeQuery(connection,
+        'INSERT INTO MediaLike (user, media, time) VALUES (?, ?, ?);',
+        [userID, mediaID, time]);
+}
+
+const likeComment = (connection, commentID, userID, time) => {
+    executeQuery(connection,
+        'INSERT INTO CommentLike (user, comment, time) VALUES (?, ?, ?);',
+        [userID, commentID, time]);
+}
 
 
 module.exports={
@@ -334,8 +365,14 @@ module.exports={
     getUserFavouriteTags: getUserFavouriteTags,
     deleteMedia: deleteMedia,
     uploadMedia: uploadMedia,
-    getMediasOrderedByImpact: getMediasOrderedByImpact
-    
+    getMediasOrderedByImpact: getMediasOrderedByImpact,
+    createUser: createUser,
+    createMessage: createMessage,
+    likeMedia: likeMedia,
+    likeComment: likeComment,
+    getUserIDFromUsername: getUserIDFromUsername,
+    getUserIDFromEmail: getUserIDFromEmail
+
 };
 
 
