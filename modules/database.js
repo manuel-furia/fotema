@@ -77,13 +77,25 @@ WHERE Media.id = ? ;`,
 }
 
 //Get the number of comments of a media
-const getCommentsFromMedia = (connection, id) => {
+const getNumCommentsFromMedia = (connection, id) => {
     return executeQuery(connection,
         `SELECT Media.*, COUNT(Comment.id) AS comments
 FROM Media
 LEFT JOIN Comment ON Media.id = Comment.targetMedia
 WHERE Media.id = ? ;`,
         [id]);
+}
+
+//Get the comments of a media
+const getCommentsFromMedia = (connection, mediaID) => {
+    return executeQuery(connection,
+        `Comment.*, COUNT(CommentLike.comment) AS likes
+FROM Media
+INNER JOIN Comment ON Media.id = Comment.targetMedia
+LEFT JOIN CommentLike ON Comment.id = CommentLike.comment
+WHERE Media.id = ?
+GROUP BY Comment.id ;`,
+        [mediaID]);
 }
 
 //Get tags from media
@@ -358,7 +370,7 @@ module.exports={
     connect: connect,
     getDataFromAttribute: getDataFromAttribute,
     getLikesFromMedia: getLikesFromMedia,
-    getCommentsFromMedia: getCommentsFromMedia,
+    getNumCommentsFromMedia: getCommentsFromMedia,
     getMediaTags: getMediaTags,
     getNumberOfMediasByTag: getNumberOfMediasByTag,
     getUserFavouriteMedias: getUserFavouriteMedias,
