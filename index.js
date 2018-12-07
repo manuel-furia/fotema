@@ -12,7 +12,6 @@ const session = require('express-session');
 const database = require('./modules/database');
 const express = require('express');
 const multer  = require('multer');
-const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const upload = multer({ dest: 'uploads/' });   
 const fs = require('fs');
