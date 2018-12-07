@@ -69,7 +69,7 @@ const validUserEmailPair = (username, email) => {
     const userExists = getUserIDFromUsername(username).then((res) => res.length > 0);
     const emailExists = getUserIDFromEmail(email).then((res) => res.length > 0);
     
-    return Promise.all([userExists, emailExists]).then(([u, e]) => {valid: !(u || e), userTaken: u, emailTaken: e});
+    return Promise.all([userExists, emailExists]).then(([u, e]) => {return {valid: !(u || e), userTaken: u, emailTaken: e};});
 }
 
 module.exports = {
