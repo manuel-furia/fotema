@@ -21,8 +21,20 @@ const sslcrt = fs.readFileSync('/etc/pki/tls/certs/ca.crt');
 
 const model = require('./modules/model');
 
+const htmlFolder = __dirname + "/frontend/html/";
+
 
 const handleError = (err) =>{console.error(err)};
+
+const injectValueAndSendHTML = (res, pattern, value, file) => {
+    fs.readFile(htmlFolder + file, 'utf8', (err, html) => {
+        if (!err){
+            res.send(html.replace(pattern, value));
+        } else {
+            handleError(err);
+        }
+    });
+}
 
 //const resize = resizeMod.resize;
 //const mysql = require('mysql2');
@@ -122,27 +134,39 @@ app.post('/signin', passport.authenticate('local'), (req, res) =>{
 });
 
 
-app.get('/anonwall/:start/:end', (req, res, next) =>{
+app.get('/media/:imageID', (req, res, next) => {
+    injectValueAndSendHTML(res, '%$m$%', req.params.imageID, 'clickedmedia.html')
+});
+
+app.get('/profile/:userID', (req, res, next) => {
+    injectValueAndSendHTML(res, '%$u$%', req.params.userID, 'myfotema.html')
+});
+
+
+
+//API
+
+app.get('/get/anonwall/:start/:end', (req, res, next) =>{
     const start = req.params.start;
     const end = req.params.end;
     const task = model.getMediasByAnonRelevance(start, end);
     task.then((json) => res.send(json)).catch(handleError );
 });
 
-app.get('/userwall/:user/:start/:end', (req, res, next) =>{
+app.get('/get/userwall/:user/:start/:end', (req, res, next) =>{
 
 
 });
 
-app.get('/search/:term/:start/:end', upload.single('mediafile'), (req, res, next) => {
+app.get('/get/search/:term/:start/:end', upload.single('mediafile'), (req, res, next) => {
   next();
 });
 
-app.get('/comments/:imageID', (req, res, next) =>{
+app.get('/get/comments/:imageID', (req, res, next) =>{
 
 });
 
-app.get('/media/:imageID', (req, res, next) =>{
+app.get('/get/media/:imageID', (req, res, next) =>{
 
 });
 
