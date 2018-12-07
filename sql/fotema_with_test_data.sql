@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 06, 2018 at 08:37 PM
+-- Generation Time: Dec 07, 2018 at 04:25 PM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.2.12
 
@@ -93,7 +93,9 @@ INSERT INTO `Media` (`id`, `path`, `title`, `description`, `type`, `thumbnail`, 
 (3, '/path/to/thumbs/2', '', '', 1, NULL, '2018-11-15 12:00:00', '2018-11-16 00:00:00', 3),
 (4, 'path/to/thumbs/3', '', '', 1, NULL, '2018-11-20 11:00:00', '2018-11-21 00:00:00', 4),
 (5, '/path/to/media/2', 'Nice dog!', 'This is a friendly dog!', 2, 3, '2018-11-15 00:00:00', '2018-11-16 00:00:00', 3),
-(6, '/path/to/media/3', 'Funny video!', 'This is a funny video.', 4, 4, '2018-11-20 11:00:00', '2018-11-21 00:00:00', 4);
+(6, '/path/to/media/3', 'Funny video!', 'This is a funny video.', 4, 4, '2018-11-20 11:00:00', '2018-11-21 00:00:00', 4),
+(9, '/test/thumb/2', 'Test 3', 'Added by node.js', 1, NULL, '2018-11-21 00:00:00', '2018-11-22 02:00:00', 2),
+(10, '/test/2', 'Test 3', 'Added by node.js', 2, 9, '2018-11-21 00:00:00', '2018-11-22 02:00:00', 2);
 
 -- --------------------------------------------------------
 
@@ -182,7 +184,10 @@ INSERT INTO `Tagged` (`mediaid`, `tagid`) VALUES
 (1, 2),
 (5, 1),
 (5, 3),
-(6, 5);
+(6, 5),
+(10, 2),
+(10, 6),
+(10, 7);
 
 -- --------------------------------------------------------
 
@@ -196,6 +201,7 @@ CREATE TABLE `UserInfo` (
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `passhash` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `salt` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `level` int(11) NOT NULL,
   `profilepicture` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -203,12 +209,12 @@ CREATE TABLE `UserInfo` (
 -- Dumping data for table `UserInfo`
 --
 
-INSERT INTO `UserInfo` (`id`, `username`, `email`, `passhash`, `salt`, `profilepicture`) VALUES
-(1, 'user1', 'user1@domain.com', 'aiucuigfyuaegfyu', 'vsgtsgt', NULL),
-(2, 'user2', 'user2@domain.com', 'bfacucfawftefused', 'wegegrge', NULL),
-(3, 'user3', 'user3@domain.com', 'cyugdyuagyucfayufckuk', 'wergerg', NULL),
-(4, 'user4', 'user4@domain.com', 'dyugdyuagyucwfwfewe', 'fdgdfgdf', NULL),
-(5, 'user5', 'user5@domain.com', 'eyugdyuagyucfayjkdciud', 'ersfdgdfg', NULL);
+INSERT INTO `UserInfo` (`id`, `username`, `email`, `passhash`, `salt`, `level`, `profilepicture`) VALUES
+(1, 'user1', 'user1@domain.com', 'aiucuigfyuaegfyu', 'vsgtsgt', 3, NULL),
+(2, 'user2', 'user2@domain.com', 'bfacucfawftefused', 'wegegrge', 2, NULL),
+(3, 'user3', 'user3@domain.com', 'cyugdyuagyucfayufckuk', 'wergerg', 1, NULL),
+(4, 'user4', 'user4@domain.com', 'dyugdyuagyucwfwfewe', 'fdgdfgdf', 1, NULL),
+(5, 'user5', 'user5@domain.com', 'eyugdyuagyucfayjkdciud', 'ersfdgdfg', 1, NULL);
 
 --
 -- Indexes for dumped tables
@@ -285,7 +291,7 @@ ALTER TABLE `Comment`
 -- AUTO_INCREMENT for table `Media`
 --
 ALTER TABLE `Media`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `MediaType`
