@@ -62,7 +62,7 @@ const getUserIDFromUsername = (username) => {
 }
 
 const getUserIDFromEmail = (email) => {
-    return db.getUserIDFromEmail(email);
+    return db.getUserIDFromEmail(connection, email);
 }
 
 const validUserEmailPair = (username, email) => {
