@@ -52,6 +52,7 @@ model.validUserEmailPair('user1', 'user4@domain.com').then(res => console.log(re
 
 model.actorDeleteMedia(1, 2, 10).catch(err => console.log(err));
 
+
 //model.getUserId('user1').then((id) => console.log(id)).catch(err => console.log(err));
 
 //db.deleteMedia(connection, 86, ()=>{});
