@@ -19,15 +19,25 @@ export const uploadImages = (callback) => {
 };
 
 export const postUserData = (x, userData) =>{
-  const settings = {
-    method: 'post',
-    body: userData
+  const settings= {
+    method: 'POST',
+    body: JSON.stringify(userData),
+    headers: {
+      'Content-Type': 'application/json'
+    },
   };
 
-  if(x === 'signin') {
-    fetch('/signin', settings);
+  if(x === 'signup') {
+    fetch('/node/signup', settings).then((res) => {
+      console.log('testi whattehel');
+      if(res.ok){
+        console.log('creation successful!')
+      }else{
+        let message = res.headers.get('Message');
+        alert(message);
+      }}).catch(err =>console.log(err));
   }else{
-    fetch('/signup', settings);
+    fetch('/node/signin', settings);
   }
 
 };

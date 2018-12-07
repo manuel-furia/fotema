@@ -49,7 +49,6 @@ const uploadMediaAndGetData(req, res)
 
    return exifPromise.then((exifData) => {
       return {
-
         imagepath: path,
         thumbpath: path + "_thumb",
         title: title,

@@ -1,41 +1,44 @@
 'use strict';
 
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 
+const executePlainQuery = (connection, sql) => {
+    return connection.then((con) => con.query(sql)).then(([rows, fields]) => rows);
+};
 
-//Function to be executed after a select query has been run
-const queryResult = (connection, callback) => (error, result) => {
-    if (error) {
-        console.log(error);
-        if (connection) connection.rollback((err) => {});
-    } else
-        callback(result);
-}
+const executeQuery = (connection, sql, params) => {
+    return connection.then((con) => con.execute(sql, params)).then(([rows, fields]) => rows);
+};
+
+const startTransaction = (connection) => {
+    return connection.then((con) => con.query('START TRANSACTION;')).then(([rows, fields]) => rows);
+};
+
+const commit = (connection) => {
+    return connection.then((con) => con.query('COMMIT')).then(([rows, fields]) => rows);
+};
+
+const rollback = (connection) => {
+    return connection.then((con) => con.query('ROLLBACK;')).then(([rows, fields]) => rows);
+};
 
 //Execute multiple queries
-const multipleQueries = (connection, queries, params, callback) => {
-    const next = (queriesLeft, paramsLeft, prevResult) => {
-        
-        if (queriesLeft.length === 0) {connection.commit(); callback(prevResult)}
-        else {
-            const currentQuery = queriesLeft[0];
-            const currentParams = (paramsLeft != null && paramsLeft[0] != null) ? paramsLeft[0] : [];
-            paramsLeft.shift();
-            queriesLeft.shift();
-            connection.execute(
-                currentQuery, currentParams, (err, result) => {
-                    if (err) console.log(err)
-                    else next(queriesLeft, paramsLeft, prevResult);
-                }
-            )
-        }
-    }
+const multipleQueries = (connection, queries, params) => {
 
-    connection.beginTransaction((err) => {
-        if (!err) next(queries.split(';').filter(x => x != '').map(x => x + ";"), params, {});
-    });
-    
-}
+    const zipWith = (xs, ys, f) => xs.map((x,i) => f(x, ys[i]));
+
+    const queriesArr = queries.split(';').filter(x => x != '').map(x => x + ";");
+
+    const filledParams = (params.length >= queries.length) ? params : [...params, ...Array(queriesArr.length-params.length).fill([])];
+
+    const runnables = zipWith(queriesArr, filledParams, (query, param) => () => executeQuery(connection, query, param));
+
+    const start = startTransaction(connection);
+
+    const transaction = runnables.reduce((p, fn) => p.then(fn), start);
+
+    return transaction.then(() => commit(connection));
+};
 
 
 const connect = () => {
@@ -53,53 +56,62 @@ const connect = () => {
  */
 
 //Get the content of a table filtered by a value of an attribute
-const getDataFromAttribute = (connection, tableName, attribute, value, callback) => {
-    connection.execute(
+const getDataFromAttribute = (connection, tableName, attribute, value) => {
+    return executeQuery(connection,
         `SELECT *
          FROM ${tableName}
          WHERE ${tableName}.${attribute} = ?`,
-         [value],
-         queryResult(connection, callback)
+         [value]
     );
 }
 
 //Get the number of likes of a media
-const getLikesFromMedia = (connection, id, callback) => {
-    connection.execute(
+const getLikesFromMedia = (connection, id) => {
+    return executeQuery(connection,
        `SELECT Media.*, COUNT(Media.id) AS likes
 FROM Media
 LEFT JOIN MediaLike ON Media.id = MediaLike.media
 WHERE Media.id = ? ;`,
-        [id],
-        queryResult(connection, callback)
+        [id]
     );
 }
 
 //Get the number of comments of a media
-const getCommentsFromMedia = (connection, id, callback) => {
-    connection.execute(
+const getNumCommentsFromMedia = (connection, id) => {
+    return executeQuery(connection,
         `SELECT Media.*, COUNT(Comment.id) AS comments
 FROM Media
 LEFT JOIN Comment ON Media.id = Comment.targetMedia
 WHERE Media.id = ? ;`,
-        [id],
-        queryResult(connection, callback));
+        [id]);
+}
+
+//Get the comments of a media
+const getCommentsFromMedia = (connection, mediaID) => {
+    return executeQuery(connection,
+        `SELECT Comment.*, COUNT(CommentLike.comment) AS likes
+FROM Media
+INNER JOIN Comment ON Media.id = Comment.targetMedia
+LEFT JOIN CommentLike ON Comment.id = CommentLike.comment
+WHERE Media.id = ?
+GROUP BY Comment.id
+ORDER BY time DESC;`,
+        [mediaID]);
 }
 
 //Get tags from media
-const getMediaTags = (connection, id, callback) => {
-    connection.execute(
+const getMediaTags = (connection, id) => {
+    return executeQuery(connection,
        `SELECT Tag.name AS tags
         FROM Media
         INNER JOIN Tagged ON Media.id = Tagged.mediaid
         INNER JOIN Tag ON Tag.id = Tagged.tagid
         WHERE Media.id = ? ;`,
-        [id],
-        queryResult(connection, callback));
+        [id]);
 }
 
-const getNumberOfMediasByTag = (connection, tag, callback) => {
-    connection.execute(`
+const getNumberOfMediasByTag = (connection, tag) => {
+    return executeQuery(connection,`
 SELECT COUNT(*) AS num
 FROM Media
 INNER JOIN Tagged ON Tagged.mediaid = Media.id
@@ -107,19 +119,19 @@ INNER JOIN Tag ON Tagged.tagid = Tag.id
 INNER JOIN MediaType ON MediaType.id = Media.type
 WHERE MediaType.name != "thumbnail" && Tag.name = ?;
 `, 
-    [tag],
-    queryResult(conection, callback));
+    [tag]);
 }
 
-const getTaggedMediasOrderedByImpact = (connection, tag, start, limit, callback) => {
-    connection.execute(
+const getTaggedMediasOrderedByImpact = (connection, tag, start, limit) => {
+    return executeQuery(connection,
        `
 SELECT L.*, C.comments, (L.likes + C.comments) AS impact
 FROM (
-    SELECT Media.*, COUNT(MediaLike.media) AS likes
+    SELECT Media.*, Thumbnails.path AS thumbpath, COUNT(MediaLike.media) AS likes
     FROM Media
     INNER JOIN MediaType ON Media.type = MediaType.id
     LEFT JOIN MediaLike ON Media.id = MediaLike.media
+    LEFT JOIN Media AS Thumbnails ON Media.thumbnail = Thumbnails.id
     WHERE MediaType.name <> "thumbnail"
     GROUP BY Media.id
 ) AS L
@@ -137,19 +149,19 @@ INNER JOIN Tag ON Tagged.tagid = Tag.id
 WHERE Tag.name = ?
 ORDER BY impact DESC
 LIMIT ?, ? ;
-`, [tag, start, limit],
-    queryResult(connection, callback));
+`, [tag, start, limit]);
 }
 
-const getMediasOrderedByImpact = (connection, start, limit, callback) => {
-    connection.execute(
+const getMediasOrderedByImpact = (connection, start, limit) => {
+    return executeQuery(connection,
        `
 SELECT L.*, C.comments, (L.likes + C.comments) AS impact
 FROM (
-    SELECT Media.*, COUNT(MediaLike.media) AS likes
+    SELECT Media.*, Thumbnails.path AS thumbpath, COUNT(MediaLike.media) AS likes
     FROM Media
     INNER JOIN MediaType ON Media.type = MediaType.id
     LEFT JOIN MediaLike ON Media.id = MediaLike.media
+    LEFT JOIN Media AS Thumbnails ON Media.thumbnail = Thumbnails.id
     WHERE MediaType.name <> "thumbnail"
     GROUP BY Media.id
 ) AS L
@@ -164,20 +176,20 @@ INNER JOIN (
 ON L.id = C.id
 ORDER BY impact DESC
 LIMIT ?, ? ;
-`, [start, limit],
-    queryResult(connection, callback));
+`, [start, limit]);
 }
 
-const getUserFavouriteMedias = (connection, userid, start, end, callback) => {
-    connection.execute(
+const getUserFavouriteMedias = (connection, userid, start, end) => {
+    return executeQuery(connection,
         `SELECT Media.*, IFNULL(L.likes, 0) AS likes, IFNULL(C.comments, 0) AS comments, IFNULL(L.likes + C.comments, 0) AS impact
 FROM Media
 LEFT JOIN (
-    SELECT Media.*, COUNT(MediaLike.media) AS likes
+    SELECT Media.*, Thumbnails.path AS thumbpath, COUNT(MediaLike.media) AS likes
     FROM Media
     INNER JOIN MediaType ON Media.type = MediaType.id
     LEFT JOIN MediaLike ON Media.id = MediaLike.media
     LEFT JOIN UserInfo ON MediaLike.user = UserInfo.id
+    LEFT JOIN Media AS Thumbnails ON Media.thumbnail = Thumbnails.id
     WHERE UserInfo.id = ?
     GROUP BY Media.id
 ) AS L ON Media.id = L.id
@@ -194,20 +206,20 @@ INNER JOIN MediaType ON MediaType.id = Media.type
 WHERE MediaType.name <> "thumbnail"
 ORDER BY impact DESC
 LIMIT ?, ? ;`,
-    [userid, userid, start, end],
-    queryResult(connection, callback));
+    [userid, userid, start, end]);
 }
 
-const getUserFavouriteTags = (connection, userid, start, end, callback) => {
-    connection.execute(
+const getUserFavouriteTags = (connection, userid, start, end) => {
+    return executeQuery(connection,
         `SELECT Tag.name AS tag, SUM(IFNULL(L.likes, 0)) AS likes, SUM(IFNULL(C.comments, 0)) AS comments, SUM(IFNULL(L.likes, 0)) + SUM(IFNULL(C.comments, 0)) AS impact
 FROM Media
 LEFT JOIN (
-    SELECT Media.*, COUNT(MediaLike.media) AS likes
+    SELECT Media.*, Thumbnails.path AS thumbpath, COUNT(MediaLike.media) AS likes
     FROM Media
     INNER JOIN MediaType ON Media.type = MediaType.id
     LEFT JOIN MediaLike ON Media.id = MediaLike.media
     LEFT JOIN UserInfo ON MediaLike.user = UserInfo.id
+    LEFT JOIN Media AS Thumbnails ON Media.thumbnail = Thumbnails.id
     WHERE UserInfo.id = ?
     GROUP BY Media.id
 ) AS L ON Media.id = L.id
@@ -227,17 +239,20 @@ WHERE MediaType.name <> "thumbnail"
 GROUP BY Tag.name
 ORDER BY impact DESC
 LIMIT ?, ? ;`,
-    [userid, userid, start, end],
-    queryResult(connection, callback));
+    [userid, userid, start, end]);
+}
+
+const getMediasUploadedByUser = (connection, userID) => {
+    return executeQuery
 }
 
 /*
  * DELETE QUERIES
  */
-const deleteMedia = (connection, mediaID, callback) => {
+const deleteMedia = (connection, mediaID) => {
 
     const deleteMediaElem = (id, done) => {
-        multipleQueries(connection,
+        return multipleQueries(connection,
            `DELETE FROM MediaLike WHERE media = ? ;
             DELETE FROM Tagged WHERE mediaid = ? ;
             DELETE FROM CommentLike WHERE comment = (
@@ -247,23 +262,17 @@ const deleteMedia = (connection, mediaID, callback) => {
                 WHERE Comment.targetmedia = ? );
             DELETE FROM Comment WHERE targetmedia = ? ;
             DELETE FROM Media WHERE id = ? ;`,
-        [[id], [id], [id], [id], [id]],
-        (result) => {if (done) callback(result)});
+        [[id], [id], [id], [id], [id]]);
     }
 
-    const fetchedImage = (imageData) => {
-        
+    getDataFromAttribute(connection, 'Media', 'id', mediaID).then((imageData) => {
         if (imageData != null && imageData.length > 0 && imageData[0].thumbnail != null){
-            deleteMediaElem(mediaID, false); //Delete the actual media
-            deleteMediaElem(imageData[0].thumbnail, true); //Then delete the thumbnail and finish (done = true)
+            return deleteMediaElem(mediaID, false).then(() => //Delete the actual media
+            deleteMediaElem(imageData[0].thumbnail, true)); //Then delete the thumbnail and finish (done = true)
         } else {
-            deleteMediaElem(mediaID, true);
+            return deleteMediaElem(mediaID, true);
         }
-        
-    }
-
-    getDataFromAttribute(connection, 'Media', 'id', mediaID, (result) => fetchedImage(result));
-        
+    });    
 }
 
 /*
@@ -271,124 +280,99 @@ const deleteMedia = (connection, mediaID, callback) => {
  */
 
 //data contains imagepath, thumbpath, title, description, type, capturetime, uploadtime, userid, tags[]
-const uploadMedia = (connection, data, callback) => {
+const uploadMedia = (connection, data) => {
 
-
-    const next = (error, acc, name, results, from, callback) => {
-        if (error) {
-            console.log(error);
-            connection.rollback((err) => {});
-        } else {
-            acc[name] = results[from];
-            callback(acc);
-        }
-    }
-
-   const insertMedia = (acc, typeID, thumbID, nextID, nextCallback) => {
-        connection.execute(
+   const insertMedia = (path, typeID, thumbID) => {
+        //console.log([data.imagepath, data.title, data.description, typeID, thumbID, data.capturetime, data.uploadtime, data.userid]);
+        return executeQuery(connection,
             `INSERT INTO Media (path, title, description, type, thumbnail, capturetime, uploadtime, user)
              VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
-            [data.imagepath, data.title, data.description, typeID, thumbID, data.capturetime, data.uploadtime, data.userid],
-            (error, results) => {
-                next(error, acc, nextID, results, 'insertId', nextCallback);
-            });
+            [path, data.title, data.description, typeID, thumbID, data.capturetime, data.uploadtime, data.userid]);
     }
 
-    //Step 6 (final)
-    const createdTag = (acc) => {
-        connection.execute(
+    const tagMedia = (mediaID, tagID) => {
+        return executeQuery(connection,
             `INSERT INTO Tagged (mediaid, tagid)
              VALUES (?, ?);`,
-            [acc.imageID, acc.tagID],
-            queryResult(connection, (result)=>{
-                    connection.commit()
-            })
+            [mediaID, tagID]
         );
     }
-    //Step 4
-    const insertedImage = (acc) => {
-        data.tags.forEach(tag => {
-        connection.execute(
-            'SELECT id, name FROM Tag WHERE name = ?;',
-            [tag],
-            (error, results) => { //Step 5
+
+    const insertTags = (mediaID) => {
+        return data.tags.map(tag => {
+            const tagIDPresent = executeQuery(connection, 'SELECT id, name FROM Tag WHERE name = ?;', [tag]);
+            const tagID = tagIDPresent.then((results) => {
                 if (results.length === 0){
-                    connection.execute(
-                    `INSERT INTO Tag (name)
-                         VALUES (?);`,
-                    [tag],
-                    (error, results) => {
-                        next(error, acc, 'tagID', results, 'insertId', createdTag);
-                    })
+                    return executeQuery(connection, 'INSERT INTO Tag (name) VALUES (?);', [tag]).then((result) => result.insertId);
                 } else {
-                    next(error, acc, 'tagID', results[0], 'id', createdTag);
+                    return results[0].id;
                 }
-            })
-        })
-        
-    }
-
-    //Step 3
-    const insertedThumbnail = (acc) => {
-        insertMedia(acc, acc.typeID, acc.thumbID, 'imageID', insertedImage);
-    }
-
-    //Step 2
-    const gotType = (acc) => {
-        insertMedia(acc, 1, null, 'thumbID', insertedThumbnail);
-    }
-
-    //Step 1
-    connection.beginTransaction((err) => {
-        if (err) connection.rollback(function() {
-          console.log(err);
+            });
+            return tagID.then((tagID) => tagMedia(mediaID, tagID));
         });
-        //First, get the typeid of the type of the media
-        getDataFromAttribute(connection, 'MediaType', 'name', data.type, (result, r) => {if (result && result.length > 0) {gotType({'typeID' : result[0].id})}})
+    }
 
-    });
+    //Start the transaction
+    const start = startTransaction(connection)
+    //Get the typeid of the type of the media
+    const getTypeID = start.then(() => getDataFromAttribute(connection, 'MediaType', 'name', data.type)).then((result) => result[0].id);
+    //Get the type id of the type 'thumbnail'
+    const getThumbTypeID = start.then(() => getDataFromAttribute(connection, 'MediaType', 'name', 'thumbnail')).then((result) => result[0].id);
+    //Create the thumbnail    
+    const createThumb = getThumbTypeID.then((thumbTypeID) => insertMedia(data.thumbpath, thumbTypeID, null)).then((result) => result.insertId);
+    //Create the media    
+    const createMedia = Promise.all([getTypeID, createThumb]).then(([typeID, thumbID]) => insertMedia(data.imagepath, typeID, thumbID)).then((result) => result.insertId);
+    //Add all the tags to the media
+    const addAllTags = createMedia.then((mediaID) => Promise.all(insertTags(mediaID)));
+    //Commit the transaction
+    const committed = addAllTags.then(() => commit(connection));
+
+    return committed;
 
 }
 
+const createUser = (connection, username, email, passhash, salt, level, profilepicture = null) => {
+    executeQuery(connection,
+        'INSERT INTO UserInfo (username, email, passhash, salt, level, profilepicture) VALUES (?, ?, ?, ?, ?, ?);',
+        [username, email, passhash, salt, level, profilepicture]);
+}
 
-//TODO: Remove old select and insert
+const createMessage = (connection, text, userID, time, targetMedia) => {
+    executeQuery(connection,
+        'INSERT INTO Comment (text, targetmedia, user, time) VALUES (?, ?, ?, ?);',
+        [text, targetMedia, userID, time]);
+}
 
-//select query to display image, comments, likes, on front end
-const select = (connection, callback, res) => {
-  console.log("teest");
-    connection.query(
-        'SELECT * from Media',
-        (error, results) =>{
-            if (error)console.log(error);
-            callback(results, res);
-        });
-};
+const likeMedia = (connection, mediaID, userID, time) => {
+    executeQuery(connection,
+        'INSERT INTO MediaLike (user, media, time) VALUES (?, ?, ?);',
+        [userID, mediaID, time]);
+}
 
-//insert data into table image, to be modified later 
-const insert = (data, connection, callback) => {
-    // simple query
-    connection.execute(
-        'INSERT INTO images (category, title, tags, details,  thumbnail, image, original) VALUES (?, ?, ?, ?, ?, ?, ?)',
-        data,
-        (err, results, fields) => {
-            if (err) {
-                console.log(err);
-            }
-            callback();
-        },
-    );
-};
-
-
+const likeComment = (connection, commentID, userID, time) => {
+    executeQuery(connection,
+        'INSERT INTO CommentLike (user, comment, time) VALUES (?, ?, ?);',
+        [userID, commentID, time]);
+}
 
 
 module.exports={
     connect: connect,
-    select: select,
-    insert: insert,
-    uploadMedia: uploadMedia,
+    getDataFromAttribute: getDataFromAttribute,
+    getLikesFromMedia: getLikesFromMedia,
+    getNumCommentsFromMedia: getCommentsFromMedia,
+    getMediaTags: getMediaTags,
+    getNumberOfMediasByTag: getNumberOfMediasByTag,
+    getUserFavouriteMedias: getUserFavouriteMedias,
+    getUserFavouriteTags: getUserFavouriteTags,
     deleteMedia: deleteMedia,
-    getUserFavouriteTags: getUserFavouriteTags
+    uploadMedia: uploadMedia,
+    getMediasOrderedByImpact: getMediasOrderedByImpact,
+    createUser: createUser,
+    createMessage: createMessage,
+    likeMedia: likeMedia,
+    likeComment: likeComment,
+
 };
 
 

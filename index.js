@@ -9,20 +9,20 @@ const passportMod = require('./modules/passport');
 const resizeMod = require('./modules/resize');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const database = require('./modules/database');
 const express = require('express');
 const multer  = require('multer');
-const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const upload = multer({ dest: 'uploads/' });   
 const fs = require('fs');
 const app = express();
-const db = require('./modules/database');
 const LocalStrategy = require('passport-local').Strategy;
 const sslkey = fs.readFileSync('/etc/pki/tls/private/ca.key');
 const sslcrt = fs.readFileSync('/etc/pki/tls/certs/ca.crt');
 
-const connection = db.connect();
+const model = require('./modules/model');
+
+
+const handleError = (err) =>{console.error(err)};
 
 //const resize = resizeMod.resize;
 //const mysql = require('mysql2');
@@ -38,6 +38,7 @@ const options ={
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use( bodyParser.json() );
 app.use(bodyParser.urlencoded({extend: true}));
 
 //passport initialization
@@ -71,47 +72,61 @@ app.post('/login',
   passport.authenticate('local', {successRedirect: '/node/', failureRedirect: '/loginfailedpage'})
 );
 
-app.post('/signup',(req, res, next) =>{
-  console.log('test!');
-  let newUser = {};
-  console.log(req.username);
+app.post('/signup',  (req, res, next) =>{
+
   //TODO: query to check if the username and email already exist in the database
-  /*
-  if(database.checkUserName(req.body.username) &&
-      database.checkEmail(req.body.email)) {
 
-    newUser.username = req.body.username;
-    newUser.email = req.body.email;
+  let userName = req.body.username;
+  let email = req.body.email;
+  let password = req.body.password;
 
-    //add a password hash for the user
-    bcrypt.genSalt(10, (err, salt) => {
-      if(err) return next(err);
-      bcrypt.hash(req.body.password, salt, (err, hash) => {
-        if(err) return next(err);
-        newUser.password = hash;
-      })
-    })
+  model.validUserEmailPair(userName, email).then(result => {
+    if(result.valid){
+      //both the username and password are not taken and usable --> return to the users own front-page.
 
-    //now we have an object newUser which holds the username, email and hashed password.
-    //we can now do an insert query to the database.
-    //TODO: Insert query to the database inserting the userdata
+      model.createUser(userName, email, password);
+      console.log('success!');
+      res.redirect('/node/' + userName + '/:start/:end');
 
-    //QUERY
-  }
-
-*/
-
+    }else if(result.userTaken){
+      //the username was taken --> return to the signup page with specific message
+      res.writeHead(200, {
+        'Message': 'The username was taken, please use another one.'});
+      res.send();
+    }else if(result.emailTaken){
+      //the email was already taken --> return to the signup page with specific message
+      res.writeHead(200, {
+        'Message': 'The email was taken, please use another one.'});
+      res.send();
+    }else{
+      //both the email and username were already taken, return to the signup page with special message.
+      res.writeHead(200, {
+        'Message': 'The email and username were taken, please use another ones.'});
+      res.send();
+    }
+  }).catch(handleError);
 
 });
 
 
+app.post('/signin', passport.authenticate('local'), (req, res) =>{
+
+  //IF the login is succesful
+  res.redirect('/node/'+ req.body.username + '/:start/:end')
+
+  //somebody is trying to sign in. we need to do the login check.
+  //TODO: Insert query to the database to check the userdata
+
+  //QUERY
+
+});
+
 
 app.get('/anonwall/:start/:end', (req, res, next) =>{
-
-   //you do the query for the pictures
- database.select(connection, cb, res);
-
-
+    const start = req.params.start;
+    const end = req.params.end;
+    const task = model.getMediasByAnonRelevance(start, end);
+    task.then((json) => res.send(json)).catch(handleError );
 });
 
 app.get('/userwall/:user/:start/:end', (req, res, next) =>{
@@ -192,3 +207,6 @@ http.createServer((req, res)=>{
 }).listen(8000);
 
 https.createServer(options, app).listen(3000);
+
+
+//testi kikkeL

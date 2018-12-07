@@ -1,7 +1,6 @@
 'use strict';
 
 const LocalStrategy = require('passport-local').Strategy;
-const db = require('./database');
 
 
   // used in authentication of the user login information. exported to viewMore.js.
@@ -16,7 +15,10 @@ const db = require('./database');
 
 
   //
-  const loginStrategy = (new LocalStrategy(
+  const loginStrategy = (new LocalStrategy({
+    usernameField: 'username',
+    passwordField: 'password',
+  },
       (username, password, done) =>{
         console.log('serializing user: ' + username);
         if(username !== 'fotema'|| password !== 'fotema')

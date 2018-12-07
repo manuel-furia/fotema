@@ -1,3 +1,4 @@
+Error.stackTraceLimit = Infinity;
 require('dotenv').config();
 const express = require('express');
 const multer  = require('multer');
@@ -13,8 +14,11 @@ const bodyParser = require('body-parser');
 const ExifImage = require('exif').ExifImage;
 const upload = multer({ dest: 'public/img/' })
 const app = express();
-const connection = db.connect();
-const rootPrefix = 'public/';;
+
+const model = require('./modules/model');
+
+//const connection = db.connect();
+const rootPrefix = 'public/';
 
 const sslkey  = fs.readFileSync('/etc/pki/tls/private/ca.key');
 const sslcert = fs.readFileSync('/etc/pki/tls/certs/ca.crt');
@@ -23,9 +27,9 @@ const options = {
   cert: sslcert
 };
 
-
 //data contains imagepath, thumbpath, title, description, type, capturetime, uploadtime, userid, tags[]
-/*const testdata = {
+/*
+const testdata = {
     imagepath: '/test/2',
     thumbpath: '/test/thumb/2',
     title: 'Test 3',
@@ -37,7 +41,18 @@ const options = {
     tags: ['cats','fur','play']
 }
 
-db.uploadMedia(connection, testdata, () => {});*/
+model.uploadMedia(testdata).catch(err => console.log(err));
+*/
+//model.deleteMedia(8);
+
+
+model.getMediasByAnonRelevance(0, 30).then((res) => console.log(res));
+
+model.validUserEmailPair('user1', 'user4@domain.com').then(res => console.log(res));;
+
+model.actorDeleteMedia(1, 2, 10).catch(err => console.log(err));
+
+//model.getUserId('user1').then((id) => console.log(id)).catch(err => console.log(err));
 
 //db.deleteMedia(connection, 86, ()=>{});
 /*
