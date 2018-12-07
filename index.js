@@ -84,7 +84,7 @@ app.post('/signup',  (req, res, next) =>{
     if(result.valid){
       //both the username and password are not taken and usable --> return to the users own front-page.
       console.log('testbooi');
-
+      //TODO: add a query to insert the data into the database
       res.redirect('/node/' + userName + '/:start/:end')
     }else if(result.userTaken){
       //the username was taken --> return to the signup page with specific message
@@ -103,11 +103,6 @@ app.post('/signup',  (req, res, next) =>{
       res.send();
     }
   }).catch(handleError);
-  //now we have an object newUser which holds the username, email and hashed password.
-  //we can now do an insert query to the database.
-  //TODO: Insert query to the database inserting the userdata
-
-    //QUERY
 
 });
 
