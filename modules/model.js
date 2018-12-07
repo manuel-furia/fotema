@@ -52,7 +52,7 @@ const createUser = (username, email, pass, profilepicture = null) => {
     });
 }
 
-const getCommentsFromMedia = (mediaID) => {
+const getNumCommentsFromMedia = (mediaID) => {
     return db.getCommentsFromMedia(connection, mediaID);
 }
 
@@ -69,7 +69,7 @@ const validUserEmailPair = (username, email) => {
     const userExists = getUserIDFromUsername(username).then((res) => res.length > 0);
     const emailExists = getUserIDFromEmail(email).then((res) => res.length > 0);
     
-    return Promise.all([userExists, emailExists]).then(([u, e]) => !(u || e));
+    return Promise.all([userExists, emailExists]).then(([u, e]) => {valid: !(u || e), userTaken: u, emailTaken: e});
 }
 
 module.exports = {
@@ -78,7 +78,7 @@ module.exports = {
     uploadMedia: checkConnect(uploadMedia),
     getUserId: checkConnect(getUserId),
     createUser: checkConnect(createUser),
-    getCommentsFromMedia: checkConnect(getCommentsFromMedia),
+    getNumCommentsFromMedia: checkConnect(getNumCommentsFromMedia),
     getMediasByUserRelevance: checkConnect(getMediasByUserRelevance),
     getUserIDFromUsername: checkConnect(getUserIDFromUsername),
     getUserIDFromEmail: checkConnect(getUserIDFromEmail),
