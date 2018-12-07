@@ -80,12 +80,29 @@ app.post('/signup',  (req, res, next) =>{
   let email = req.body.email;
   let password = req.body.password;
 
-  model.validUserEmailPair(userName, email).then(result => {console.log(result)}).catch(handleError);
-  //now we have an object newUser which holds the username, email and hashed password.
-  //we can now do an insert query to the database.
-  //TODO: Insert query to the database inserting the userdata
-
-    //QUERY
+  model.validUserEmailPair(userName, email).then(result => {
+    if(result.valid){
+      //both the username and password are not taken and usable --> return to the users own front-page.
+      console.log('testbooi');
+      //TODO: add a query to insert the data into the database
+      res.redirect('/node/' + userName + '/:start/:end')
+    }else if(result.userTaken){
+      //the username was taken --> return to the signup page with specific message
+      res.writeHead(200, {
+        'Message': 'The username was taken, please use another one.'});
+      res.send();
+    }else if(result.emailTaken){
+      //the email was already taken --> return to the signup page with specific message
+      res.writeHead(200, {
+        'Message': 'The email was taken, please use another one.'});
+      res.send();
+    }else{
+      //both the email and username were already taken, return to the signup page with special message.
+      res.writeHead(200, {
+        'Message': 'The email and username were taken, please use another ones.'});
+      res.send();
+    }
+  }).catch(handleError);
 
 });
 

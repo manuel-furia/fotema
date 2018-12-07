@@ -27,10 +27,18 @@ export const postUserData = (x, userData) =>{
     },
   };
 
-  if(x === 'signin') {
-    fetch('/signin', settings);
+  if(x === 'signup') {
+    fetch('/node/signup', settings).then((res) => {
+      console.log('testi whattehel');
+      if(res.ok){
+        let message = res.headers.get('Message');
+        alert(message);
+      }else{
+        let message = res.headers.get('Message');
+        alert(message);
+      }}).catch(err =>console.log(err));
   }else{
-    fetch('/node/signup', settings);
+    fetch('/node/signin', settings);
   }
 
 };

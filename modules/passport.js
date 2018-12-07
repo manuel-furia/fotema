@@ -15,7 +15,10 @@ const LocalStrategy = require('passport-local').Strategy;
 
 
   //
-  const loginStrategy = (new LocalStrategy(
+  const loginStrategy = (new LocalStrategy({
+    usernameField: 'username',
+    passwordField: 'password',
+  },
       (username, password, done) =>{
         console.log('serializing user: ' + username);
         if(username !== 'fotema'|| password !== 'fotema')
