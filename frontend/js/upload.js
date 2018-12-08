@@ -1,6 +1,6 @@
 
 //show image after user has chosen one, before uploading
-const readURL = (input) => {
+/*const previewMedia = (input) => {
     if (input.files && input.files[0]) {
         const reader = new FileReader();
 
@@ -13,7 +13,9 @@ const readURL = (input) => {
 
         reader.readAsDataURL(input.files[0]);
     }
-};
+};*/
+
+
 
 const showUploadForm = () =>{
     const uploadfileForm = document.querySelector('#uploadfile');
@@ -63,8 +65,9 @@ const uploadImages = (event) => {
     });
     console.log('uploading OK');
 };
-
-mediaForm.addEventListener('submit', uploadImages);
+if (mediaForm != null) {
+    mediaForm.addEventListener('submit', uploadImages);
+}
 
 
 //get images

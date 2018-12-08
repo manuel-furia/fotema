@@ -267,8 +267,8 @@
 
 
         <div class="row">
-            <a id="cancelupload" href="javascript:history.back()" onclick="document.getElementById('uploadfile').style.display = 'none';"><i class="fa fa-times"></i></a> <!--href="javascript:history.back()"-->
-        </div>
+            <a id="cancelupload" onclick="document.getElementById('uploadfile').style.display = 'none';"><i class="fa fa-times"></i></a>
+        </div> <!--href="javascript:history.back()"-->
 
         <!--<div class="row">
             <div class="col-25">
@@ -321,7 +321,8 @@
                 </label>
             </div>
             <div class="col-50">
-                <input type="file" name="mediafile" accept="audio/*,video/*,image/*" onchange="readURL(this);">
+                <input type="file" name="mediafile" accept="audio/*,video/*,image/*" onchange="document.getElementById('newImage').src = window.URL.createObjectURL(this.files[0])">
+                >
             </div>
         </div>
 

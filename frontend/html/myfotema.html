@@ -135,7 +135,7 @@
                 </select>
             </div>
             <div class="col-50">
-                <input type="file" name="mediafile" accept="audio/*,video/*,image/*" onchange="readURL(this);">
+                <input type="file" name="mediafile" accept="audio/*,video/*,image/*" onchange="document.getElementById('newImage').src = window.URL.createObjectURL(this.files[0])">
             </div>
         </div>
 
