@@ -1,48 +1,31 @@
 
 
-/*.dropdown{*/
-/*flex: 15% !important;*/
-/*margin: 0;*/
-/*}*/
-
-/*.dropdown-content {*/
-/*display: none;*/
-/*left: -10%;*/
-/*}*/
-
 .sign{
     display: none !important;
 }
 
-.my-media{
+.my-media-container{
     overflow: auto;
-    display: block;
     width: 90%;
     margin: auto;
     padding-top: 60px;
     padding-bottom: 40px;
 }
 
-.my-media-first-block, .viewmore-my-media {
-    overflow: auto;
+.my-media{
+
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    width: 90%;
-    margin: auto;
 }
 
 
-
-.viewmore-my-media{
-    display: none;
-}
 
 #btnViewMoreMyMedia{
     position: absolute;
-    width: 100px;
-    height: 40px;
-    margin: 30px auto 50px;
+    width: 150px;
+    height: 50px;
+    margin: 30px auto 80px;
     left: 0;
     right: 0;
     background-color: #eb4208;
