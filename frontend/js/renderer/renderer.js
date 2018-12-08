@@ -10,9 +10,9 @@ export const showImages = (images) => {
         myMedia.innerHTML +=
 
         ` <div class="responsive" >
-              <div class="gallery">
+              <div class="gallery" >
                   <a target="_blank" href=${media.path}>
-                      <img src=${media.thumbnail} width="" height="">
+                      <img src=${media.thumbnail} width="" height=""  class="clickedMedia" id="${media.id}" >
                   </a>
                   <div class="desc">
                       <p class="description">${media.description}</p>
@@ -21,9 +21,9 @@ export const showImages = (images) => {
                   </div>
               </div>
           </div>` ;
-
+     // console.log('html: ' + myMedia.innerHTML);
     });
-  console.log('html: ' + myMedia.innerHTML);
+
 
     console.log('showing images OK???');
 };
