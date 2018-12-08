@@ -130,7 +130,7 @@ body{
 .header .sign button{
     float: left;
     margin-right: 10px;
-    /*display: none;*/
+    display: none;
 }
 
 
@@ -140,7 +140,7 @@ body{
 }
 
 .header .upload, .header .dropdown{
-    display: none;
+    /*display: none;*/
 }
 
 
@@ -316,7 +316,7 @@ body{
     }
 
     .search-container input[type=text] {
-        width: 260px;
+        /*width: 260px;*/
 
     }
 
@@ -388,7 +388,6 @@ body{
 @media screen and (max-width: 650px) {
     .header{
         height: 45px;
-        display: inline;
     }
 
     .header .logo {

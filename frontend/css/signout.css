@@ -6,10 +6,13 @@
     float: left !important;
 }
 
+.header .sign, .header .upload, .header .dropdown{
+    display: none !important;
+}
+
 .search-container{
     float: right !important;
-    position: fixed;
-    left: 40%;
+
 }
 
 
@@ -131,7 +134,7 @@
 
 
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 650px) {
 
     .header{
         display: inline !important;
@@ -142,17 +145,19 @@
     }
 
     .search-container{
-        display: inline;
-        float: left !important;
+        position: unset;
+        display: flex !important;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        float: right !important;
         margin-right: 5px;
-        margin-left: 0;
-        top: 3px;
-        width: 90%;
+        margin-left: 10px;
+        width: 200px;
     }
 
 
     .search-container input[type=text] {
-        width: 90%;
+        width: 80%;
     }
 
 
