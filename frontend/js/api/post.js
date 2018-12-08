@@ -28,13 +28,13 @@ export const postUserData = (x, userData) =>{
   };
 
   if(x === 'signup') {
-    fetch('/node/signup', settings).then((res) => {
-      console.log('testi whattehel');
-      if(res.ok){
-        console.log('creation successful!')
+    fetch('/node/signup', settings).then((res) => { console.log(res); return res.json()}).then(json => {
+      console.log(json);
+      if(json.err){
+        alert(json.err);
       }else{
-        let message = res.headers.get('Message');
-        alert(message);
+        console.log('success!');
+        window.location.href = '/node/userwall/' + json.user+ '/0/12';
       }}).catch(err =>console.log(err));
   }else{
     fetch('/node/signin', settings);
