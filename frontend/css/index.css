@@ -84,6 +84,7 @@ body{
 
 .header .upload{
     float: left;
+    margin-right: 10px;
 }
 
 .header .upload a{
@@ -128,7 +129,8 @@ body{
 
 .header .sign button{
     float: left;
-    display: none;
+    margin-right: 10px;
+    /*display: none;*/
 }
 
 
@@ -138,7 +140,7 @@ body{
 }
 
 .header .upload, .header .dropdown{
-    /*display: none;*/
+    display: none;
 }
 
 
@@ -383,7 +385,7 @@ body{
 }
 
 /* Extra small devices (phones, 600px and down) */
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 650px) {
     .header{
         height: 45px;
         display: inline;
@@ -461,11 +463,14 @@ body{
         top: 3px;
         background: #575757;
         padding: 0 10px 2px;
+        width: 200px;
+        z-index: 9;
     }
 
     .search-container input[type=text] {
         padding: 2px;
         font-size: 14px;
+        width: 80%;
     }
 
     .search-container button {

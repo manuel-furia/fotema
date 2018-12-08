@@ -2,19 +2,10 @@ body{
     overflow: auto;
 }
 
-/*.header .dropdown{*/
-/*flex: 15% !important;*/
-/*margin: 0;*/
-/*}*/
 
-/*.dropdown-content {*/
-/*display: none;*/
-/*left: -10%;*/
-/*}*/
 
-.sign{
+.header .sign{
     display: none !important;
-    visibility: hidden;
 }
 
 .usersettings{
@@ -173,6 +164,7 @@ body{
 }
 
 @media only screen and (max-width: 600px) {
+
     .usersettings{
         padding-top: 12%;
         width: 95%;
@@ -210,5 +202,6 @@ body{
     .usersettings img{
         display: none;
     }
+
 
 }
