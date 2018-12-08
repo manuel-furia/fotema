@@ -14,13 +14,31 @@ export const showImages = (images) => {
                   <a target="_blank" href=${media.path}>
                       <img src=${media.thumbnail} width="" height=""  class="clickedMedia" id="${media.id}" >
                   </a>
+              </div>
                   <div class="desc">
                       <p class="description">${media.description}</p>
                       <p class="likesnumber"><i class="fa fa-heart"></i> ${media.likeAmount}</p>
                       <p class="commentsnumber"><i class="fa fa-commenting"></i> ${media.commentAmount}</p>
                   </div>
-              </div>
+              
           </div>` ;
+
+        //div of new image box
+        /*
+        <div class="responsive">
+                <div class="gallery">
+                    <a target="_blank" href="../image/f1.jpg">
+                        <img src="../image/f1.jpg" width="" height="" alt="">
+                    </a>
+                </div>
+                <div class="desc">
+                    <p class="description">description of the image </p>
+                    <p class="likesnumber"><button  onclick="likeMedia()"><i class="fa fa-heart"></i></button> 100000</p>
+                    <p class="commentsnumber"><button  onclick="commentMedia()"><i class="fa fa-commenting"></i></button> 900</p>
+                </div>
+            </div>
+        */
+
      // console.log('html: ' + myMedia.innerHTML);
     });
 
