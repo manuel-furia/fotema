@@ -2,25 +2,25 @@ body{
     overflow: auto;
 }
 
-.header .dropdown{
-    flex: 15% !important;
-    margin: 0;
-}
+/*.header .dropdown{*/
+/*flex: 15% !important;*/
+/*margin: 0;*/
+/*}*/
 
-.dropdown-content {
-    display: none;
-    left: -10%;
-}
+/*.dropdown-content {*/
+/*display: none;*/
+/*left: -10%;*/
+/*}*/
 
 .sign{
-    display: none;
+    display: none !important;
     visibility: hidden;
 }
 
 .usersettings{
     display: flex;
     flex-direction: column;
-    padding-top: 10%;
+    padding-top: 5%;
     margin: auto;
     width: 70%;
     color: white;
@@ -94,7 +94,6 @@ body{
 }
 
 .usersettings img{
-    display: block;
     position: fixed;
     left: 70%;
     width: 50%;
@@ -137,7 +136,7 @@ body{
 @media only screen and (max-width: 1024px) {
 
     .usersettings{
-        padding-top: 25%;
+        padding-top: 8%;
         width: 80%;
     }
 
@@ -148,18 +147,34 @@ body{
 
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 860px) {
 
     .usersettings{
-        padding-top: 25%;
+        padding-top: 10%;
         width: 90%;
     }
+
+    .usersettings label {
+        padding: 3px;
+        margin-right: 10px;
+        font-size: 14px;
+
+    }
+
+
+    .usersettings .col-25 {
+        float: left;
+        width: 25%;
+        margin-top: 8px;
+        text-align: right;
+    }
+
 
 }
 
 @media only screen and (max-width: 600px) {
     .usersettings{
-        padding-top: 25%;
+        padding-top: 12%;
         width: 95%;
         align-items: center;
         float: left;

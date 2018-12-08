@@ -34,15 +34,6 @@
         <button id="headerBtnUpload"><a href="myfotema.html#uploadfile?show"> upload</a></button>
     </div>
 
-    <div class="search-container">
-        <form  id="searchForm"><!--action="/search/:value"-->
-            <input type="text" placeholder="Search.." name="search">
-            <button type="submit"><i class="fa fa-search"></i></button>
-        </form>
-    </div>
-
-    <button id="btnSearchMobile" onclick="showSearchContainerOnMobile()"><i class="fa fa-search"></i></button>
-
 
     <div class="dropdown" id="headerBtnMore">
         <button class="dropbtn">more <i class="fa fa-caret-down"></i>
@@ -65,6 +56,15 @@
             <p class="username">username</p>
         </a>
     </div>
+
+    <div class="search-container">
+        <form  id="searchForm"><!--action="/search/:value"-->
+            <input type="text" placeholder="Search.." name="search">
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+
+    <button id="btnSearchMobile" onclick="showSearchContainerOnMobile()"><i class="fa fa-search"></i></button>
 
 </div>
 
@@ -162,17 +162,27 @@
     <div class="responsive">
 
         <div class="gallery">
-            <a target="_blank" href="../image/CUTLtuC.jpg">
-                <img src="../image/qRthE91.jpg" width="" height="">
+            <h4 class="media-title"> this is the title this is the title this is the title this is the ...</h4>
+            <h5> by :  <a href="myfotema.html" class="media-owner"><strong> Manuel Furia Elias Koivula </strong></a></h5>
+            <a target="_blank" href="../image/f1.jpg">
+                <img src="../image/qRthE91.jpg" width="" height="" alt="">
             </a>
-            <div class="desc">
-                <p class="description">description description description hgeihgeihgiehgeighei</p>
-                <p class="likesnumber"><i class="fa fa-heart"></i> 200</p>
-                <p class="commentsnumber"><i class="fa fa-commenting"></i> 20</p>
-            </div>
         </div>
 
+        <div class="desc">
+            <p class="description">description of the image </p>
+            <p class="likesnumber"><button id="btnLike" onclick="likeMedia()"><i class="fa fa-heart"></i></button> 100000</p>
+            <p class="commentsnumber"><button id="btnComment" onclick="commentMedia()"><i class="fa fa-commenting"></i></button> 900</p>
+        </div>
+
+    </div>
+
         <div class="editmedia" id="editmedia">
+
+            <div class="deletemedia">
+                <button id="btnDeleteMedia" onclick="deleteMedia()"><i class="fa fa-trash-o"></i></button>
+            </div>
+
             <div class="updatemedia">
 
                 <button id="btnUpdateMedia" onclick="showUpdateForm()"><i class="fa fa-pencil"></i></button>
@@ -199,16 +209,15 @@
                 </form>
             </div>
 
-            <div class="deletemedia">
-                <button id="btnDeleteMedia" onclick="deleteMedia()"><i class="fa fa-trash-o"></i></button>
-            </div>
+
 
         </div>
 
         <div class="writecomment" id="writeComment">
             <form action="/comment" id="commentform">
-                <label>Write a comment</label>
-                <input type="text" name="your-comment" maxlength="140" placeholder="your comment here">
+                <!--<label>Write a comment</label>-->
+                <!--<input type="text" name="your-comment" maxlength="140" placeholder="your comment here">-->
+                <textarea placeholder="Write your comment here" autofocus></textarea>
                 <input type="submit" id="submitComments" value="submit">
             </form>
         </div>
@@ -242,7 +251,6 @@
                 <p class="commentcontent">this is great!!</p>
             </div>
         </div>
-    </div>
 </div>
 
 <div id="searchResults" class="search-results">
@@ -255,33 +263,36 @@
 
         <div class="responsive">
             <div class="gallery">
-                <a target="_blank" href="../../image/slogo15.PNG">
-                    <img src="../../image/slogo15.PNG" width="" height="">
+                <a target="_blank" href="../image/f1.jpg">
+                    <img src="../image/f1.jpg" width="" height="" alt="">
                 </a>
-                <div class="desc">
-                    <p class="description">description</p>
-                    <p class="likesnumber"><i class="fa fa-heart"></i> 200</p>
-                    <p class="commentsnumber"><i class="fa fa-commenting"></i> 20</p>
-                </div>
+            </div>
+            <div class="desc">
+                <p class="description">description of the image </p>
+                <p class="likesnumber"><button  onclick="likeMedia()"><i class="fa fa-heart"></i></button> 100000</p>
+                <p class="commentsnumber"><button  onclick="commentMedia()"><i class="fa fa-commenting"></i></button> 900</p>
             </div>
         </div>
 
     </div>
 
-    <div class="view-more-search-results" id="viewMoreSearchResults">
+    <div class="more-search-results" id="viewMoreSearchResults">
+
         <div class="responsive">
             <div class="gallery">
-                <a target="_blank" href="../../image/slogo15.PNG">
-                    <img src="../../image/slogo15.PNG" width="" height="">
+                <a target="_blank" href="../image/f1.jpg">
+                    <img src="../image/f1.jpg" width="" height="" alt="">
                 </a>
-                <div class="desc">
-                    <p class="description">description</p>
-                    <p class="likesnumber"><i class="fa fa-heart"></i> 200</p>
-                    <p class="commentsnumber"><i class="fa fa-commenting"></i> 20</p>
-                </div>
+            </div>
+            <div class="desc">
+                <p class="description">description of the image </p>
+                <p class="likesnumber"><button  onclick="likeMedia()"><i class="fa fa-heart"></i></button> 100000</p>
+                <p class="commentsnumber"><button  onclick="commentMedia()"><i class="fa fa-commenting"></i></button> 900</p>
             </div>
         </div>
+
     </div>
+
 
     <div class="divbtnViewMoreSearchResults">
         <button class="btnViewMoreSearchResults" id="btnViewMoreSearchResults" onclick="viewMoreSearchResults()">view more</button>

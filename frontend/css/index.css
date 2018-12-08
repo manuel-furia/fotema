@@ -8,10 +8,8 @@ body{
     font-family: sans-serif, Arial, Helvetica;
     background-size: cover;
     background: #5d5d5d no-repeat fixed center center;
-    /*background-image: linear-gradient(to bottom, #000000, #0e000d, #040004);*/
     width: 100%;
     height: 100%;
-    /*overflow-x: hidden;*/
 }
 
 
@@ -46,14 +44,8 @@ body{
     z-index: 9;
     width: 100%;
     background-color: grey;
-    background-image: linear-gradient(to right, #3f3f3f, #7e7e7e, #3f3f3f);
-    /*background-image: linear-gradient(to right,  #040004, #1d001a, #040004);*/
     padding: 5px 10px;
-    display:flex;
-    flex: 100%;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    /*height: max-content;*/
+    display:inline;
 }
 
 
@@ -65,7 +57,7 @@ body{
     text-align: center;
     padding: 8px;
     border: none;
-    border-radius: 8px;
+    border-radius: 5px;
 }
 
  .logo a {
@@ -74,7 +66,8 @@ body{
      font-weight: bold;
      color: white;
      text-decoration: none;
-     font-family: Verdana, cursive;
+     font-family: sans-serif, Arial, Helvetica, Verdana, cursive;
+     /*font-family: Verdana, cursive;*/
      line-height: 20px;
 }
 
@@ -91,13 +84,9 @@ body{
 
 .header .upload{
     float: left;
-    flex: 25%;
 }
 
 .header .upload a{
-    /*display: flex;*/
-    /*flex-direction: row;*/
-    /*float: left;*/
 }
 
 .header .upload button, .header .sign button, .dropbtn {
@@ -106,11 +95,12 @@ body{
     padding: 8px;
     margin-top: 2px;
     text-decoration: none;
-    font-family: Verdana, cursive;
+    /*font-family: Verdana, cursive;*/
+    font-family: sans-serif, Arial, Helvetica, Verdana, cursive;
     font-size: 17px;
     line-height: 20px;
     border: none;
-    border-radius: 8px;
+    border-radius: 5px;
     /*background-color: #d7380b;*/
     background-color: #1fb72f;
 
@@ -135,47 +125,35 @@ body{
 }
 
 
-.header .sign, .dropdown{
-    float: right;
-}
-
-.header .sign{
-    flex: 10%;
-    float: right;
-    /*visibility: hidden;*/
-}
 
 .header .sign button{
-    margin-left: 4%;
-    float: right;
+    float: left;
 }
+
 
 
 .header .dropdown{
-    flex: 5%;
-    margin: 0;
+    float: left;
 }
 
 .header .upload, .header .dropdown{
-    /*visibility: hidden;*/
+    display: none;
 }
 
 
 .search-container{
-    flex: 45%;
     display: flex;
     flex-direction: row;
+    float: right;
 }
 
 
 .search-container input[type=text] {
-    width: 400px;
     padding: 3px;
     border: 1px solid #eb0715;
     margin-top: 6px;
     margin-right: 3px;
     font-size: 15px;
-    /*background-color: rgba(210, 186, 207, 0.99);*/
     background-color: white;
 }
 
@@ -183,16 +161,14 @@ body{
     padding: 3px 5px;
     margin-top: 6px;
     background: #eb4208;
-    /*background-image: linear-gradient(to bottom, #7b2006, #e43b0c, #e43b0c, #7b2006);*/
     font-size: 15px;
+    border-radius: 5px;
     border: none;
     cursor: pointer;
     color: white;
 }
 
 .search-container button:hover {
-    /*background: #ba3406;*/
-    /*background-image: linear-gradient(to bottom, #e93d0c, #8b2407, #e93d0c);*/
     background-color: #1fb72f;
     color: white;
 }
@@ -209,19 +185,18 @@ body{
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #474747;
+    background-color: #dadada;
     min-width: 130px;
     width: max-content;
     padding: 5px;
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.6);
     z-index: 9;
     border-radius: 5px;
-    right: 2%;
 
 }
 
 .dropdown-content a{
-    color: white;
+    color: black;
     padding: 12px 16px;
     font-size: 17px;
     text-decoration: none;
@@ -231,8 +206,9 @@ body{
 }
 
 .dropdown-content a:hover {
-    background-color: rgba(123, 123, 123, 0.82);
+    background-color: rgba(93, 93, 93, 0.82);
     border-radius: 5px;
+    color: white;
 }
 
 .dropdown:hover .dropdown-content {
@@ -241,13 +217,10 @@ body{
 
 
 .profile{
-    position: fixed;
-    right: 20px;
-    top: 10px;
+    margin: 3px 10px 0 3%;
     overflow-x: hidden;
     max-width: content-box;
-    width: 150px;
-    display: none;
+    float: right;
 }
 
 .profile a{
@@ -261,15 +234,16 @@ body{
 .profile img{
     width: 30px;
     height: 30px;
-    border-radius: 5px;
+    /*border-radius: 5px;*/
+    border-radius: 90%;
 }
 
 .profile .username{
     float: right;
     margin-left: 5px;
     color: whitesmoke;
-    font-size: 20px;
-    font-family: Verdana, cursive;
+    font-size: 18px;
+    font-family: sans-serif, Arial, Helvetica, Verdana, cursive;
 }
 
 
@@ -280,8 +254,6 @@ body{
     bottom: 0;
     width: 100%;
     height: 30px;
-    /*background-color: rgb(82, 1, 74);*/
-    /*background-image: linear-gradient(to right,  #040004, #1d001a, #040004);*/
     background-color: #676767;
     background-image: linear-gradient(to right, #3f3f3f, #3f3f3f);
     text-align: center;
@@ -316,56 +288,37 @@ body{
     }
 
     .logo a {
-        flex: none;
-        font-size: 15px;
-        font-weight: normal;
-        line-height: 20px;
+
     }
 
     .header .upload{
-        position: fixed;
-        left: 100px;
-        /*visibility: hidden;*/
+
     }
 
     .header .dropdown{
-        position: fixed;
-        left: 180px;
-        flex: none;
-        /*visibility: hidden;*/
+
 
     }
 
     .header .sign{
-        position: fixed;
-        display: flex;
-        flex-direction: row-reverse;
-        right: 15px;
-        float: left;
-        /*visibility: hidden;*/
+
     }
 
     .header .sign button{
-        width: 85px;
-        margin-left: 3%;
+
     }
 
     .search-container{
-        position: fixed;
-        left: 40%;
-        flex: none;
-        flex-wrap: nowrap;
+
     }
 
     .search-container input[type=text] {
         width: 260px;
-        padding: 2px;
-        font-size: 14px;
-        /*background-color: rgba(203, 203, 203, 0.99);*/
+
     }
 
     .search-container button {
-        font-size: 14px;
+
     }
 
     .profile {
@@ -373,7 +326,7 @@ body{
 
 
     ::-webkit-scrollbar {
-        width: 0;
+        /*width: 0;*/
     }
 
 }
@@ -381,72 +334,45 @@ body{
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (max-width: 768px) {
+    .profile .username{
+        display: none;
+    }
+
     .header{
-        flex: none;
-        display: inline-block;
-        margin: 0;
-        /*background-color: #0e000d;*/
-        /*background-image: linear-gradient(#0e000d, #230021,#0e000d);*/
-        /*background-image: none;*/
+
     }
 
     .logo a {
-        flex: none;
-        font-size: 15px;
-        font-weight: normal;
-        line-height: 20px;
+
     }
 
     .header .upload{
-        position: fixed;
-        left: 100px;
-        /*visibility: hidden;*/
+
     }
 
     .header .dropdown{
-        position: fixed;
-        left: 180px;
-        flex: none;
-        /*visibility: hidden;*/
+
 
     }
 
     .header .sign{
-        position: fixed;
-        display: flex;
-        flex-direction: row-reverse;
-        right: 15px;
 
-        /*visibility: hidden;*/
     }
 
     .header .sign button{
-        width: 90px;
-        margin-left: 3%;
+
     }
 
     .search-container{
-        position: fixed;
-        left: 40%;
-        flex: none;
-        flex-wrap: nowrap;
+
     }
 
     .search-container input[type=text] {
-        width: 220px;
-        padding: 2px;
-        margin-top: 0;
-        margin-right: 0;
-        font-size: 14px;
+
     }
 
     .search-container button {
-        padding: 4px 6px;
-        margin-top: 6px;
-        font-size: 14px;
-        border: none;
-        cursor: pointer;
-        color: white;
+
     }
 
     ::-webkit-scrollbar {
@@ -458,60 +384,45 @@ body{
 /* Extra small devices (phones, 600px and down) */
 @media screen and (max-width: 600px) {
     .header{
-        flex: none;
         height: 45px;
         display: inline;
-        margin: 0;
     }
 
     .header .logo {
         padding: 5px;
-        position: fixed;
-        top: 5px;
-        left: 5px;
+
     }
 
     .logo a {
-        flex: none;
         font-size: 14px;
         font-weight: normal;
         line-height: 18px;
     }
 
    .header .upload button, .header .sign button, .dropbtn {
-        padding: 5px 0 !important;
-        width: 70px;
+       padding: 5px !important;
+       width: fit-content;
        font-size: 14px;
        font-weight: normal;
     }
 
     .header .upload, .header .dropdown, .header .sign{
-        position: fixed;
-        top: 5px;
-
         line-height: 16px;
-        flex: none;
     }
 
     .header .upload{
-        left: 85px;
-        /*visibility: hidden;*/
+
     }
 
     .header .dropdown{
-        left: 160px;
-        /*visibility: hidden;*/
+
     }
 
     .header .sign{
-        display: flex;
-        flex-direction: row;
-        left: 75px;
-        visibility: hidden;
+
     }
 
     .header .sign button{
-        width: 63px;
         padding: 5px 3px;
     }
 
@@ -541,20 +452,19 @@ body{
 
 
     .search-container{
-        /*visibility: hidden;*/
         display: none;
         position: fixed;
         flex: none;
         flex-wrap: nowrap;
-        left: 12%;
-        top: 45px;
+        left: 5px;
+        top: 3px;
+        background: #575757;
+        padding: 0 10px 2px;
     }
 
     .search-container input[type=text] {
-        width: 200px;
         padding: 2px;
         font-size: 14px;
-
     }
 
     .search-container button {
@@ -581,7 +491,7 @@ body{
 
 
 
-
+/*
 @media only screen and (orientation: landscape) {
     @media screen and (max-width: 768px) {
         .header{
@@ -609,9 +519,7 @@ body{
 
     }
 
-
-
-}
+}*/
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
