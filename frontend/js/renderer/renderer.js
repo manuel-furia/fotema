@@ -29,7 +29,7 @@ export const showImages = (images) => {
 };
 
 //show search results on front end
-const showSearchResults = (images) => {
+export const showSearchResults = (images) => {
   console.log('showing showSearchResults ???');
   images.forEach(image=>{
 
