@@ -10,9 +10,9 @@ export const showImages = (images) => {
         myMedia.innerHTML +=
 
         ` <div class="responsive" >
-              <div class="gallery">
+              <div class="gallery" >
                   <a target="_blank" href=${media.path}>
-                      <img src=${media.thumbnail} width="" height="">
+                      <img src=${media.thumbnail} width="" height=""  class="clickedMedia" id="${media.id}" >
                   </a>
                   <div class="desc">
                       <p class="description">${media.description}</p>
@@ -21,9 +21,9 @@ export const showImages = (images) => {
                   </div>
               </div>
           </div>` ;
-
+     // console.log('html: ' + myMedia.innerHTML);
     });
-  console.log('html: ' + myMedia.innerHTML);
+
 
     console.log('showing images OK???');
 };
@@ -37,8 +37,8 @@ export const showSearchResults = (images) => {
     document.getElementById('showSearchResults').style.visibility = 'visible';
 
 
-    const myMedia = document.querySelector('#showSearchResults');
-    myMedia.innerHTML =
+    const searchResults = document.querySelector('#firstBlockSearchResults');
+    searchResults.innerHTML =
 
         `<div class="responsive">
           <div class="gallery">
@@ -51,7 +51,7 @@ export const showSearchResults = (images) => {
                 <p class="comments"><i class="fa fa-commenting">${image.comments}</i></p>
             </div>
           </div>
-        </div>` + myMedia.innerHTML;
+        </div>` + searchResults.innerHTML;
 
   });
 

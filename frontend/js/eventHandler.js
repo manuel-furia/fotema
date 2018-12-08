@@ -70,6 +70,12 @@ const signUp = (event)=> {
   postUserData('signup', result);
 };
 
+const clickedMedia = (imageID) =>{
+  console.log('image ID of clicked image: ' + imageID);
+};
+
+const images = document.querySelectorAll('.clickedMedia');
+console.log(images);
 
 document.getElementById('signin').addEventListener('submit', signIn);
 

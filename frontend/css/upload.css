@@ -108,8 +108,10 @@
     display: block;
     position: fixed;
     left: 65%;
-    width: 40%;
-    top: 15%;
+    width: 25%;
+    max-width: 400px;
+    min-width: 100px;
+    top: 10%;
     margin-left: 3%;
     z-index: -1;
 }

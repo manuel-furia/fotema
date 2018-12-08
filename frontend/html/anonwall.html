@@ -17,7 +17,7 @@
     <link rel="stylesheet" type="text/css" href="css/signup.css">
     <link rel="stylesheet" type="text/css" href="css/media.css">
     <link rel="stylesheet" type="text/css" href="css/search.css">
-
+    <link rel="stylesheet" type="text/css" href="css/upload.css">
 
     <title>home</title>
 </head>
@@ -28,30 +28,22 @@
 <div class="header" id="header">
 
     <div class="logo">
-        <a href="index.html"> FOTEMA <!--<img src="/image/slogo14.PNG">--></a>
+        <a href="/node/"> FOTEMA <!--<img src="/image/slogo14.PNG">--></a>
     </div>
 
     <div class="upload" >
-        <button id="headerBtnUpload"><a href="myfotema.html#uploadfile?show"> upload</a></button>
+        <!--<button id="headerBtnUpload"><a href="myfotema.html#uploadfile?show"> upload</a></button>-->
+        <button id="headerBtnUpload" onclick="showUploadForm()"> upload</button>
     </div>
-
-    <div class="search-container">
-        <form  id="searchForm"><!--action="/search/:value"-->
-            <input type="text" placeholder="Search.." name="search">
-            <button type="submit"><i class="fa fa-search"></i></button>
-        </form>
-    </div>
-
-    <button id="btnSearchMobile" onclick="showSearchContainerOnMobile()"><i class="fa fa-search"></i></button>
 
 
     <div class="dropdown" id="headerBtnMore">
         <button class="dropbtn">more <i class="fa fa-caret-down"></i>
         </button>
         <div class="dropdown-content">
-            <a class="myfotema" href="myfotema.html">my fotema</a>
-            <a class="settings" href="settings.html">settings</a>
-            <a class="signout" href="signout.html">sign out </a>
+            <a class="myfotema" href="/node/html/myfotema.html">my fotema</a>
+            <a class="settings" href="/node/html/settings.html">settings</a>
+            <a class="signout" href="/node/html/signout.html">sign out </a>
         </div>
     </div>
 
@@ -66,6 +58,17 @@
                 <p class="username">username</p>
             </a>
     </div>
+
+    <div class="search-container">
+        <form  id="searchForm"><!--action="/search/:value"-->
+            <input type="text" placeholder="Search.." name="search">
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+
+    <button id="btnSearchMobile" onclick="showSearchContainerOnMobile()"><i class="fa fa-search"></i></button>
+
+
 
 </div>
 
@@ -165,45 +168,110 @@
 
     <div class="firstblock-mediacontent" id="imageTarget"> <!--show on page load, user can click view-more button to load more-->
 
-
-
-    <div class="responsive">
-        <div class="gallery">
-            <a target="_blank" href="../../image/f1.jpg">
-                <img src="../../image/f1.jpg" width="" height="">
-            </a>
+        <div class="responsive">
+            <div class="gallery">
+                <a target="_blank" href="../image/f1.jpg">
+                    <img src="../image/f1.jpg" width="" height="" alt="">
+                </a>
+            </div>
             <div class="desc">
                 <p class="description">description of the image </p>
-                <p class="likesnumber"><i class="fa fa-heart"></i> 100000</p>
-                <p class="commentsnumber"><i class="fa fa-commenting"></i> 900</p>
+                <p class="likesnumber"><button id="btnLike" onclick="likeMedia()"><i class="fa fa-heart"></i></button> 100000</p>
+                <p class="commentsnumber"><button id="btnComment" onclick="commentMedia()"><i class="fa fa-commenting"></i></button> 900</p>
             </div>
         </div>
-    </div>
+
+        <div class="responsive">
+            <div class="gallery">
+                <a target="_blank" href="../image/CUTLtuC.jpg">
+                    <img src="../image/f1.jpg" width="" height="" alt="">
+                </a>
+            </div>
+            <div class="desc">
+                <p class="description">description of the image </p>
+                <p class="likesnumber"><button  onclick="likeMedia()"><i class="fa fa-heart"></i></button> 100000</p>
+                <p class="commentsnumber"><button  onclick="commentMedia()"><i class="fa fa-commenting"></i></button> 900</p>
+            </div>
+        </div>
+
+        <div class="responsive">
+            <div class="gallery">
+                <a target="_blank" href="../image/slogo1.PNG">
+                    <img src="../image/f1.jpg" width="" height="" alt="">
+                </a>
+            </div>
+            <div class="desc">
+                <p class="description">description of the image </p>
+                <p class="likesnumber"><button  onclick="likeMedia()"><i class="fa fa-heart"></i></button> 100000</p>
+                <p class="commentsnumber"><button  onclick="commentMedia()"><i class="fa fa-commenting"></i></button> 900</p>
+            </div>
+        </div>
+
+        <div class="responsive">
+            <div class="gallery">
+                <a target="_blank" href="../image/qRthE91.jpg">
+                    <img src="../image/f1.jpg" width="" height="" alt="">
+                </a>
+            </div>
+            <div class="desc">
+                <p class="description">description of the image </p>
+                <p class="likesnumber"><button  onclick="likeMedia()"><i class="fa fa-heart"></i></button> 100000</p>
+                <p class="commentsnumber"><button  onclick="commentMedia()"><i class="fa fa-commenting"></i></button> 900</p>
+            </div>
+        </div>
+
+        <div class="responsive">
+            <div class="gallery">
+                <a target="_blank" href="../image/f1.jpg">
+                    <img src="../image/f1.jpg" width="" height="" alt="">
+                </a>
+            </div>
+            <div class="desc">
+                <p class="description">description of the image </p>
+                <p class="likesnumber"><button  onclick="likeMedia()"><i class="fa fa-heart"></i></button> 100000</p>
+                <p class="commentsnumber"><button  onclick="commentMedia()"><i class="fa fa-commenting"></i></button> 900</p>
+            </div>
+        </div>
+
+        <div class="responsive">
+            <div class="gallery">
+                <a target="_blank" href="../image/f1.jpg">
+                    <img src="../image/f1.jpg" width="" height="" alt="">
+                </a>
+            </div>
+            <div class="desc">
+                <p class="description">description of the image </p>
+                <p class="likesnumber"><button  onclick="likeMedia()"><i class="fa fa-heart"></i></button> 100000</p>
+                <p class="commentsnumber"><button  onclick="commentMedia()"><i class="fa fa-commenting"></i></button> 900</p>
+            </div>
+        </div>
+
+
     </div>
 
 
     <div class="morecontent" id="morecontent">
 
 
-
         <div class="responsive">
             <div class="gallery">
-                <a target="_blank" href="../../image/f1.jpg">
-                    <img src="../../image/f1.jpg" width="" height="">
+                <a target="_blank" href="../image/f1.jpg">
+                    <img src="../image/f1.jpg" width="" height="" alt="">
                 </a>
-                <div class="desc">
-                    <p class="description">description of the image </p>
-                    <p class="likesnumber"><i class="fa fa-heart"></i> 100000</p>
-                    <p class="commentsnumber"><i class="fa fa-commenting"></i> 900</p>
-                </div>
+            </div>
+            <div class="desc">
+                <p class="description">description of the image </p>
+                <p class="likesnumber"><button  onclick="likeMedia()"><i class="fa fa-heart"></i></button> 100000</p>
+                <p class="commentsnumber"><button  onclick="commentMedia()"><i class="fa fa-commenting"></i></button> 900</p>
             </div>
         </div>
 
     </div>
 
+    <button class="btnViewMoreContent" id="btnViewMore" onclick="viewMore()">view more</button>
+
 </div>
 
-<button class="viewmorecontent" id="btnViewMore" onclick="viewMore()">view more</button>
 
 
 <div id="searchResults" class="search-results">
@@ -216,32 +284,34 @@
 
         <div class="responsive">
             <div class="gallery">
-                <a target="_blank" href="../../image/slogo15.PNG">
-                    <img src="../../image/slogo15.PNG" width="" height="">
+                <a target="_blank" href="../image/f1.jpg">
+                    <img src="../image/f1.jpg" width="" height="" alt="">
                 </a>
-                <div class="desc">
-                    <p class="description">description</p>
-                    <p class="likesnumber"><i class="fa fa-heart"></i> 200</p>
-                    <p class="commentsnumber"><i class="fa fa-commenting"></i> 20</p>
-                </div>
+            </div>
+            <div class="desc">
+                <p class="description">description of the image </p>
+                <p class="likesnumber"><button  onclick="likeMedia()"><i class="fa fa-heart"></i></button> 100000</p>
+                <p class="commentsnumber"><button  onclick="commentMedia()"><i class="fa fa-commenting"></i></button> 900</p>
             </div>
         </div>
 
     </div>
 
-    <div class="view-more-search-results" id="viewMoreSearchResults">
+    <div class="more-search-results" id="viewMoreSearchResults">
+
         <div class="responsive">
             <div class="gallery">
-                    <a target="_blank" href="../image/CUTLtuC.jpg">
-                    <img src="../image/slogo15.PNG" width="" height="" alt="">
+                <a target="_blank" href="../image/f1.jpg">
+                    <img src="../image/f1.jpg" width="" height="" alt="">
                 </a>
-                <div class="desc">
-                    <p class="description">description</p>
-                    <p class="likesnumber"><i class="fa fa-heart"></i> 200</p>
-                    <p class="commentsnumber"><i class="fa fa-commenting"></i> 20</p>
-                </div>
+            </div>
+            <div class="desc">
+                <p class="description">description of the image </p>
+                <p class="likesnumber"><button  onclick="likeMedia()"><i class="fa fa-heart"></i></button> 100000</p>
+                <p class="commentsnumber"><button  onclick="commentMedia()"><i class="fa fa-commenting"></i></button> 900</p>
             </div>
         </div>
+
     </div>
 
 
@@ -251,6 +321,86 @@
 
 </div>
 
+
+<div class="uploadfile" id="uploadfile" >
+
+    <form action="/upload" id="mediaform">
+
+        <div class="row">
+            <h4> Upload Media Content </h4>
+        </div>
+
+
+        <div class="row">
+            <a id="cancelupload" onclick="document.getElementById('uploadfile').style.display = 'none';"><i class="fa fa-times"></i></a>
+        </div> <!--href="javascript:history.back()"-->
+
+        <!--<div class="row">
+            <div class="col-25">
+                <label>category</label>
+            </div>
+            <div class="col-75">
+                <input type = "text" name = "category"  placeholder="category">
+            </div>
+        </div>-->
+
+        <div class="row">
+            <div class="col-25">
+                <label>title</label>
+            </div>
+            <div class="col-75">
+                <input type = "text" name = "title"  placeholder="title">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-25">
+                <label>tags</label>
+            </div>
+            <div class="col-75">
+                <input type = "text" name = "tags"  placeholder="#tags">
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-25">
+                <label>details</label>
+            </div>
+            <div class="col-75">
+                <input type = "text" name = "details"  placeholder="details">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-25">
+                <label>file type</label>
+            </div>
+            <div class="col-25">
+                <label>
+                    <select name="category">
+                        <option value="image">image</option>
+                        <option value="audio">audio</option>
+                        <option value="video">video</option>
+                    </select>
+                </label>
+            </div>
+            <div class="col-50">
+                <input type="file" name="mediafile" accept="audio/*,video/*,image/*" onchange="document.getElementById('newImage').src = window.URL.createObjectURL(this.files[0])">
+                >
+            </div>
+        </div>
+
+        <!--<button type="submit"><a id="uploadButton">upload</a></button>-->
+        <button type="submit" id="uploadButton">upload</button>
+
+        <div class="row">
+            <img id="newImage" src="" alt="new image" />
+        </div>
+
+    </form>
+
+</div>
 
 
 <div class="footer" id="footer">
@@ -270,6 +420,7 @@
 
 <script src="js/search.js"></script>
 <script src="js/viewMore.js"></script>
+<script src="js/upload.js"></script>
 
 
 

@@ -6,54 +6,56 @@
 
 .search-results{
     overflow: auto;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
     margin: auto;
     position: fixed;
-    overflow-y: scroll;
     z-index: 9;
     background-color: #4a5762;
     border: solid #000000 2px;
     width: 80%;
+    min-width: 200px;
+    max-width: 1400px;
+    height: 700px;
+    min-height: 300px;
+    max-height: 800px;
     padding: 1%;
-    left: 10%;
-    right: 10%;
-    top: 80px;
-    bottom: 60px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     box-shadow: 0 0 1000px 1000px rgba(0, 0, 0, 0.9);
-    visibility: hidden;
+    /*display: block;*/
+    display: none;
+
 }
 
-.first-block-search-results, .view-more-search-results{
-    flex: 100%;
+.first-block-search-results, .more-search-results{
+    width: 100%;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    overflow: visible;
+    margin: auto;
 }
 
-.view-more-search-results{
+.more-search-results{
     display: none;
 }
 
 
-.responsive {
-    padding: 6px;
-    float: left;
-    width: 20%;
+.search-results .responsive {
+    width: 250px;
+    height:300px;
 }
 
 
 #hideSearchResult{
     background-color: #a6a0a2;
-    /*margin: 1% 5%;*/
     color: black;
     border-radius: 4px;
     cursor: pointer;
     float: right;
-    position: fixed;
-    top: 4%;
-    right: 12%;
+    position: static;
+    top: 10px;
+    right: 10px;
     width: 25px;
     height: 23px;
     font-size: large;
@@ -66,52 +68,36 @@
 }
 
 div.gallery {
-    border: 1px solid #ccc;
-    width: 100%;
-    height: 300px;
+
 }
 
 div.gallery:hover {
-    border: 2px solid #535353;
-    background-color: rgba(210, 210, 210, 0.53);
+
 }
 
 div.gallery img {
-    width: 100%;
-    height: 220px;
+
 }
 
 div.gallery a{
-    width: 100%;
+
 
 }
 
 div.desc {
-    width: 100%;
-    height: 80px;
-    padding: 10px;
-    text-align: center;
-    font-size: 17px;
-    color: white;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    background-color: rgb(83, 83, 83);
+/
 }
 
 div.desc:hover{
-    background-color: #858585;
+    /*background-color: #858585;*/
 }
 
 .desc .description{
-    display: flex;
-    flex: 100%;
-    text-align: left;
+
 }
 
 .desc .likesnumber, .commentsnumber{
-    color: #f0f8ff;
+    /*color: #f0f8ff;*/
 }
 
 .divbtnViewMoreSearchResults{
@@ -122,7 +108,7 @@ div.desc:hover{
 #btnViewMoreSearchResults{
     width: 100px;
     height: 40px;
-    margin: 3% 45%;
+    margin: 3% auto;
     /*margin-bottom: 3%;*/
     background-color: #eb4208;
     border: 1px gray;
@@ -148,8 +134,7 @@ div.desc:hover{
     }
 
     .responsive {
-        width: 33%;
-        margin: auto;
+
     }
 
 }
@@ -158,35 +143,41 @@ div.desc:hover{
 
     #searchResults{
         padding-top: 30px;
-        margin: auto;
+        padding-bottom: 20px;
+
     }
 
 
     .responsive {
-        width: 49%;
+
     }
 }
 
 @media only screen and (max-width: 500px) {
 
-    #searchResults{
-        padding-top: 20px;
-        margin: auto;
-    }
+
 
 
     .responsive {
-        width: 100%;
+
     }
 }
 
-.clearfix:after {
-    content: "";
-    display: table;
-    clear: both;
-}
+
 
 @media screen and (max-width: 600px) {
+
+    #searchResults{
+        width: 90%;
+        height: 100%;
+        margin: 5px 0 6px;
+        -ms-overflow-style: none;
+        overflow: -moz-scrollbars-none;
+    }
+
+    #searchResults::-webkit-scrollbar {
+        display: none;
+    }
 
 
 }
