@@ -213,9 +213,12 @@
 
 .signin-popup{
     position: fixed;
-    left: 25%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     width: 50%;
-    top: 25%;
+    /*top: 25%;*/
+    /*left: 25%;*/
     padding: 40px;
     background: #FBFBF0;
     border: solid #000000 2px;
@@ -314,11 +317,11 @@
 @media screen and (max-width: 1024px) {
 
     .signin-popup{
-        left: 5%;
-        width: 90%;
+        width: 80%;
         height: max-content;
         /*top: 150px;*/
-        top: 30%;
+        /*top: 30%;*/
+        /*left: 5%;*/
         padding: 5px;
     }
 
@@ -351,11 +354,12 @@
 
 @media screen and (max-width: 600px) {
     .signin-popup{
-        left: 5%;
+        /*left: 5%; */
+        /*top: 25%;*/
         width: 90%;
         height: max-content;
         /*top: 120px;*/
-        top: 25%;
+
         padding: 5px;
     }
 

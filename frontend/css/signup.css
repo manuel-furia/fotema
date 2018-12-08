@@ -1,9 +1,12 @@
 
 .signup-popup{
     position: fixed;
-    left: 25%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     width: 50%;
-    top: 18%;
+    /*left: 25%;*/
+    /*top: 18%;*/
     padding: 50px;
     background: #FBFBF0;
     border: solid #000000 2px;
@@ -119,10 +122,10 @@
 @media screen and (max-width: 1024px) {
 
     .signup-popup{
-        left: 5%;
-        width: 90%;
+        /*left: 5%;*/
+        width: 80%;
         height: max-content;
-        top: 25%;
+        /*top: 18%;*/
         padding: 5px;
     }
 
@@ -138,22 +141,17 @@
         margin-right: 20%;
     }
 
-    /*.signup-popup a{*/
-        /*margin-top: 2%;*/
-        /*margin-left: 25%;*/
-    /*}*/
-
 
 
 }
 
 @media screen and (max-width: 600px) {
     .signup-popup{
-        left: 5%;
+        /*left: 5%;*/
         width: 90%;
         height: max-content;
         /*top: 100px;*/
-        top: 14%;
+        /*top: 14%;*/
         padding: 5px;
     }
 
