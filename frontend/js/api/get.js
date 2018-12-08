@@ -5,7 +5,7 @@ import * as conf from './apiconf.js';
 // t is for the page type, because it needs to fetch different images depending on the ocasion
 //TODO:this needs to be fully implemented for user walls and personal walls
 export const getImages = (t, start, amount, callback) =>{
-  if(t === 'anonwall') fetch(conf.apiroot + t + '/' + start + '/' + amount).then(response=>response.json()).then(json => {
+  if(t === 'anonwall') fetch(conf.apiroot +'/get/' + t + '/' + start + '/' + amount).then(response=>response.json()).then(json => {
     callback(json);
   });
   else if(t === 'userwall')fetch('/' + t + '/'+ 'user' +'/'+ start + '/' + amount ).then(response => {return response.json();});
