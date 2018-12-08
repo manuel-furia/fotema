@@ -8,10 +8,9 @@
 .mediacontent {
     overflow: auto;
     display: block;
-    width: 90%;
     margin: auto;
-    padding-top: 70px;
-    padding-bottom: 20px;
+    padding-top: 60px;
+    padding-bottom: 30px;
 }
 
 
@@ -19,52 +18,53 @@
     overflow: auto;
     display: flex;
     width: 90%;
+    flex: 100%;
     margin: auto;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
 .responsive {
-    padding: 6px;
     float: left;
-    width: 20%;
-    margin: auto;
+    margin: 15px auto;
+    border: 1px solid #bcbcbc;
+    background-color: #575757;
+    height: 400px;
+    width: 300px;
 }
 
 
 div.gallery {
-    border: 1px solid #ccc;
     width: 100%;
-    height: 300px;
-}
-
-div.gallery:hover {
-    border: 2px solid #535353;
-    background-color: rgba(210, 210, 210, 0.53);
+    height: 75%;
+    overflow: hidden;
 }
 
 div.gallery img {
     width: 100%;
     height: auto;
-}
-
-div.gallery a{
-    width: 100%;
 
 }
+
+
+div.gallery img:hover {
+    border: 2px solid red;
+
+}
+
 
 div.desc {
     width: 100%;
-    height: 80px;
-    padding: 10px;
+    height: 25%;
     text-align: center;
-    font-size: 17px;
-    color: white;
+    font-size: 15px;
+    color: whitesmoke;
+    resize: vertical;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-evenly;
-    background-color: rgb(83, 83, 83);
+    /*background-color: rgb(83, 83, 83);*/
 }
 
 div.desc:hover{
@@ -75,21 +75,39 @@ div.desc:hover{
     display: flex;
     flex: 100%;
     text-align: left;
+    padding: 10px;
 }
 
 .desc .likesnumber, .commentsnumber{
     color: #f0f8ff;
+    width: 50%;
+    flex: fit-content;
 }
+
+.desc .likesnumber button, .commentsnumber button{
+    width: 30px;
+    padding: 1px;
+    background-color: inherit;
+    border: 1px;
+}
+
+.desc .likesnumber button:hover, .commentsnumber button:hover{
+    color: #00b500;
+    font-size: large;
+}
+
 
 .morecontent{
     display: none;
 }
 
-.viewmorecontent{
+.btnViewMoreContent{
     position: absolute;
     width: 100px;
     height: 40px;
-    margin: 2% 45%;
+    margin: 30px auto 50px;
+    left: 0;
+    right: 0;
     background-color: #eb4208;
     border: 1px gray;
     border-radius: 5px;
@@ -98,21 +116,21 @@ div.desc:hover{
     padding: 5px 8px;
 }
 
-.viewmorecontent:hover{
+.btnViewMoreContent:hover{
     background-color: green;
 }
 
 
 /**********************************************************************************************************************/
-@media only screen and (max-width: 1024px){
+@media only screen and (max-width: 1200px){
 
     .mediacontent{
+        padding-top: 11%;
 
     }
 
     .responsive {
-        width: 29%;
-        margin: auto;
+        margin-bottom: 10px;
     }
 
 }
@@ -120,28 +138,34 @@ div.desc:hover{
 @media only screen and (max-width: 768px) {
 
     .mediacontent{
-        margin: auto;
+        padding-top: 13%;
     }
 
 
     .responsive {
-        width: 49%;
-    }
-}
-
-@media only screen and (max-width: 500px) {
-
-    .responsive {
-        width: 100%;
+        margin-bottom: 10px;
     }
 }
 
 
 
 @media screen and (max-width: 600px) {
+
+
     .mediacontent{
-        margin: auto;
+        padding-top: 17%;
+        width: 90%;
     }
+
+
+    .responsive {
+        margin-bottom: 10px;
+    }
+
+    .mediacontent::-webkit-scrollbar {
+        display: none;
+    }
+
 
 
 }

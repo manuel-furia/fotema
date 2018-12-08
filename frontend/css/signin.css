@@ -1,3 +1,215 @@
+/*.header{*/
+    /*display: inline !important;*/
+/*}*/
+
+/*.header .logo{*/
+    /*float: left !important;*/
+/*}*/
+
+/*.search-container{*/
+    /*float: left !important;*/
+    /*margin-left: 40%;*/
+    /*background-color: unset;*/
+/*}*/
+
+
+/*.signin-popup{*/
+    /*position: fixed;*/
+    /*left: 0;*/
+    /*right: 0;*/
+    /*margin: auto;*/
+    /*width: 60%;*/
+    /*top: 25%;*/
+    /*z-index: 9;*/
+    /*visibility: visible !important;*/
+    /*!*background-color: red;*!*/
+/*}*/
+
+
+/*.signin-popup label {*/
+    /*padding: 8px;*/
+    /*margin-left: 10px;*/
+    /*display: inline-block;*/
+    /*font-size: 16px;*/
+    /*color: beige;*/
+/*}*/
+
+/*.signin-popup .row:after {*/
+    /*content: "";*/
+    /*display: table;*/
+    /*clear: both;*/
+/*}*/
+
+/*.signin-popup .col-25 {*/
+    /*float: left;*/
+    /*width: 25%;*/
+    /*margin-top: 12px;*/
+/*}*/
+
+/*.signin-popup .col-75 {*/
+    /*float: left;*/
+    /*width: 65%;*/
+    /*margin-top: 6px;*/
+/*}*/
+
+
+
+/*.signin-popup form input{*/
+    /*width: 100%;*/
+    /*padding: 8px;*/
+    /*margin: 8px 0;*/
+    /*box-sizing: border-box;*/
+    /*background-color: beige;*/
+    /*color: black;*/
+    /*border: 2px solid #ccc;*/
+    /*border-radius: 4px;*/
+    /*font-size: 14px;*/
+    /*resize: vertical;*/
+/*}*/
+
+/*.signin-popup form input[type = submit]{*/
+    /*background-color: #1da92b;*/
+    /*color: white;*/
+    /*padding: 8px;*/
+    /*border: none;*/
+    /*border-radius: 4px;*/
+    /*cursor: pointer;*/
+    /*width: 100px;*/
+    /*font-size: medium;*/
+    /*text-align: center;*/
+    /*margin: 15px 50%;*/
+
+/*}*/
+
+
+
+/*.signin-popup form input[type=submit]:hover {*/
+    /*background-color: #218c1a;*/
+/*}*/
+
+
+
+
+
+/*!**************************************************************************************************************************!*/
+
+/*@media screen and (max-width: 1024px) {*/
+
+
+    /*.signin-popup{*/
+        /*width: 80%;*/
+        /*top: 30%;*/
+        /*padding-left: 10%;*/
+
+
+    /*}*/
+
+    /*.signin-popup .col-25 {*/
+        /*width: 100%;*/
+
+    /*}*/
+
+    /*.signin-popup .col-75 {*/
+        /*width: 80%;*/
+
+    /*}*/
+
+
+    /*.signin-popup form input[type = submit]{*/
+        /*!*width: 100px;*!*/
+        /*!*margin-right: 45%;*!*/
+    /*}*/
+
+    /*.search-container{*/
+
+    /*}*/
+
+/*}*/
+
+/*@media screen and (max-width: 768px) {*/
+
+/*}*/
+
+/*@media only screen and (orientation: landscape) {*/
+
+/*}*/
+
+
+
+/*@media screen and (max-width: 600px) {*/
+
+    /*!*.header{*!*/
+    /*!*display: inline !important;*!*/
+    /*!*}*!*/
+
+    /*!*.header .logo{*!*/
+    /*!*float: left !important;*!*/
+    /*!*}*!*/
+
+    /*.search-container{*/
+        /*display: inline-block !important;*/
+        /*float: right !important;*/
+        /*margin-left: 10px;*/
+        /*position: unset;*/
+    /*}*/
+
+
+    /*.search-container input[type=text] {*/
+        /*!*width: 150px;*!*/
+    /*}*/
+
+
+    /*.signin-popup{*/
+        /*!*padding-left: 10%;*!*/
+        /*padding-left: auto;*/
+        /*padding-right: auto;*/
+        /*width: 90%;*/
+        /*height: max-content;*/
+        /*top: 25%;*/
+
+    /*}*/
+
+
+    /*.signin-popup label {*/
+        /*padding: 2px;*/
+        /*margin-left: 20px;*/
+        /*display: block;*/
+        /*font-size: small;*/
+    /*}*/
+
+
+    /*.signin-popup .col-25 {*/
+        /*float: left;*/
+        /*width: 100%;*/
+    /*}*/
+
+    /*.signin-popup .col-75 {*/
+        /*float: left;*/
+        /*width: 80%;*/
+    /*}*/
+
+
+
+    /*.signin-popup form input{*/
+        /*width: 100%;*/
+        /*padding: 5px;*/
+        /*border: 2px solid #ccc;*/
+        /*font-size: small;*/
+        /*resize: vertical;*/
+    /*}*/
+
+    /*.signin-popup form input[type = submit]{*/
+        /*!*margin-right: 37%;*!*/
+        /*!*margin-top: 2%;*!*/
+        /*!*padding: 10px;*!*/
+        /*!*width: 80px;*!*/
+    /*}*/
+
+/*}*/
+
+
+
+
 
 .signin-popup{
     position: fixed;
@@ -122,7 +334,7 @@
     }
 
     /*.signin-popup a{*/
-        /*margin-left: 25%;*/
+    /*margin-left: 25%;*/
     /*}*/
 
 }
@@ -189,10 +401,11 @@
     }
 
     /*.signin-popup a{*/
-        /*margin-top: 2%;*/
-        /*margin-left: 10%;*/
-        /*padding: 10px;*/
-        /*width: 80px;*/
+    /*margin-top: 2%;*/
+    /*margin-left: 10%;*/
+    /*padding: 10px;*/
+    /*width: 80px;*/
     /*}*/
 }
+
 
