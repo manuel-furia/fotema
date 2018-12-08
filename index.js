@@ -84,7 +84,7 @@ app.post('/login',
   passport.authenticate('local', {successRedirect: '/node/', failureRedirect: '/loginfailedpage'})
 );
 
-app.post('/signup',  (req, res, next) =>{
+app.post('/signup',  (req, res) =>{
 
   //TODO: query to check if the username and email already exist in the database
 
@@ -95,26 +95,18 @@ app.post('/signup',  (req, res, next) =>{
   model.validUserEmailPair(userName, email).then(result => {
     if(result.valid){
       //both the username and password are not taken and usable --> return to the users own front-page.
-
       model.createUser(userName, email, password);
       console.log('success!');
-      res.redirect('/node/' + userName + '/:start/:end');
-
-    }else if(result.userTaken){
+      res.json({user: userName});
+    }else if(result.userTaken && !result.emailTaken){
       //the username was taken --> return to the signup page with specific message
-      res.writeHead(200, {
-        'Message': 'The username was taken, please use another one.'});
-      res.send();
-    }else if(result.emailTaken){
+      res.json({err: "user taken"});
+    }else if(result.emailTaken && !result.userTaken){
       //the email was already taken --> return to the signup page with specific message
-      res.writeHead(200, {
-        'Message': 'The email was taken, please use another one.'});
-      res.send();
+      res.json({err: "email taken"});
     }else{
       //both the email and username were already taken, return to the signup page with special message.
-      res.writeHead(200, {
-        'Message': 'The email and username were taken, please use another ones.'});
-      res.send();
+      res.json({err: "both user and email taken"});
     }
   }).catch(handleError);
 
@@ -151,9 +143,18 @@ app.get('/get/anonwall/:start/:end', (req, res, next) =>{
     const end = req.params.end;
     const task = model.getMediasByAnonRelevance(start, end);
     task.then((json) => res.send(json)).catch(handleError );
+
+
 });
 
+app.get('/home/', (req, res) =>{
+
+  res.sendFile('userwall.html', { root: __dirname + "/frontend/html/" } );
+});
+
+
 app.get('/get/userwall/:user/:start/:end', (req, res, next) =>{
+
 
 
 });
