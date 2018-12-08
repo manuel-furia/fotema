@@ -15,9 +15,15 @@ const readURL = (input) => {
     }
 };
 
-
-
 const showUploadForm = () =>{
+    const uploadfileForm = document.querySelector('#uploadfile');
+    console.log('show upload dialog');
+    uploadfileForm.style.display = "block";
+};
+
+
+
+/*const showUploadForm = () =>{
     if (window.location.href.indexOf("#uploadfile?show") !== -1) {
         const uploadfileForm = document.getElementById('uploadfile');
         console.log('show upload dialog');
@@ -31,7 +37,7 @@ const showUploadForm = () =>{
 
 };
 
-showUploadForm();
+showUploadForm();*/
 
 
 //send upload form
