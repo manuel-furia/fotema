@@ -117,8 +117,11 @@ app.get('/get/comments/:imageID', (req, res, next) =>{
 
 });
 
+
 app.get('/get/media/:imageID', (req, res, next) =>{
     
+  const data = model.getMediaInfo(req.params.imageID).then((json) => res.send(json));
+
 });
 
 app.get('/get/loginstate', function(req, res){
