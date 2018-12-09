@@ -117,7 +117,7 @@ app.get('/get/comments/:imageID', (req, res, next) =>{
 
 });
 
-app.get('/get/media/:imageID', (req, res, next) =>{
+app.get('/get/singleMedia/:imageID', (req, res) =>{
 
 });
 

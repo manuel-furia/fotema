@@ -7,7 +7,7 @@ const uploadImages = (callback) => {
     body: formData,
   };
 
-  return fetch('/upload', settings).then((response) =>{
+  return fetch(apiroot + '/upload', settings).then((response) =>{
     return response.json();
   }).catch(err => {return {err: 'Server internal error.'}});
 };
