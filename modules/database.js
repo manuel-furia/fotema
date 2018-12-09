@@ -378,7 +378,7 @@ const createUser = (connection, username, email, passhash, salt, level, profilep
         [username, email, passhash, salt, level, profilepicture]);
 }
 
-const createMessage = (connection, text, userID, time, targetMedia) => {
+const createComment = (connection, text, userID, time, targetMedia) => {
     executeQuery(connection,
         'INSERT INTO Comment (text, targetmedia, user, time) VALUES (?, ?, ?, ?);',
         [text, targetMedia, userID, getMysqlTime(time)]);
@@ -409,7 +409,7 @@ module.exports={
     uploadMedia: uploadMedia,
     getMediasOrderedByImpact: getMediasOrderedByImpact,
     createUser: createUser,
-    createMessage: createMessage,
+    createComment: createComment,
     likeMedia: likeMedia,
     likeComment: likeComment,
     getMediaInfo: getMediaInfo
