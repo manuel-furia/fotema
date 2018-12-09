@@ -2,6 +2,10 @@
 
 const mysql = require('mysql2/promise');
 
+const getMysqlTime = (jsdatetime) => {
+    return jsdatetime.toISOString().slice(0, 19).replace('T', ' ');
+}
+
 const executePlainQuery = (connection, sql) => {
     return connection.then((con) => con.query(sql)).then(([rows, fields]) => rows);
 };
@@ -102,12 +106,45 @@ ORDER BY time DESC;`,
 //Get tags from media
 const getMediaTags = (connection, id) => {
     return executeQuery(connection,
-       `SELECT Tag.name AS tags
+       `SELECT Tag.name AS tag
         FROM Media
         INNER JOIN Tagged ON Media.id = Tagged.mediaid
         INNER JOIN Tag ON Tag.id = Tagged.tagid
         WHERE Media.id = ? ;`,
         [id]);
+}
+
+//Get all media info from id
+const getMediaInfo = (connection, id) => {
+    const infoQuery = executeQuery(connection,
+       `SELECT L.*, C.comments, UserInfo.username AS ownername
+FROM (
+    SELECT Media.*, Thumbnails.path AS thumbpath, COUNT(MediaLike.media) AS likes
+    FROM Media
+    INNER JOIN MediaType ON Media.type = MediaType.id
+    LEFT JOIN MediaLike ON Media.id = MediaLike.media
+    LEFT JOIN Media AS Thumbnails ON Media.thumbnail = Thumbnails.id
+    WHERE MediaType.name <> "thumbnail" AND Media.id = ?
+    GROUP BY Media.id
+) AS L
+INNER JOIN (
+    SELECT Media.id, COUNT(Comment.id) AS comments
+    FROM Media
+    INNER JOIN MediaType ON Media.type = MediaType.id
+    LEFT JOIN Comment ON Media.id = Comment.targetMedia
+    WHERE MediaType.name <> "thumbnail" AND Media.id = ?
+    GROUP BY Media.id
+) AS C
+ON L.id = C.id
+INNER JOIN UserInfo ON UserInfo.id = L.user;`,
+        [id, id]);
+
+    const tagsQuery = getMediaTags(connection, id);
+
+    return Promise.all([infoQuery, tagsQuery]).then(([info, tags]) => {
+        const tagArray = tags.map(tag => tag.tag);
+        return Object.assign(info[0], {tags: tagArray});
+    });
 }
 
 const getNumberOfMediasByTag = (connection, tag) => {
@@ -214,12 +251,11 @@ const getUserFavouriteTags = (connection, userid, start, end) => {
         `SELECT Tag.name AS tag, SUM(IFNULL(L.likes, 0)) AS likes, SUM(IFNULL(C.comments, 0)) AS comments, SUM(IFNULL(L.likes, 0)) + SUM(IFNULL(C.comments, 0)) AS impact
 FROM Media
 LEFT JOIN (
-    SELECT Media.*, Thumbnails.path AS thumbpath, COUNT(MediaLike.media) AS likes
+    SELECT Media.*, COUNT(MediaLike.media) AS likes
     FROM Media
     INNER JOIN MediaType ON Media.type = MediaType.id
     LEFT JOIN MediaLike ON Media.id = MediaLike.media
     LEFT JOIN UserInfo ON MediaLike.user = UserInfo.id
-    LEFT JOIN Media AS Thumbnails ON Media.thumbnail = Thumbnails.id
     WHERE UserInfo.id = ?
     GROUP BY Media.id
 ) AS L ON Media.id = L.id
@@ -282,12 +318,17 @@ const deleteMedia = (connection, mediaID) => {
 //data contains imagepath, thumbpath, title, description, type, capturetime, uploadtime, userid, tags[]
 const uploadMedia = (connection, data) => {
 
+  console.log(data);
+    
+
+
    const insertMedia = (path, typeID, thumbID) => {
         //console.log([data.imagepath, data.title, data.description, typeID, thumbID, data.capturetime, data.uploadtime, data.userid]);
+        console.log(getMysqlTime(data.uploadtime));
         return executeQuery(connection,
             `INSERT INTO Media (path, title, description, type, thumbnail, capturetime, uploadtime, user)
              VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
-            [path, data.title, data.description, typeID, thumbID, data.capturetime, data.uploadtime, data.userid]);
+            [path, data.title, data.description, typeID, thumbID, getMysqlTime(data.capturetime), getMysqlTime(data.uploadtime), data.userid]);
     }
 
     const tagMedia = (mediaID, tagID) => {
@@ -340,19 +381,19 @@ const createUser = (connection, username, email, passhash, salt, level, profilep
 const createMessage = (connection, text, userID, time, targetMedia) => {
     executeQuery(connection,
         'INSERT INTO Comment (text, targetmedia, user, time) VALUES (?, ?, ?, ?);',
-        [text, targetMedia, userID, time]);
+        [text, targetMedia, userID, getMysqlTime(time)]);
 }
 
 const likeMedia = (connection, mediaID, userID, time) => {
     executeQuery(connection,
         'INSERT INTO MediaLike (user, media, time) VALUES (?, ?, ?);',
-        [userID, mediaID, time]);
+        [userID, mediaID, getMysqlTime(time)]);
 }
 
 const likeComment = (connection, commentID, userID, time) => {
     executeQuery(connection,
         'INSERT INTO CommentLike (user, comment, time) VALUES (?, ?, ?);',
-        [userID, commentID, time]);
+        [userID, commentID, getMysqlTime(time)]);
 }
 
 module.exports={
@@ -371,7 +412,7 @@ module.exports={
     createMessage: createMessage,
     likeMedia: likeMedia,
     likeComment: likeComment,
-
+    getMediaInfo: getMediaInfo
 };
 
 

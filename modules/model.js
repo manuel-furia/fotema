@@ -62,7 +62,10 @@ const deleteMedia = (id) => {
 
 const uploadMedia = (data) => {
     return db.uploadMedia(connection, data, (result) => resolve(result));
+}
 
+const getMediaInfo = (id) => {
+    return db.getMediaInfo(connection, id);
 }
 
 const getUserId = (username) => {
@@ -162,6 +165,6 @@ module.exports = {
     validUserEmailPair: checkConnect(validUserEmailPair),
     getCommentsFromMedia: checkConnect(getCommentsFromMedia),
     actorDeleteMedia: checkConnect(normalAction(deleteMedia)),
-    checkUserLogin: checkConnect(checkUserLogin)
-    
+    checkUserLogin: checkConnect(checkUserLogin),
+    getMediaInfo: checkConnect(getMediaInfo)
 };
