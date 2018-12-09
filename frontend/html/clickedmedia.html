@@ -159,21 +159,8 @@
 
 <div class="clickmedia">
 
-    <div class="responsive">
+    <div class="responsive" id="mediaTarget">
 
-        <div class="gallery">
-            <h4 class="media-title"> this is the title this is the title this is the title this is the ...</h4>
-            <h5> by :  <a href="myfotema.html" class="media-owner"><strong> Manuel Furia Elias Koivula </strong></a></h5>
-            <a target="_blank" href="../image/f1.jpg">
-                <img src="../image/qRthE91.jpg" width="" height="" alt="">
-            </a>
-        </div>
-
-        <div class="desc">
-            <p class="description">description of the image </p>
-            <p class="likesnumber"><button id="btnLike" onclick="likeMedia()"><i class="fa fa-heart"></i></button> 100000</p>
-            <p class="commentsnumber"><button id="btnComment" onclick="commentMedia()"><i class="fa fa-commenting"></i></button> 900</p>
-        </div>
 
     </div>
 
@@ -229,75 +216,7 @@
                 <p class="commenttime">4 hr </p>
                 <p class="commentcontent">this is great!!</p>
             </div>
-
-            <div class="usercomments">
-                <p class="commentername">commenter name</p>
-                <button class="likecomment"><i class="fa fa-thumbs-up"></i>  500 </button>
-                <p class="commenttime">4 hr </p>
-                <p class="commentcontent">this is great!! great great great great great great great great hitehitheitheihteihtiehighdigh hitehitheitheihteihtiehighdigh hitehitheitheihteihtiehighdigh</p>
-            </div>
-
-            <div class="usercomments">
-                <p class="commentername">commenter name</p>
-                <button class="likecomment"><i class="fa fa-thumbs-up"></i>  5k </button>
-                <p class="commenttime">4 hr </p>
-                <p class="commentcontent">this is great!!</p>
-            </div>
-
-            <div class="usercomments">
-                <p class="commentername">commenter name</p>
-                <button class="likecomment"><i class="fa fa-thumbs-up"></i>  105k</button>
-                <p class="commenttime">4 hr </p>
-                <p class="commentcontent">this is great!!</p>
-            </div>
         </div>
-</div>
-
-<div id="searchResults" class="search-results">
-
-    <a id="btnCloseSearchResult" onclick="document.getElementById('searchResults').style.display = 'none';" >
-        <i class="fa fa-times"></i>
-    </a>
-
-    <div class="first-block-search-results" id="firstBlockSearchResults">
-
-        <div class="responsive">
-            <div class="gallery">
-                <a target="_blank" href="../image/f1.jpg">
-                    <img src="../image/f1.jpg" width="" height="" alt="">
-                </a>
-            </div>
-            <div class="desc">
-                <p class="description">description of the image </p>
-                <p class="likesnumber"><button  onclick="likeMedia()"><i class="fa fa-heart"></i></button> 100000</p>
-                <p class="commentsnumber"><button  onclick="commentMedia()"><i class="fa fa-commenting"></i></button> 900</p>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="more-search-results" id="viewMoreSearchResults">
-
-        <div class="responsive">
-            <div class="gallery">
-                <a target="_blank" href="../image/f1.jpg">
-                    <img src="../image/f1.jpg" width="" height="" alt="">
-                </a>
-            </div>
-            <div class="desc">
-                <p class="description">description of the image </p>
-                <p class="likesnumber"><button  onclick="likeMedia()"><i class="fa fa-heart"></i></button> 100000</p>
-                <p class="commentsnumber"><button  onclick="commentMedia()"><i class="fa fa-commenting"></i></button> 900</p>
-            </div>
-        </div>
-
-    </div>
-
-
-    <div class="divbtnViewMoreSearchResults">
-        <button class="btnViewMoreSearchResults" id="btnViewMoreSearchResults" onclick="viewMoreSearchResults()">view more</button>
-    </div>
-
 </div>
 
 <div class="footer" id="footer">
@@ -307,7 +226,7 @@
     <a class="report" href="report.html">report </a>
 </div>
 
-
+<script src="../js/conf.js"></script>
 <script src="../js/popup.js"></script>
 <!--<script src="../js/viewMore.js"></script>-->
 <script src="../js/search.js"></script>
