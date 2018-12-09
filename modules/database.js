@@ -355,7 +355,6 @@ const likeComment = (connection, commentID, userID, time) => {
         [userID, commentID, time]);
 }
 
-
 module.exports={
     connect: connect,
     getDataFromAttribute: getDataFromAttribute,

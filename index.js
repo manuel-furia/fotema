@@ -86,8 +86,12 @@ app.get('/profile/:userID', (req, res, next) => {
 });
 
 
-
 //API
+
+
+app.get('/uploads/:path', (req, res, next) =>{
+    res.sendFile(req.params.path, { root: __dirname + "/uploads/" } );
+});
 
 app.get('/get/anonwall/:start/:end', (req, res, next) =>{
     const start = req.params.start;
@@ -164,14 +168,8 @@ app.post('/post/signout', function(req, res){
 
 app.post('/upload', upload.single('mediafile'), (req, res) => {
   //Create the image data and store in in the db
-  uploadMod.uploadMediaAndGetData(req, res).then(data => model.uploadMedia(data)).catch(err => res.json({err: err.message}));
+  uploadMod.uploadMediaAndGetData(req, res).then(data => {model.uploadMedia(data); res.json({})}).catch(err => {res.json({err: err.message}); console.error(err)});
 });
-
-
-app.get('/images', (req, res) => {
-  db.select(connection, cb, res);
-});
-
 
 
 http.createServer((req, res)=>{

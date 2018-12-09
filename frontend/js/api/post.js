@@ -8,13 +8,8 @@ const uploadImages = (callback) => {
   };
 
   return fetch('/upload', settings).then((response) =>{
-
     return response.json();
-
-  }).then((json) =>{
-    console.log(json);
-    callback(json);
-  });
+  }).catch(err => {return {err: 'Server internal error.'}});
 };
 
 const processLoginResponse = (resPromise) => {

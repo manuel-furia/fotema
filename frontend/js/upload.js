@@ -1,76 +1,10 @@
-
-//show image after user has chosen one, before uploading
-/*const previewMedia = (input) => {
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-
-        reader.onload = function (e) {
-            $('#newImage')
-                .attr('src', e.target.result)
-                .width(300)
-                .height('auto');
-        };
-
-        reader.readAsDataURL(input.files[0]);
-    }
-};*/
-
-
-
 const showUploadForm = () =>{
     const uploadfileForm = document.querySelector('#uploadfile');
-    console.log('show upload dialog');
     uploadfileForm.style.display = "block";
 };
 
-
-
-/*const showUploadForm = () =>{
-    if (window.location.href.indexOf("#uploadfile?show") !== -1) {
-        const uploadfileForm = document.getElementById('uploadfile');
-        console.log('show upload dialog');
-        uploadfileForm.style.display = "block";
-    }
-
-    if(window.location.href.indexOf('#showSearchResults?show') !==-1){
-        const showSearchResults = document.getElementById('showSearchResults');
-        showSearchResults.style.display = "block";
-    }
-
+const hideUploadForm = () =>{
+    const uploadfileForm = document.querySelector('#uploadfile');
+    uploadfileForm.style.display = "none";
 };
-
-showUploadForm();*/
-
-//send upload form
-const mediaFormObj = document.querySelector('#mediaform');
-
-const uploadImage = (event) => {
-
-    
-
-    console.log('uploading...');
-
-    event.preventDefault();
-    const formData = new FormData(mediaForm);
-    const settings = {
-        method: 'post',
-        body: formData,
-    };
-
-    fetch('/upload', settings).then((response) =>{
-
-        return response.json();
-
-    }).then((json) =>{
-        console.log(json);
-        getImages();
-
-    });
-    console.log('uploading OK');
-};
-if (mediaFormObj != null) {
-    mediaFormObj.addEventListener('submit', uploadImages);
-}
-
-
 

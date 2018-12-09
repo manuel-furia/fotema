@@ -13,13 +13,13 @@ const showImages = (images) => {
         ` <div class="responsive" >
               <div class="gallery" >
                   <a target="_blank" href="media/${media.id}">
-                      <img src="${media.thumbnail}" width="" height=""  class="clickedMedia" id="${media.id}" >
+                      <img src="${apiroot + media.thumbpath}" width="" height=""  class="clickedMedia" id="${media.id}" >
                   </a>
               </div>
                   <div class="desc">
                       <p class="description">${media.description}</p>
-                      <p class="likesnumber"><button  onclick="likeMedia(${media.id})"><i class="fa fa-heart"></button></i> ${media.likeAmount}</p>
-                      <p class="commentsnumber"><button  onclick="commentMedia(${media.id})"><i class="fa fa-commenting"></button></i> ${media.commentAmount}</p>
+                      <p class="likesnumber"><button  onclick="likeMedia(${media.id})"><i class="fa fa-heart"></button></i> ${media.likes}</p>
+                      <p class="commentsnumber"><button  onclick="commentMedia(${media.id})"><i class="fa fa-commenting"></button></i> ${media.comments}</p>
                   </div>
               
           </div>` ;

@@ -9,13 +9,19 @@
 
 let start = 0;
 const amount = 30;
-//event listener function for fileupload
-const mediaForm = document.querySelector('#mediaform');
+
 const uploadEvent = (event) => {
   console.log('starting the event chain for upload');
   event.preventDefault();
 //TODO:get the image data here, and pass it forward.
-  uploadImages()
+  uploadImages().then((json) => {
+    if (json.err) {
+        alert(json.err);
+    } else {
+        hideUploadForm();
+        location.reload();
+    }
+  }).catch(err => alert(err));
   //when you upload a photo, you post the form into /bla bla
 
 };
@@ -94,7 +100,8 @@ document.getElementById('signup').addEventListener('submit', signUp);
 
 document.querySelector('.signout').addEventListener('click', signOut);
 
-
+//event listener function for fileupload
+const mediaForm = document.querySelector('#mediaform');
 if (mediaForm != null) mediaForm.addEventListener('submit', uploadEvent);
 
 const searchForm = document.getElementById('searchForm');
