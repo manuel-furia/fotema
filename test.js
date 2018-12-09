@@ -45,14 +45,15 @@ model.uploadMedia(testdata).catch(err => console.log(err));
 */
 //model.deleteMedia(8);
 
-/*
-model.getMediasByAnonRelevance(0, 30).then((res) => console.log(res));
 
+//model.getMediasByAnonRelevance(0, 30).then((res) => console.log(res));
+
+/*
 model.validUserEmailPair('user1', 'user4@domain.com').then(res => console.log(res));
 
 model.actorDeleteMedia(1, 2, 10).catch(err => console.log(err));*/
 
-model.getMediaInfo(64).then(res => {console.log(res); console.log(res.title); console.log(res.tags)});
+//model.getMediaInfo(64).then(res => {console.log(res); console.log(res.title); console.log(res.tags)});
 
 //model.getUserId('user1').then((id) => console.log(id)).catch(err => console.log(err));
 
