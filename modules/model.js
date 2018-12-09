@@ -68,6 +68,10 @@ const getMediaInfo = (id) => {
     return db.getMediaInfo(connection, id);
 }
 
+const createComment = (text, userID, time, targetMedia) => {
+    return db.createComment(connection, text, userID, time, targetMedia);
+}
+
 const getUserId = (username) => {
     return new Promise((resolve, reject) => {
         db.getDataFromAttribute(connection, 'UserInfo', 'username', username).then((result) => {
@@ -166,5 +170,6 @@ module.exports = {
     getCommentsFromMedia: checkConnect(getCommentsFromMedia),
     actorDeleteMedia: checkConnect(normalAction(deleteMedia)),
     checkUserLogin: checkConnect(checkUserLogin),
-    getMediaInfo: checkConnect(getMediaInfo)
+    getMediaInfo: checkConnect(getMediaInfo),
+    createComment: checkConnect(createComment)
 };
