@@ -132,6 +132,10 @@ app.get('/get/loginstate', function(req, res){
   }
 });
 
+app.post('/post/comment', (req, res) =>{
+  console.log(req.body.username)
+});
+
 app.post('/post/signup',  (req, res) =>{
 
   let userName = req.body.username;

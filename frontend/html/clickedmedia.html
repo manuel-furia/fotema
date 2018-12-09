@@ -200,10 +200,10 @@
         </div>
 
         <div class="writecomment" id="writeComment">
-            <form action="/comment" id="commentform">
+            <form action="/comment" id="commentForm">
                 <!--<label>Write a comment</label>-->
                 <!--<input type="text" name="your-comment" maxlength="140" placeholder="your comment here">-->
-                <textarea placeholder="Write your comment here" autofocus></textarea>
+                <textarea id="comment" placeholder="Write your comment here" autofocus></textarea>
                 <input type="submit" id="submitComments" value="submit">
             </form>
         </div>
@@ -220,7 +220,9 @@
     <a class="report" href="report.html">report </a>
 </div>
 
+
 <script src="../js/conf.js"></script>
+<script src="../js/api/get.js"></script>
 <script src="../js/popup.js"></script>
 <script src="../js/search.js"></script>
 <script src="../js/upload.js"></script>

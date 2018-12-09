@@ -53,6 +53,27 @@ const buildComments = (json) =>{
       `}
 };
 
+const postComment = (event) => {
+  event.preventDefault();
+  const comment = {};
+  comment.comment =  document.getElementById('comment').value;
+  getLoginState().then(res =>{ comment.username = res.username});
+
+  getLoginState().then(res =>{console.log(res)});
+
+  const settings = {
+    method: 'POST',
+    body: comment,
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  };
+  fetch(apiroot + 'post/comment', settings);
+};
+
+document.getElementById('commentForm').addEventListener('submit', postComment);
+
+
 
 onPageLoad();
 
