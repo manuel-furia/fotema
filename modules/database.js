@@ -214,7 +214,29 @@ ON L.id = C.id
 ORDER BY impact DESC
 LIMIT ?, ? ;
 `, [start, limit]);
-}
+};
+
+const markAlreadyLikedBy = (connection, userId, medias) => {
+    
+    return Promise.all(medias.map(media => {
+        return executeQuery(connection, 
+        `SELECT MediaLike.*
+         FROM Media
+         INNER JOIN MediaType ON Media.type = MediaType.id
+         LEFT JOIN MediaLike ON Media.id = MediaLike.media
+         LEFT JOIN UserInfo ON MediaLike.user = UserInfo.id
+         LEFT JOIN Media AS Thumbnails ON Media.thumbnail = Thumbnails.id
+         WHERE UserInfo.id = ? AND Media.id = ?;
+        `,
+    [userId, media.id]).then(result => {
+            if (result.length > 0)
+                return Object.assign(media, {alreadyLiked: true});
+            else
+                return media;
+        });
+        
+    }));
+};
 
 const getUserFavouriteMedias = (connection, userid, start, end) => {
     return executeQuery(connection,
@@ -243,7 +265,7 @@ INNER JOIN MediaType ON MediaType.id = Media.type
 WHERE MediaType.name <> "thumbnail"
 ORDER BY impact DESC
 LIMIT ?, ? ;`,
-    [userid, userid, start, end]);
+    [userid, userid, start, end]).then(medias => markAlreadyLikedBy(connection, userid, medias));
 }
 
 const getUserFavouriteTags = (connection, userid, start, end) => {
@@ -277,6 +299,37 @@ ORDER BY impact DESC
 LIMIT ?, ? ;`,
     [userid, userid, start, end]);
 }
+
+const getTagMediasOrderedByImpact = (connection, tag, start, limit) => {
+    return executeQuery(connection,
+       `
+SELECT L.*, C.comments, (L.likes + C.comments) AS impact
+FROM (
+    SELECT Media.*, Thumbnails.path AS thumbpath, COUNT(MediaLike.media) AS likes
+    FROM Media
+    INNER JOIN MediaType ON Media.type = MediaType.id
+    INNER JOIN Tagged ON Tagged.mediaid = Media.id
+    INNER JOIN Tag ON Tag.id = Tagged.tagid
+    LEFT JOIN MediaLike ON Media.id = MediaLike.media
+    LEFT JOIN Media AS Thumbnails ON Media.thumbnail = Thumbnails.id
+    WHERE MediaType.name <> "thumbnail" AND Tag.name = ?
+    GROUP BY Media.id
+) AS L
+INNER JOIN (
+    SELECT Media.id, COUNT(Comment.id) AS comments
+    FROM Media
+    INNER JOIN MediaType ON Media.type = MediaType.id
+    INNER JOIN Tagged ON Tagged.mediaid = Media.id
+    INNER JOIN Tag ON Tag.id = Tagged.tagid
+    LEFT JOIN Comment ON Media.id = Comment.targetMedia
+    WHERE MediaType.name <> "thumbnail" AND Tag.name = ?
+    GROUP BY Media.id
+) AS C
+ON L.id = C.id
+ORDER BY impact DESC
+LIMIT ?, ? ;
+`, [tag, tag, start, limit]);
+};
 
 const getMediasUploadedByUser = (connection, userID) => {
     return executeQuery
@@ -400,7 +453,8 @@ module.exports={
     connect: connect,
     getDataFromAttribute: getDataFromAttribute,
     getLikesFromMedia: getLikesFromMedia,
-    getNumCommentsFromMedia: getCommentsFromMedia,
+    getNumCommentsFromMedia: getNumCommentsFromMedia,
+    getCommentsFromMedia: getCommentsFromMedia,
     getMediaTags: getMediaTags,
     getNumberOfMediasByTag: getNumberOfMediasByTag,
     getUserFavouriteMedias: getUserFavouriteMedias,

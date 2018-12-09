@@ -117,8 +117,9 @@ app.get('/get/comments/:imageID', (req, res, next) =>{
   const data = model.getCommentsFromMedia(req.params.imageID).then((json) => res.send(json));
 });
 
-app.get('/get/singleMedia/:imageID', (req, res) =>{
 
+app.get('/get/media/:imageID', (req, res, next) =>{
+    
   const data = model.getMediaInfo(req.params.imageID).then((json) => res.send(json));
 
 });

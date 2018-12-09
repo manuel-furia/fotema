@@ -8,7 +8,7 @@
 
 
 let start = 0;
-const amount = 30;
+const amount = 12;
 
 const uploadEvent = (event) => {
   console.log('starting the event chain for upload');
