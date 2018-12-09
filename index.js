@@ -114,7 +114,7 @@ app.get('/get/search/:term/:start/:end', upload.single('mediafile'), (req, res, 
 });
 
 app.get('/get/comments/:imageID', (req, res, next) =>{
-
+  const data = model.getCommentsFromMedia(req.params.imageID).then((json) => res.send(json));
 });
 
 app.get('/get/singleMedia/:imageID', (req, res) =>{

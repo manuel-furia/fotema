@@ -2,12 +2,19 @@
 
 function onPageLoad (){
   const imageID = document.getElementById('userID').value;
-  fetch(apiroot + '/get/singleMedia/' + imageID).then(response => response.json()).then(json => {
-   buildHTML(json);
+  fetch(apiroot + '/get/media/' + imageID).then(response => response.json()).then(json => {
+ //   console.log(json);
+   buildImage(json);
   });
+
+  fetch(apiroot + '/get/comments/' + imageID).then(response => response.json()).then(json => {
+    console.log(json);
+    buildComments(json);
+  });
+
 }
 
-const buildHTML = (json) =>{
+const buildImage = (json) =>{
   const div = document.getElementById('mediaTarget');
   div.innerHTML +=
 `
@@ -26,20 +33,30 @@ const buildHTML = (json) =>{
             <p class="commentsnumber"><button id="btnComment" onclick="commentMedia()"><i class="fa fa-commenting"></i></button> 0</p>
         </div>
 
-    
-
   `
+};
+
+
+const buildComments = (json) =>{
+
+  const div = document.getElementById('mediaTarget');
+  div.innerHTML += `
+      
+  <div class="usercomments"
+       <p class="commentername">${json.user}</p>
+       <button class="likecomment"><i class="fa fa-thumbs-up"></i>  5k </button>
+       <p class="commenttime">4 hr </p>
+       <p class="commentcontent">this is great!!</p>
+  </div>
+      
+      `
 };
 
 onPageLoad();
 
 
 
-/*  <div class="usercomments">
-      <p class="commentername">commenter name</p>
-  <button class="likecomment"><i class="fa fa-thumbs-up"></i>  5k </button>
-  <p class="commenttime">4 hr </p>
-  <p class="commentcontent">this is great!!</p>
+/*
 
 
 
