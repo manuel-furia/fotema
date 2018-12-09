@@ -22,7 +22,7 @@
 
 <body>
 
-<input type='hidden' name='mediaID' value='%$m$%'>
+<input type='hidden' id='userID' name='mediaID' value='%$m$%'>
 
 <div class="header" id="header">
 
@@ -30,27 +30,22 @@
         <a href="/node/"> FOTEMA <!--<img src="/image/slogo14.PNG">--></a>
     </div>
 
-    <div class="upload" >
-        <button id="headerBtnUpload"><a href="myfotema.html#uploadfile?show"> upload</a></button>
+    <div class="upload logged" >
+        <button id="headerBtnUpload" onclick="showUploadForm()"> upload</button>
     </div>
 
 
-    <div class="dropdown" id="headerBtnMore">
+    <div class="dropdown logged" id="headerBtnMore">
         <button class="dropbtn">more <i class="fa fa-caret-down"></i>
         </button>
         <div class="dropdown-content">
-            <a class="/node/html/myfotema" href="myfotema.html">my fotema</a>
-            <a class="/node/html/settings" href="settings.html">settings</a>
-            <a class="/node/html/signout" href="signout.html">sign out </a>
+            <a class="myfotema" href="myfotema.html">my fotema</a>
+            <a class="settings" href="settings.html">settings</a>
+            <a class="signout" href="signout.html">sign out </a>
         </div>
     </div>
 
-    <!--<div class="sign">-->
-        <!--<button id="headerBtnSignIn" ><a class="signin" href="javascript:popup('showsignin');">sign in</a></button>-->
-        <!--<button id="headerBtnSignup"><a class="signup"  href="javascript:popup('showsignup');"> sign up</a></button>-->
-    <!--</div>-->
-
-    <div class="sign">
+    <div class="sign anon">
         <button id="headerBtnSignIn" onclick="popup('showsignin')">sign in</button>
         <button id="headerBtnSignup" onclick="popup('showsignup')">sign up</button>
     </div>

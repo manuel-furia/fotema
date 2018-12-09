@@ -12,6 +12,9 @@ const LVL_ADMIN = 3;
 const USR_NOT_FOUND = 'User not found';
 const EMAIL_NOT_FOUND = 'Email not found';
 const PERMISSION_DENIED = 'Permission denied';
+const WRONG_CREDENTIAL = 'Wrong username or password';
+
+const userType = ['none', 'normal', 'mod', 'admin']; 
 
 const executableAsUser = requiredlvl => f => (actorId, targetOwnerId, ...args) => {
     return getPermissions(actorId).then(lvl => {
@@ -106,12 +109,12 @@ const getNumCommentsFromMedia = (mediaID) => {
 
 const validUserEmailPair = (username, email) => {
     const userExists = getUserId(username).then(() => true).catch((err) => {
-        if (err == USR_NOT_FOUND)
+        if (err === USR_NOT_FOUND)
             return false;
         throw new Error(err);    
     });
     const emailExists = getUserIdFromEmail(email).then(() => true).catch((err) => {
-        if (err == EMAIL_NOT_FOUND)
+        if (err === EMAIL_NOT_FOUND)
             return false;
         throw new Error(err);    
     });
@@ -121,6 +124,30 @@ const validUserEmailPair = (username, email) => {
 
 const getCommentsFromMedia = (mediaID) => {
     return db.getCommentsFromMedia(connection, mediaID);
+}
+
+const checkUserLogin = (username, pass) => {
+    const user = new Promise((resolve, reject) => {
+        db.getDataFromAttribute(connection, 'UserInfo', 'username', username).then((result) => {
+            if (result != null && result.length > 0)   
+                resolve(result[0]);
+            else 
+                reject(USR_NOT_FOUND);
+        });
+    });
+
+    const pHash = user.then(user => {
+        const salt = user.salt;
+        return bcrypt.hash(pass, salt);
+    });
+
+    return Promise.all([user, pHash]).then(([user, hash]) => {
+       if (user.passhash === hash){
+            return {username: user.username, type: userType[user.level]};
+       } else {
+            return {err: WRONG_CREDENTIAL};
+       }
+    }).catch(err => {if (err === USR_NOT_FOUND) return {err: USR_NOT_FOUND}; else throw(err)});
 }
 
 module.exports = {
@@ -134,6 +161,7 @@ module.exports = {
     getUserIdFromEmail: checkConnect(getUserIdFromEmail),
     validUserEmailPair: checkConnect(validUserEmailPair),
     getCommentsFromMedia: checkConnect(getCommentsFromMedia),
-    actorDeleteMedia: normalAction(deleteMedia)
+    actorDeleteMedia: checkConnect(normalAction(deleteMedia)),
+    checkUserLogin: checkConnect(checkUserLogin)
     
 };

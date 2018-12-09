@@ -1,5 +1,7 @@
+//import {apiroot} from '../api/apiconf.js';
+
 'use strict';
-export const showImages = (images) => {
+const showImages = (images) => {
     console.log('showing images???');
     images.forEach(media=>{
 
@@ -8,17 +10,16 @@ export const showImages = (images) => {
         const myMedia = document.getElementById('imageTarget');
         console.log('mymedia: ' + myMedia);
         myMedia.innerHTML +=
-
         ` <div class="responsive" >
               <div class="gallery" >
-                  <a target="_blank" href=${media.path}>
-                      <img src=${media.thumbnail} width="" height=""  class="clickedMedia" id="${media.id}" >
+                  <a target="_blank" href="media/${media.id}">
+                      <img src="${media.thumbnail}" width="" height=""  class="clickedMedia" id="${media.id}" >
                   </a>
               </div>
                   <div class="desc">
                       <p class="description">${media.description}</p>
-                      <p class="likesnumber"><i class="fa fa-heart"></i> ${media.likeAmount}</p>
-                      <p class="commentsnumber"><i class="fa fa-commenting"></i> ${media.commentAmount}</p>
+                      <p class="likesnumber"><button  onclick="likeMedia(${media.id})"><i class="fa fa-heart"></button></i> ${media.likeAmount}</p>
+                      <p class="commentsnumber"><button  onclick="commentMedia(${media.id})"><i class="fa fa-commenting"></button></i> ${media.commentAmount}</p>
                   </div>
               
           </div>` ;
@@ -47,7 +48,7 @@ export const showImages = (images) => {
 };
 
 //show search results on front end
-export const showSearchResults = (images) => {
+const showSearchResults = (images) => {
   console.log('showing showSearchResults ???');
   images.forEach(image=>{
 

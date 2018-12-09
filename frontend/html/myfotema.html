@@ -28,7 +28,7 @@
 
 <body>
 
-<input type='hidden' name='userID' value='%$u$%'>
+<input type='hidden' id='userID' name='userID' value='%$u$%'>
 
 <div class="header" id="header">
 
@@ -36,22 +36,25 @@
         <a href="/node/"> FOTEMA </a>
     </div>
 
-    <div class="upload" >
-        <button id="headerBtnUpload" onclick="document.getElementById('uploadfile').style.display = 'block';"><a href="myfotema.html#uploadfile?show"> upload</a></button>
+    <div class="upload logged" >
+        <button id="headerBtnUpload" onclick="showUploadForm()"> upload</button>
     </div>
 
 
-
-    <div class="dropdown" id="headerBtnMore">
+    <div class="dropdown logged" id="headerBtnMore">
         <button class="dropbtn">more <i class="fa fa-caret-down"></i>
         </button>
         <div class="dropdown-content">
-            <a class="/node/html/myfotema" href="myfotema.html">my fotema</a>
-            <a class="/node/html/settings" href="settings.html">settings</a>
-            <a class="/node/html/signout" href="signout.html">sign out </a>
+            <a class="myfotema" href="myfotema.html">my fotema</a>
+            <a class="settings" href="settings.html">settings</a>
+            <a class="signout" href="signout.html">sign out </a>
         </div>
     </div>
 
+    <div class="sign anon">
+        <button id="headerBtnSignIn" onclick="popup('showsignin')">sign in</button>
+        <button id="headerBtnSignup" onclick="popup('showsignup')">sign up</button>
+    </div>
 
     <div class="profile" id="headerUserProfile">
         <a href="myfotema.html">

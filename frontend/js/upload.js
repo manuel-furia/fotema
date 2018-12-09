@@ -41,10 +41,13 @@ const showUploadForm = () =>{
 
 showUploadForm();*/
 
-
 //send upload form
-const mediaForm = document.querySelector('#mediaform');
-const uploadImages = (event) => {
+const mediaFormObj = document.querySelector('#mediaform');
+
+const uploadImage = (event) => {
+
+    
+
     console.log('uploading...');
 
     event.preventDefault();
@@ -65,21 +68,9 @@ const uploadImages = (event) => {
     });
     console.log('uploading OK');
 };
-if (mediaForm != null) {
-    mediaForm.addEventListener('submit', uploadImages);
+if (mediaFormObj != null) {
+    mediaFormObj.addEventListener('submit', uploadImages);
 }
 
-
-//get images
-const getImages = () =>{
-    console.log('getting images???');
-    fetch('/images').then(response=>{
-        return response.json();
-    }).then(json =>{
-        console.log(json);
-        showImages(json);
-    });
-    console.log('getting images OK???');
-};
 
 

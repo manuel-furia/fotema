@@ -125,12 +125,17 @@ body{
 
 }
 
+.anon {
+    display: none;
+}
 
+.logged {
+    display: none;
+}
 
 .header .sign button{
     float: left;
     margin-right: 10px;
-    display: none;
 }
 
 
@@ -140,7 +145,6 @@ body{
 }
 
 .header .upload, .header .dropdown{
-    /*display: none;*/
 }
 
 

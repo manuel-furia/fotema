@@ -5,10 +5,6 @@
 // 1. It receives an event.
 // 2. It acts according to whatever that event needs to do (post, get is pretty normal route for refreshing pictures after upload)
 'use strict';
-import {getImages} from './api/get.js';
-import {showImages} from './renderer/renderer.js';
-import {uploadImages} from './api/post.js';
-import {postUserData} from './api/post.js';
 
 
 let start = 0;
@@ -25,7 +21,7 @@ const uploadEvent = (event) => {
 };
 
 //search for content
-const search = () => {
+const onSearch = () => {
   const searchText = document.querySelector(
       '#searchForm input[name="search"]').value;
   get.search(searchText, (json) => {
@@ -37,6 +33,9 @@ const search = () => {
 //function that runs on fresh page load
 function onPageLoad(t, obj) {
   console.log(t, obj);
+
+  updateHeader();
+
   start = 0;
   getImages(t, start, amount, (json) => {
     showImages(json);
@@ -52,26 +51,38 @@ function viewMoreLoad(t, obj) {
   });
 };
 
-
 const signIn = (event)=> {
-  //first needs to check if given credentials are correct
   event.preventDefault();
-  postUserData('signin', mediaForm);
-};
-
-const signUp = (event)=> {
-  const signUpForm = document.querySelectorAll('.signup');
-  event.preventDefault();
-  const test = Array.prototype.slice.call(signUpForm);
-  let result = {};
-  test.forEach(elem =>{
-    Object.assign(result, {[elem.name]: elem.value});
+  const signInForm = document.getElementById('signin');
+  const data = getFieldsFromForm(signInForm);
+  postSignIn(data).then((json) => {
+    if (json.user && !json.err){ 
+      location.reload();
+    } else {
+      alert(json.err);
+    }
   });
-  postUserData('signup', result);
 };
 
-const clickedMedia = (imageID) =>{
-  console.log('image ID of clicked image: ' + imageID);
+const signUp = (event) => {
+  const signUpForm = document.getElementById('signup');
+  const data = getFieldsFromForm(signUpForm);
+  event.preventDefault();
+  postSignUp(data).then((json) => {
+    console.log(json);
+    if(json.err){
+      alert(json.err);
+    }else{
+      location.reload();
+    }
+  });
+};
+
+const signOut = (event) => {
+  postSignOut().then(() => {
+    window.location.href = apiroot;
+    location.reload();
+  });
 };
 
 const images = document.querySelectorAll('.clickedMedia');
@@ -80,6 +91,8 @@ console.log(images);
 document.getElementById('signin').addEventListener('submit', signIn);
 
 document.getElementById('signup').addEventListener('submit', signUp);
+
+document.querySelector('.signout').addEventListener('click', signOut);
 
 
 if (mediaForm != null) mediaForm.addEventListener('submit', uploadEvent);
