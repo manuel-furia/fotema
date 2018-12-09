@@ -9,6 +9,13 @@ const resize = (pathToFile, width, newPath) => {
   .toFile(newPath)
 };
 
+const parseExifTime = (exifTime) => {
+    var str = exifTime.split(" ");
+    var dateStr = str[0].replace(':', '-');
+    var properDateStr = dateStr + " " + str[1];
+    return new Date(properDateStr);
+}
+
 const uploadMediaAndGetData = (req, res) => {
     if (req.user == null){
         return new Promise(() => {throw new Error('User not logged in.')});
@@ -23,8 +30,7 @@ const uploadMediaAndGetData = (req, res) => {
 
     return resize(path, 360, path + "_thumb").then(() => {
 
-        const now = new Date(Date.now());
-        let time = now.toString();    
+        let time = new Date(Date.now());;    
 
         const exifPromise = new Promise(function(resolve, reject) {
           try{
@@ -32,7 +38,7 @@ const uploadMediaAndGetData = (req, res) => {
                 if (error){
                     console.log('Error: '+error.message); resolve({'time': time});
                 } else {
-                    try {time = exifData.exif.CreateDate;} catch(e){console.log("Failed to read time from exif.")}
+                    try {time = parseExifTime(exifData.exif.CreateDate);} catch(e){console.log("Failed to read time from exif.")}
                     resolve({'time': time});
                 }
             });} catch (e) {console.log("Failed to read time from exif."); resolve({'time': time})};
