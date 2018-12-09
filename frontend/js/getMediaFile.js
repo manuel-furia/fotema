@@ -38,47 +38,21 @@ const buildImage = (json) =>{
 
 
 const buildComments = (json) =>{
-
-  const div = document.getElementById('mediaTarget');
+  const div = document.getElementById('commentBlock');
+  for(let comment in json){
+    let time = new Date(json[comment].time);
   div.innerHTML += `
       
   <div class="usercomments"
-       <p class="commentername">${json.user}</p>
-       <button class="likecomment"><i class="fa fa-thumbs-up"></i>  5k </button>
-       <p class="commenttime">4 hr </p>
-       <p class="commentcontent">this is great!!</p>
+       <p class="commentername">${json[comment].user}</p>
+       <button class="likecomment"><i class="fa fa-thumbs-up"></i> ${json[comment].likes}</button>
+       <p class="commenttime">${time.getDate()}.${time.getMonth()}.${time.getFullYear()} - ${time.getHours()}:${time.getMinutes()<10?'0':''}${time.getMinutes()} </p>
+       <p class="commentcontent">${json[comment].text}</p>
   </div>
       
-      `
+      `}
 };
+
 
 onPageLoad();
 
-
-
-/*
-
-
-
-
-<div class="usercomments">
-      <p class="commentername">commenter name</p>
-  <button class="likecomment"><i class="fa fa-thumbs-up"></i>  500 </button>
-  <p class="commenttime">4 hr </p>
-  <p class="commentcontent">this is great!! great great great great great great great great hitehitheitheihteihtiehighdigh hitehitheitheihteihtiehighdigh hitehitheitheihteihtiehighdigh</p>
-  </div>
-
-  <div class="usercomments">
-      <p class="commentername">commenter name</p>
-  <button class="likecomment"><i class="fa fa-thumbs-up"></i>  5k </button>
-  <p class="commenttime">4 hr </p>
-  <p class="commentcontent">this is great!!</p>
-  </div>
-
-  <div class="usercomments">
-      <p class="commentername">commenter name</p>
-  <button class="likecomment"><i class="fa fa-thumbs-up"></i>  105k</button>
-  <p class="commenttime">4 hr </p>
-  <p class="commentcontent">this is great!!</p>
-  </div>
-  </div>*/
