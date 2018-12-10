@@ -55,20 +55,22 @@ const buildComments = (json) =>{
 
 const postComment = (event) => {
   event.preventDefault();
-  const comment = {};
-  comment.comment =  document.getElementById('comment').value;
-  getLoginState().then(res =>{ comment.username = res.username});
 
-  getLoginState().then(res =>{console.log(res)});
+  return getLoginState().then(res =>{ return  res.username}).then((username) => {
+    const comment = {
+      comment : document.getElementById('comment').value,
+      username : username,
+    };
+    const settings = {
+      method: 'POST',
+      body: JSON.stringify(comment),
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    };
+    return fetch(apiroot + 'post/comment', settings);
+  });
 
-  const settings = {
-    method: 'POST',
-    body: comment,
-    headers: {
-      'Content-Type': 'application/json'
-    },
-  };
-  fetch(apiroot + 'post/comment', settings);
 };
 
 document.getElementById('commentForm').addEventListener('submit', postComment);
