@@ -2,12 +2,12 @@
 
 function onPageLoad (){
   const imageID = document.getElementById('userID').value;
-  fetch(apiroot + '/get/media/' + imageID).then(response => response.json()).then(json => {
+  fetch(apiroot + 'get/media/' + imageID).then(response => response.json()).then(json => {
  //   console.log(json);
    buildImage(json);
   });
 
-  fetch(apiroot + '/get/comments/' + imageID).then(response => response.json()).then(json => {
+  fetch(apiroot + 'get/comments/' + imageID).then(response => response.json()).then(json => {
     console.log(json);
     buildComments(json);
   });
