@@ -2,25 +2,28 @@ const maxLoginDurationInDays = 3;
 const usernameCookie = 'user'
 const userTypeCookie = 'type'
 
-/*
-const onLogIn = (username, type) => {
-    setCookie(usernameCookie, username, maxLoginDurationInDays);
-    setCookie(userTypeCookie, type, maxLoginDurationInDays);
-};
-
-const onLogOut = () => {
-    deleteCookie(usernameCookie);
-    deleteCookie(userTypeCookie);
-};
-
-const isLoggedIn = () => {
-    const username = getCookie(usernameCookie);
-    return username != undefined && username != null && username != "";
-};*/
-
 const isLoggedIn = () => {
     return getLoginState().then(loginState => loginState.username != undefined && loginState.username != null && loginState.username != '');
 };
+
+const getUsername = () => {
+    return getLoginState().then((loginState) => {
+        if (loginState && loginState.username != null && loginState.username !== "")
+            return loginState.username;
+        else
+            throw new Error ('You must log in first.');
+    });
+};
+
+const getUserId = () => {
+    return getLoginState().then((loginState) => {
+        if (loginState && loginState.userid != null && loginState.userid !== "")
+            return loginState.userid;
+        else
+            throw new Error ('You must log in first.');
+    });
+};
+
 
 const updateHeader = () => {
     isLoggedIn().then(loggedIn => {

@@ -7,7 +7,7 @@ const uploadImages = (callback) => {
     body: formData,
   };
 
-  return fetch(apiroot + '/upload', settings).then((response) =>{
+  return fetch(apiroot + 'post/upload', settings).then((response) =>{
     return response.json();
   }).catch(err => {return {err: 'Server internal error.'}});
 };
@@ -58,4 +58,26 @@ const postSignOut = () =>{
   };
   return fetch(apiroot + 'post/signout', settings);
 };
+
+const postLikeMedia = (mediaId, userId) => {
+  const settings= {
+    method: 'POST',
+    body: JSON.stringify({mediaId: mediaId, userId: userId}),
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  };
+  return fetch(apiroot + 'post/like', settings);
+}
+
+const postUnlikeMedia = (mediaId, userId) => {
+  const settings= {
+    method: 'POST',
+    body: JSON.stringify({mediaId: mediaId, userId: userId}),
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  };
+  return fetch(apiroot + 'post/unlike', settings);
+}
 

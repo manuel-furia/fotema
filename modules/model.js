@@ -30,6 +30,8 @@ const normalAction = executableAsUser((actor, owner) => (actor === owner) ? LVL_
 const adminAction = executableAsUser((actor, owner) => (actor === owner) ? LVL_NORMAL : LVL_ADMIN);
 
 
+const zipWith = (xs, ys, f) => xs.map((n,i) => f(n, ys[i]))
+
 const checkConnect = f => (...args) => {
     if (connection === null || connection.status === 'disconnected'){
         connection = db.connect();
@@ -52,7 +54,15 @@ const getMediasByAnonRelevance = (start, limit) => {
 }
 
 const getMediasByUserRelevance = (start, limit, user) => {
-    //TODO: Implement user specific relevance algorithm
+    const probs = [0.30, 0.20, 0.10, 0.10, 0.5];
+    getUserFavouriteTags(connection, userid, start, end).then((elems) => {
+        return elems.map(elem => elem.tag);
+    }).then(tags => {
+        
+    })
+    
+    
+
     return db.getMediasOrderedByImpact(connection, start, limit);
 }
 
@@ -66,6 +76,21 @@ const uploadMedia = (data) => {
 
 const getMediaInfo = (id) => {
     return db.getMediaInfo(connection, id);
+}
+
+const likeMedia = (userId, mediaId) => {
+    return db.isMediaAlreadyLikedBy(connection, userId, mediaId).then((liked) => {
+        if (liked) {
+            return {err: "Already liked"};
+        } else {
+            const time = new Date(Date.now());
+            return db.likeMedia(connection, mediaId, userId, time);
+        }
+    });
+}
+
+const unlikeMedia = (userId, mediaId) => {
+    return db.unlikeMedia(connection, mediaId, userId);
 }
 
 const createComment = (text, userID, time, targetMedia) => {
@@ -133,6 +158,10 @@ const getCommentsFromMedia = (mediaID) => {
     return db.getCommentsFromMedia(connection, mediaID);
 }
 
+const getCommentsFromMediaForUser = (mediaID, userID) => {
+    return db.getCommentsFromMedia(connection, mediaID, userID);
+}
+
 const checkUserLogin = (username, pass) => {
     const user = new Promise((resolve, reject) => {
         db.getDataFromAttribute(connection, 'UserInfo', 'username', username).then((result) => {
@@ -159,6 +188,7 @@ const checkUserLogin = (username, pass) => {
 
 module.exports = {
     getMediasByAnonRelevance: checkConnect(getMediasByAnonRelevance),
+    getMediasByUserRelevance: checkConnect(getMediasByUserRelevance),
     deleteMedia: checkConnect(deleteMedia),
     uploadMedia: checkConnect(uploadMedia),
     getUserId: checkConnect(getUserId),
@@ -168,8 +198,11 @@ module.exports = {
     getUserIdFromEmail: checkConnect(getUserIdFromEmail),
     validUserEmailPair: checkConnect(validUserEmailPair),
     getCommentsFromMedia: checkConnect(getCommentsFromMedia),
+    getCommentsFromMediaForUser: checkConnect(getCommentsFromMediaForUser),
     actorDeleteMedia: checkConnect(normalAction(deleteMedia)),
     checkUserLogin: checkConnect(checkUserLogin),
     getMediaInfo: checkConnect(getMediaInfo),
-    createComment: checkConnect(createComment)
+    createComment: checkConnect(createComment),
+    likeMedia: checkConnect(likeMedia),
+    unlikeMedia: checkConnect(unlikeMedia)
 };

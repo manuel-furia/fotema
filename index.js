@@ -93,20 +93,16 @@ app.get('/uploads/:path', (req, res, next) =>{
     res.sendFile(req.params.path, { root: __dirname + "/uploads/" } );
 });
 
-app.get('/get/anonwall/:start/:end', (req, res, next) =>{
+app.get('/get/wall/:start/:end', (req, res, next) =>{
     const start = req.params.start;
     const end = req.params.end;
-    const task = model.getMediasByAnonRelevance(start, end);
+    let task;
+    if (req.user){
+        task = model.getMediasByAnonRelevance(start, end);
+    } else {
+        task = model.getMediasByAnonRelevance(start, end);
+    }
     task.then((json) => res.json(json)).catch(handleError );
-
-
-});
-
-
-app.get('/get/userwall/:user/:start/:end', (req, res, next) =>{
-
-
-
 });
 
 app.get('/get/search/:term/:start/:end', upload.single('mediafile'), (req, res, next) => {
@@ -126,7 +122,9 @@ app.get('/get/media/:imageID', (req, res, next) =>{
 
 app.get('/get/loginstate', function(req, res){
   if (req.user) {
-    res.json({username: req.user.username, type: req.user.type});
+    model.getUserId(req.user.username).then((userId) => {
+        res.json({username: req.user.username, userid: userId, type: req.user.type});
+    }).catch(err => res.json({err: err}));
   } else {
     res.json({anon: 'anon'});
   }
@@ -158,6 +156,18 @@ app.post('/post/signup',  (req, res) =>{
 
 });
 
+app.post('/post/like', (req, res) => {
+    model.likeMedia(req.body.userId, req.body.mediaId).then(() => {
+        res.send({});
+    }).catch(err => res.send({}));
+});
+
+app.post('/post/unlike', (req, res) => {
+    model.unlikeMedia(req.body.userId, req.body.mediaId).then(() => {
+        res.send({});
+    }).catch(err => res.send({}));
+});
+
 app.post('/post/signin', passport.authenticate('local'), (req, res) => {
     console.log(`User ${req.user.username} signin`);
     res.send({user: req.user.username, type: req.user.type});
@@ -169,11 +179,16 @@ app.post('/post/signout', function(req, res){
   res.redirect('/');
 });
 
+//TODO: Remove
 app.post('/upload', upload.single('mediafile'), (req, res) => {
   //Create the image data and store in in the db
   uploadMod.uploadMediaAndGetData(req, res).then(data => {model.uploadMedia(data); res.json({})}).catch(err => {res.json({err: err.message}); console.error(err)});
 });
 
+app.post('/post/upload', upload.single('mediafile'), (req, res) => {
+  //Create the image data and store in in the db
+  uploadMod.uploadMediaAndGetData(req, res).then(data => {model.uploadMedia(data); res.json({})}).catch(err => {res.json({err: err.message}); console.error(err)});
+});
 
 http.createServer((req, res)=>{
   console.log('creating http server on port: 8000');

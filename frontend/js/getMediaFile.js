@@ -9,6 +9,7 @@ function onPageLoad (){
 
 const buildHTML = (json) =>{
   const div = document.getElementById('mediaTarget');
+  const liked = json.alreadyLiked ? 'likedlikesnumber' : '';
   div.innerHTML +=
 `
 
@@ -22,8 +23,8 @@ const buildHTML = (json) =>{
 
         <div class="desc">
             <p class="description">${json.description}</p>
-            <p class="likesnumber"><button id="btnLike" onclick="likeMedia()"><i class="fa fa-heart"></i></button> 0</p>
-            <p class="commentsnumber"><button id="btnComment" onclick="commentMedia()"><i class="fa fa-commenting"></i></button> 0</p>
+            <p class="likesnumber ${liked}" id="like${json.id}"><button id="btnLike" onclick="likeMedia(${json.id})"><i class="fa fa-heart"></i></button><span id="nlikes${json.id}">${json.likes}</span></p>
+            <p class="commentsnumber"><button id="btnComment"><i class="fa fa-commenting"></i></button> 0</p>
         </div>
 
     

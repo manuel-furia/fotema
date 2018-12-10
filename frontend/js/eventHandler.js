@@ -26,6 +26,30 @@ const uploadEvent = (event) => {
 
 };
 
+const likeMedia = (id) => {
+    const likeBtn = document.getElementById('like' + id);
+    const likesSpan = document.getElementById('nlikes' + id);
+    
+    getUserId().then(userId => {
+        if (likeBtn) {
+            const liked = likeBtn.classList.contains('likedlikesnumber');
+            const likes = parseInt(likesSpan.textContent, 10);
+            
+            if (liked) {
+                likeBtn.classList.remove('likedlikesnumber');
+               likesSpan.textContent = likes - 1;
+                postUnlikeMedia(id, userId);
+            } else {
+                likeBtn.classList.add('likedlikesnumber');
+                likesSpan.textContent = likes + 1;
+                postLikeMedia(id, userId);
+            }
+
+        }
+
+    }).catch(err => alert(err));
+};
+
 //search for content
 const onSearch = () => {
   const searchText = document.querySelector(
@@ -43,16 +67,18 @@ function onPageLoad(t, obj) {
   updateHeader();
 
   start = 0;
-  getImages(t, start, amount, (json) => {
+  getImages(start, amount).then((json) => {
     showImages(json);
   });
+
+
 };
 
 //function that runs when view more button is clicked
 function viewMoreLoad(t, obj) {
   start += amount;
   console.log(t, start, amount);
-  getImages(t, start, amount, (json) =>{
+  getImages(start, amount).then((json) =>{
       showImages(json);
   });
 };

@@ -30,7 +30,7 @@ const uploadMediaAndGetData = (req, res) => {
 
     return resize(path, 360, path + "_thumb").then(() => {
 
-        let time = new Date(Date.now());;    
+        let time = new Date(Date.now());    
 
         const exifPromise = new Promise(function(resolve, reject) {
           try{

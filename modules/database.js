@@ -101,6 +101,12 @@ WHERE Media.id = ?
 GROUP BY Comment.id
 ORDER BY time DESC;`,
         [mediaID]);
+};
+
+
+//Get the comments of a media and mark the ones that the user has already liked
+const getCommentsFromMediaForUser = (connection, mediaID, userID) => {
+    return getCommentsFromMedia.then(comments => markAlreadyLikedBy(connection, userid, comments, isCommentAlreadyLikedBy));
 }
 
 //Get tags from media
@@ -216,25 +222,46 @@ LIMIT ?, ? ;
 `, [start, limit]);
 };
 
-const markAlreadyLikedBy = (connection, userId, medias) => {
-    
-    return Promise.all(medias.map(media => {
-        return executeQuery(connection, 
+const isMediaAlreadyLikedBy = (connection, userId, mediaId) => {
+    return executeQuery(connection, 
         `SELECT MediaLike.*
          FROM Media
-         INNER JOIN MediaType ON Media.type = MediaType.id
          LEFT JOIN MediaLike ON Media.id = MediaLike.media
          LEFT JOIN UserInfo ON MediaLike.user = UserInfo.id
-         LEFT JOIN Media AS Thumbnails ON Media.thumbnail = Thumbnails.id
          WHERE UserInfo.id = ? AND Media.id = ?;
         `,
-    [userId, media.id]).then(result => {
+    [userId, mediaId]).then(result => {
             if (result.length > 0)
-                return Object.assign(media, {alreadyLiked: true});
+                return true;
+            else
+                return false;
+     });
+}
+
+const isCommentAlreadyLikedBy = (connection, userId, commentId) => {
+    return executeQuery(connection, 
+        `SELECT CommentLike.*
+         FROM Comment
+         LEFT JOIN CommentLike ON Comment.id = CommentLike.comment
+         LEFT JOIN UserInfo ON CommentLike.user = UserInfo.id
+         WHERE UserInfo.id = ? AND Comment.id = ?;
+        `,
+    [userId, commentId]).then(result => {
+            if (result.length > 0)
+                return true;
+            else
+                return false;
+     });
+}
+
+const markAlreadyLikedBy = (connection, userId, results, isAlreadyLikedByFunction) => {
+    return Promise.all(results.map(result => {
+        return isAlreadyLikedByFunction(userId, result.id).then(liked => {
+            if (liked)
+                return Object.assign(result, {alreadyLiked: true});
             else
                 return media;
         });
-        
     }));
 };
 
@@ -265,7 +292,7 @@ INNER JOIN MediaType ON MediaType.id = Media.type
 WHERE MediaType.name <> "thumbnail"
 ORDER BY impact DESC
 LIMIT ?, ? ;`,
-    [userid, userid, start, end]).then(medias => markAlreadyLikedBy(connection, userid, medias));
+    [userid, userid, start, end]).then(medias => markAlreadyLikedBy(connection, userid, medias, isMediaAlreadyLikedBy));
 }
 
 const getUserFavouriteTags = (connection, userid, start, end) => {
@@ -329,6 +356,10 @@ ON L.id = C.id
 ORDER BY impact DESC
 LIMIT ?, ? ;
 `, [tag, tag, start, limit]);
+};
+
+const getTagMediasOrderedByImpactForUser = (connection, tag, userid, start, limit) => {
+    return getTagMediasOrderedByImpact(connection, tag, start, limit).then(medias => markAlreadyLikedBy(connection, userid, medias, isMediaAlreadyLikedBy));
 };
 
 const getMediasUploadedByUser = (connection, userID) => {
@@ -443,6 +474,12 @@ const likeMedia = (connection, mediaID, userID, time) => {
         [userID, mediaID, getMysqlTime(time)]);
 }
 
+const unlikeMedia = (connection, mediaID, userID) => {
+    executeQuery(connection,
+        'DELETE FROM MediaLike WHERE user = ? and media = ?;',
+        [userID, mediaID]);
+}
+
 const likeComment = (connection, commentID, userID, time) => {
     executeQuery(connection,
         'INSERT INTO CommentLike (user, comment, time) VALUES (?, ?, ?);',
@@ -455,6 +492,7 @@ module.exports={
     getLikesFromMedia: getLikesFromMedia,
     getNumCommentsFromMedia: getNumCommentsFromMedia,
     getCommentsFromMedia: getCommentsFromMedia,
+    getCommentsFromMediaForUser: getCommentsFromMediaForUser,
     getMediaTags: getMediaTags,
     getNumberOfMediasByTag: getNumberOfMediasByTag,
     getUserFavouriteMedias: getUserFavouriteMedias,
@@ -462,11 +500,16 @@ module.exports={
     deleteMedia: deleteMedia,
     uploadMedia: uploadMedia,
     getMediasOrderedByImpact: getMediasOrderedByImpact,
+    getTagMediasOrderedByImpactForUser: getTagMediasOrderedByImpactForUser,
     createUser: createUser,
     createComment: createComment,
     likeMedia: likeMedia,
     likeComment: likeComment,
-    getMediaInfo: getMediaInfo
+    getMediaInfo: getMediaInfo,
+    isMediaAlreadyLikedBy: isMediaAlreadyLikedBy,
+    isCommentAlreadyLikedBy: isCommentAlreadyLikedBy,
+    likeMedia: likeMedia,
+    unlikeMedia: unlikeMedia
 };
 
 

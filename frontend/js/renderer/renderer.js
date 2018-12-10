@@ -4,22 +4,23 @@
 const showImages = (images) => {
     console.log('showing images???');
     images.forEach(media=>{
-
+//<img src="${apiroot + media.thumbpath}" width="" height=""  class="clickedMedia" id="${media.id}" >
+//<div class="galleryImage" style="background-image: url('${apiroot + media.thumbpath}')" id="${media.id}"></div>
     // document.getElementById('uploadfile').style.display = 'none';
 
         const myMedia = document.getElementById('imageTarget');
-        console.log('mymedia: ' + myMedia);
+        const liked = media.alreadyLiked ? 'likedlikesnumber' : '';
         myMedia.innerHTML +=
         ` <div class="responsive" >
-              <div class="gallery" >
-                  <a target="_blank" href="media/${media.id}">
-                      <img src="${apiroot + media.thumbpath}" width="" height=""  class="clickedMedia" id="${media.id}" >
-                  </a>
+            <a target="_blank" href="media/${media.id}">
+              <div class="gallery">
+                <img src="${apiroot + media.thumbpath}" width="" height=""  class="clickedMedia galleryImage" id="${media.id}" >
               </div>
+            </a>
                   <div class="desc">
                       <p class="description">${media.description}</p>
-                      <p class="likesnumber"><button  onclick="likeMedia(${media.id})"><i class="fa fa-heart"></button></i> ${media.likes}</p>
-                      <p class="commentsnumber"><button  onclick="commentMedia(${media.id})"><i class="fa fa-commenting"></button></i> ${media.comments}</p>
+                      <p class="likesnumber ${liked}" id="like${media.id}"><button  onclick="likeMedia(${media.id})"><i class="fa fa-heart"></button></i><span id="nlikes${media.id}">${media.likes}</span></p>
+                      <p class="commentsnumber"><button><i class="fa fa-commenting"></button></i> ${media.comments}</p>
                   </div>
               
           </div>` ;
