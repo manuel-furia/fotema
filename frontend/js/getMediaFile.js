@@ -55,7 +55,6 @@ const buildImage = (json) =>{
             <input type='hidden' id='posterID' value='${json.user}'>
             <h5> by :  <a href="myfotema.html" class="media-owner"><strong> ${json.ownername}</strong></a></h5>
                 <img src="${apiroot}${json.path}" width="" height="" alt="">
-            </a>
         </div>
 
         <div class="desc">
