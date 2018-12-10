@@ -19,9 +19,10 @@ const userType = ['none', 'normal', 'mod', 'admin'];
 const executableAsUser = requiredlvl => f => (actorId, targetOwnerId, ...args) => {
     return getPermissions(actorId).then(lvl => {
         if (lvl >= requiredlvl(actorId, targetOwnerId)){
+            console.log('succes!');
             return f(...args);
         } else {
-            reject(PERMISSION_DENIED);
+            throw new Error(PERMISSION_DENIED);
         }
     });  
 }

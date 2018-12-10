@@ -115,7 +115,7 @@ app.get('/get/comments/:imageID', (req, res, next) =>{
 
 
 app.get('/get/media/:imageID', (req, res, next) =>{
-    
+
   const data = model.getMediaInfo(req.params.imageID).then((json) => res.send(json));
 
 });
@@ -130,8 +130,17 @@ app.get('/get/loginstate', function(req, res){
   }
 });
 
+
 app.post('/post/comment', (req, res) =>{
-  console.log(req.body.username)
+   let userID = req.body.userID;
+   let comment = req.body.comment;
+   let imageID = req.body.imageID;
+   let time = new Date(Date.now());
+
+   model.createComment(comment, userID, time, imageID).then(() =>{
+     res.send({});
+   }).catch((err) => res.send({}));
+
 });
 
 app.post('/post/signup',  (req, res) =>{
@@ -172,6 +181,7 @@ app.post('/post/unlike', (req, res) => {
     }).catch(err => res.send({}));
 });
 
+
 app.post('/post/signin', passport.authenticate('local'), (req, res) => {
     console.log(`User ${req.user.username} signin`);
     res.send({user: req.user.username, type: req.user.type});
@@ -192,6 +202,17 @@ app.post('/upload', upload.single('mediafile'), (req, res) => {
 app.post('/post/upload', upload.single('mediafile'), (req, res) => {
   //Create the image data and store in in the db
   uploadMod.uploadMediaAndGetData(req, res).then(data => {model.uploadMedia(data); res.json({})}).catch(err => {res.json({err: err.message}); console.error(err)});
+});
+
+app.delete('/delete/media/id', (req, res) =>{
+  const owner = model.getMediaInfo(req.body.imageID).then((response) => {
+    console.log('test');
+    return response.user;
+  });
+
+  const actor = model.getUserId(req.user.username);
+  Promise.all([owner, actor]).then(([ownerid, actorid]) => { model.actorDeleteMedia(actorid, ownerid, req.body.imageID)}).then(() => res.json({}));
+
 });
 
 http.createServer((req, res)=>{
