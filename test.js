@@ -43,7 +43,7 @@ const testdata = {
 
 model.uploadMedia(testdata).catch(err => console.log(err));
 */
-//model.deleteMedia(8);
+model.deleteMedia(1);
 
 
 //model.getMediasByAnonRelevance(0, 30).then((res) => console.log(res));
