@@ -128,11 +128,14 @@ const signOut = (event) => {
 const images = document.querySelectorAll('.clickedMedia');
 console.log(images);
 
-document.getElementById('signin').addEventListener('submit', signIn);
-
-document.getElementById('signup').addEventListener('submit', signUp);
-
-document.querySelector('.signout').addEventListener('click', signOut);
+try {
+    document.getElementById('signin').addEventListener('submit', signIn);
+    document.getElementById('signup').addEventListener('submit', signUp);
+    document.querySelector('.signout').addEventListener('click', signOut);
+    document.getElementById('btnViewMore').addEventListener('click', ()=>{
+        viewMoreLoad(page, document.getElementById('imageTarget'))
+    });
+} catch(ex) {}
 
 //event listener function for fileupload
 const mediaForm = document.querySelector('#mediaform');
@@ -142,10 +145,6 @@ const searchForm = document.getElementById('searchForm');
 if (searchForm != null) searchForm.addEventListener('submit', (event) => {
   event.preventDefault();
   search();
-});
-
-document.getElementById('btnViewMore').addEventListener('click', ()=>{
-  viewMoreLoad(page, document.getElementById('imageTarget'))
 });
 
 onPageLoad(page, document.getElementById('imageTarget'));

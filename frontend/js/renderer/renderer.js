@@ -4,10 +4,6 @@
 const showImages = (images, target = 'imageTarget') => {
     console.log('showing images???');
     images.forEach(media=>{
-//<img src="${apiroot + media.thumbpath}" width="" height=""  class="clickedMedia" id="${media.id}" >
-//<div class="galleryImage" style="background-image: url('${apiroot + media.thumbpath}')" id="${media.id}"></div>
-    // document.getElementById('uploadfile').style.display = 'none';
-
         const myMedia = document.getElementById(target);
         const liked = media.alreadyLiked ? 'likedlikesnumber' : '';
         myMedia.innerHTML +=
@@ -24,24 +20,6 @@ const showImages = (images, target = 'imageTarget') => {
                   </div>
               
           </div>` ;
-
-        //div of new image box
-        /*
-        <div class="responsive">
-                <div class="gallery">
-                    <a target="_blank" href="../image/f1.jpg">
-                        <img src="../image/f1.jpg" width="" height="" alt="">
-                    </a>
-                </div>
-                <div class="desc">
-                    <p class="description">description of the image </p>
-                    <p class="likesnumber"><button  onclick="likeMedia()"><i class="fa fa-heart"></i></button> 100000</p>
-                    <p class="commentsnumber"><button  onclick="commentMedia()"><i class="fa fa-commenting"></i></button> 900</p>
-                </div>
-            </div>
-        */
-
-     // console.log('html: ' + myMedia.innerHTML);
     });
 
 

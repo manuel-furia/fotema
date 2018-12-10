@@ -49,7 +49,6 @@ const buildImage = (json) =>{
   const liked = json.alreadyLiked ? 'likedlikesnumber' : '';
   div.innerHTML +=
 `
-
         <div class="gallery">
             <h4 class="media-title"> ${json.title}</h4>
             <input type='hidden' id='posterID' value='${json.user}'>
@@ -60,7 +59,7 @@ const buildImage = (json) =>{
         <div class="desc">
             <p class="description">${json.description}</p>
             <p class="likesnumber ${liked}" id="like${json.id}"><button id="btnLike" onclick="likeMedia(${json.id})"><i class="fa fa-heart"></i></button><span class="nlikes" id="nlikes${json.id}">${json.likes}</span></p>
-            <p class="commentsnumber"><button id="btnComment"><i class="fa fa-commenting"></i></button> 0</p>
+            <p class="commentsnumber"><button id="btnComment"><i class="fa fa-commenting"></i></button> ${json.comments}</p>
         </div>
 
   `
