@@ -13,7 +13,7 @@
 }
 
 .my-media{
-
+    margin: auto;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -53,6 +53,8 @@
     }
 
     .my-media{
+        padding-top: 3%;
+        padding-bottom: 2%;
 
     }
 
@@ -66,6 +68,8 @@
     }
 
     .my-media{
+        padding-top: 2%;
+        padding-bottom: 2%;
 
     }
 
@@ -83,7 +87,9 @@
     }
 
     .my-media{
-
+        margin: auto;
+        padding-bottom: 2%;
+        padding-top: 3%;
     }
 
     .responsive {
