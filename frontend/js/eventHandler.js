@@ -51,7 +51,7 @@ const likeMedia = (id) => {
             
             if (liked) {
                 likeBtn.classList.remove('likedlikesnumber');
-               likesSpan.textContent = likes - 1;
+                likesSpan.textContent = likes - 1;
                 postUnlikeMedia(id, userId);
             } else {
                 likeBtn.classList.add('likedlikesnumber');

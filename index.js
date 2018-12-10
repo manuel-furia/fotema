@@ -93,16 +93,16 @@ app.get('/uploads/:path', (req, res, next) =>{
     res.sendFile(req.params.path, { root: __dirname + "/uploads/" } );
 });
 
-app.get('/get/wall/:start/:end', (req, res, next) =>{
+app.get('/get/wall/:start/:amount', (req, res, next) =>{
     const start = req.params.start;
-    const end = req.params.end;
-    let task;
+    const amount = req.params.amount;
     if (req.user){
-        task = model.getMediasByAnonRelevance(start, end);
+        model.getUserId(req.user.username).then((userId) => {
+            return model.getMediasByUserRelevance(start, amount, userId);
+        }).then((json) => res.json(json)).catch(handleError);
     } else {
-        task = model.getMediasByAnonRelevance(start, end);
+        model.getMediasByAnonRelevance(start, amount).then((json) => res.json(json)).catch(handleError);
     }
-    task.then((json) => res.json(json)).catch(handleError );
 });
 
 app.get('/get/search/:term/:start/:end', upload.single('mediafile'), (req, res, next) => {
@@ -118,7 +118,6 @@ app.get('/get/comments/:imageID', (req, res, next) =>{
 app.get('/get/media/:imageID', (req, res, next) =>{
 
   const data = model.getMediaInfo(req.params.imageID).then((json) => res.send(json));
-
 });
 
 app.get('/get/loginstate', function(req, res){

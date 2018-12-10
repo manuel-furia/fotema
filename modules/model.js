@@ -70,21 +70,46 @@ const getPermissions = (userId) => {
     })
 }
 
-const getMediasByAnonRelevance = (start, limit) => {
-    return db.getMediasOrderedByImpact(connection, start, limit);
+const getMediasByAnonRelevance = (start, amount) => {
+    return db.getMediasOrderedByImpact(connection, start, amount);
 }
 
-const getMediasByUserRelevance = (start, limit, user) => {
-    const probs = [0.30, 0.20, 0.10, 0.10, 0.5];
-    getUserFavouriteTags(connection, userid, start, end).then((elems) => {
+const getMediasByUserRelevance = (start, amount, userId) => {
+    const probs = [0.30, 0.20, 0.10, 0.10, 0.05];
+    const nums = probs.map(x => Math.round(x * amount));
+    const nRandTags = 3;
+    const rest = Math.round(amount*(1.0 - probs.reduce((s, x) => s + x, 0)) / nRandTags);
+
+    const zipfDist = (amount) => {
+        const max = Math.log(amount);
+        const rnd = Math.round(Math.exp(Math.random() * max));
+        return Math.max(Math.min(rnd, amount-1), 0);
+    }    
+
+    return db.getUserFavouriteTags(connection, userId, 0, 1000000).then((elems) => {
         return elems.map(elem => elem.tag);
     }).then(tags => {
-        
-    })
-    
-    
-
-    return db.getMediasOrderedByImpact(connection, start, limit);
+        const getRandomTag = () => {
+            return tags[Math.floor(tags.length * Math.random())];
+        };
+        const randomTags = Array(nRandTags).fill(0).map(x => getRandomTag());
+        const selectedTags = tags.slice(0, nums.length).concat(randomTags);
+        return Promise.all(selectedTags.map(tag => {
+                return db.getNumberOfMediasByTag(connection, tag).then((tagnum) => {
+                if (tagnum.length > 0) return tagnum[0];
+                else return {};
+            });
+        }));
+    }).then(tags => {
+        return Promise.all(tags.filter(x => x !== {}).map((tag, index) => {
+            const selected = zipfDist(tag.num);
+            const howMany = index < nums.length ? nums[index] : rest;
+            return db.getTagMediasOrderedByImpactForUser(connection, tag.name, userId, selected, howMany);
+        }));
+    }).then(results => {
+        const flattenRes = results.flat();
+        return shuffle(flattenRes);
+    });
 }
 
 const deleteMedia = (id) => {

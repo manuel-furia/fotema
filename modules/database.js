@@ -156,7 +156,7 @@ INNER JOIN UserInfo ON UserInfo.id = L.user;`,
 
 const getNumberOfMediasByTag = (connection, tag) => {
     return executeQuery(connection,`
-SELECT COUNT(*) AS num
+SELECT Tag.name, COUNT(*) AS num
 FROM Media
 INNER JOIN Tagged ON Tagged.mediaid = Media.id
 INNER JOIN Tag ON Tagged.tagid = Tag.id
@@ -166,7 +166,7 @@ WHERE MediaType.name != "thumbnail" && Tag.name = ?;
     [tag]);
 }
 
-const getTaggedMediasOrderedByImpact = (connection, tag, start, limit) => {
+const getTaggedMediasOrderedByImpact = (connection, tag, start, amount) => {
     return executeQuery(connection,
        `
 SELECT L.*, C.comments, (L.likes + C.comments) AS impact
@@ -193,10 +193,10 @@ INNER JOIN Tag ON Tagged.tagid = Tag.id
 WHERE Tag.name = ?
 ORDER BY impact DESC
 LIMIT ?, ? ;
-`, [tag, start, limit]);
+`, [tag, start, amount]);
 }
 
-const getMediasOrderedByImpact = (connection, start, limit) => {
+const getMediasOrderedByImpact = (connection, start, amount) => {
     return executeQuery(connection,
        `
 SELECT L.*, C.comments, (L.likes + C.comments) AS impact
@@ -220,7 +220,7 @@ INNER JOIN (
 ON L.id = C.id
 ORDER BY impact DESC
 LIMIT ?, ? ;
-`, [start, limit]);
+`, [start, amount]);
 };
 
 const isMediaAlreadyLikedBy = (connection, userId, mediaId) => {
@@ -257,16 +257,16 @@ const isCommentAlreadyLikedBy = (connection, userId, commentId) => {
 
 const markAlreadyLikedBy = (connection, userId, results, isAlreadyLikedByFunction) => {
     return Promise.all(results.map(result => {
-        return isAlreadyLikedByFunction(userId, result.id).then(liked => {
+        return isAlreadyLikedByFunction(connection, userId, result.id).then(liked => {
             if (liked)
                 return Object.assign(result, {alreadyLiked: true});
             else
-                return media;
+                return result;
         });
     }));
 };
 
-const getUserFavouriteMedias = (connection, userid, start, end) => {
+const getUserFavouriteMedias = (connection, userid, start, amount) => {
     return executeQuery(connection,
         `SELECT Media.*, IFNULL(L.likes, 0) AS likes, IFNULL(C.comments, 0) AS comments, IFNULL(L.likes + C.comments, 0) AS impact
 FROM Media
@@ -293,10 +293,10 @@ INNER JOIN MediaType ON MediaType.id = Media.type
 WHERE MediaType.name <> "thumbnail"
 ORDER BY impact DESC
 LIMIT ?, ? ;`,
-    [userid, userid, start, end]).then(medias => markAlreadyLikedBy(connection, userid, medias, isMediaAlreadyLikedBy));
+    [userid, userid, start, amount]).then(medias => markAlreadyLikedBy(connection, userid, medias, isMediaAlreadyLikedBy));
 }
 
-const getUserFavouriteTags = (connection, userid, start, end) => {
+const getUserFavouriteTags = (connection, userid, start, amount) => {
     return executeQuery(connection,
         `SELECT Tag.name AS tag, SUM(IFNULL(L.likes, 0)) AS likes, SUM(IFNULL(C.comments, 0)) AS comments, SUM(IFNULL(L.likes, 0)) + SUM(IFNULL(C.comments, 0)) AS impact
 FROM Media
@@ -325,10 +325,10 @@ WHERE MediaType.name <> "thumbnail"
 GROUP BY Tag.name
 ORDER BY impact DESC
 LIMIT ?, ? ;`,
-    [userid, userid, start, end]);
+    [userid, userid, start, amount]);
 }
 
-const getTagMediasOrderedByImpact = (connection, tag, start, limit) => {
+const getTagMediasOrderedByImpact = (connection, tag, start, amount) => {
     return executeQuery(connection,
        `
 SELECT L.*, C.comments, (L.likes + C.comments) AS impact
@@ -356,7 +356,7 @@ INNER JOIN (
 ON L.id = C.id
 ORDER BY impact DESC
 LIMIT ?, ? ;
-`, [tag, tag, start, limit]);
+`, [tag, tag, start, amount]);
 };
 
 const getTagMediasOrderedByImpactForUser = (connection, tag, userid, start, limit) => {
@@ -386,7 +386,7 @@ const deleteMedia = (connection, mediaID) => {
         });
     };
 
-    startTransaction(connection).then(() => getDataFromAttribute(connection, 'Media', 'id', mediaID).then((imageData) => {
+    return startTransaction(connection).then(() => getDataFromAttribute(connection, 'Media', 'id', mediaID).then((imageData) => {
         if (imageData != null && imageData.length > 0 && imageData[0].thumbnail != null){
             return deleteMediaElem(mediaID, false).then(() => //Delete the actual media
             deleteMediaElem(imageData[0].thumbnail, true)); //Then delete the thumbnail and finish (done = true)
@@ -403,13 +403,7 @@ const deleteMedia = (connection, mediaID) => {
 //data contains imagepath, thumbpath, title, description, type, capturetime, uploadtime, userid, tags[]
 const uploadMedia = (connection, data) => {
 
-  console.log(data);
-    
-
-
    const insertMedia = (path, typeID, thumbID) => {
-        //console.log([data.imagepath, data.title, data.description, typeID, thumbID, data.capturetime, data.uploadtime, data.userid]);
-        console.log(getMysqlTime(data.uploadtime));
         return executeQuery(connection,
             `INSERT INTO Media (path, title, description, type, thumbnail, capturetime, uploadtime, user)
              VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
@@ -458,31 +452,31 @@ const uploadMedia = (connection, data) => {
 }
 
 const createUser = (connection, username, email, passhash, salt, level, profilepicture = null) => {
-    executeQuery(connection,
+    return executeQuery(connection,
         'INSERT INTO UserInfo (username, email, passhash, salt, level, profilepicture) VALUES (?, ?, ?, ?, ?, ?);',
         [username, email, passhash, salt, level, profilepicture]);
 }
 
 const createComment = (connection, text, userID, time, targetMedia) => {
-    executeQuery(connection,
+    return executeQuery(connection,
         'INSERT INTO Comment (text, targetmedia, user, time) VALUES (?, ?, ?, ?);',
         [text, targetMedia, userID, getMysqlTime(time)]);
 }
 
 const likeMedia = (connection, mediaID, userID, time) => {
-    executeQuery(connection,
+    return executeQuery(connection,
         'INSERT INTO MediaLike (user, media, time) VALUES (?, ?, ?);',
         [userID, mediaID, getMysqlTime(time)]);
 }
 
 const unlikeMedia = (connection, mediaID, userID) => {
-    executeQuery(connection,
+    return executeQuery(connection,
         'DELETE FROM MediaLike WHERE user = ? and media = ?;',
         [userID, mediaID]);
 }
 
 const likeComment = (connection, commentID, userID, time) => {
-    executeQuery(connection,
+    return executeQuery(connection,
         'INSERT INTO CommentLike (user, comment, time) VALUES (?, ?, ?);',
         [userID, commentID, getMysqlTime(time)]);
 }
@@ -504,7 +498,6 @@ module.exports={
     getTagMediasOrderedByImpactForUser: getTagMediasOrderedByImpactForUser,
     createUser: createUser,
     createComment: createComment,
-    likeMedia: likeMedia,
     likeComment: likeComment,
     getMediaInfo: getMediaInfo,
     isMediaAlreadyLikedBy: isMediaAlreadyLikedBy,
