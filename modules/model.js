@@ -19,9 +19,10 @@ const userType = ['none', 'normal', 'mod', 'admin'];
 const executableAsUser = requiredlvl => f => (actorId, targetOwnerId, ...args) => {
     return getPermissions(actorId).then(lvl => {
         if (lvl >= requiredlvl(actorId, targetOwnerId)){
+            console.log('succes!');
             return f(...args);
         } else {
-            reject(PERMISSION_DENIED);
+            throw new Error(PERMISSION_DENIED);
         }
     });  
 }
@@ -31,6 +32,26 @@ const adminAction = executableAsUser((actor, owner) => (actor === owner) ? LVL_N
 
 
 const zipWith = (xs, ys, f) => xs.map((n,i) => f(n, ys[i]))
+
+//Fisher-Yates shuffle algorithm
+function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+function convertUTCDateToLocalDate(date) {
+    var newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
+
+    var offset = date.getTimezoneOffset() / 60;
+    var hours = date.getHours();
+
+    newDate.setHours(hours - offset);
+
+    return newDate;   
+}
 
 const checkConnect = f => (...args) => {
     if (connection === null || connection.status === 'disconnected'){
@@ -49,21 +70,46 @@ const getPermissions = (userId) => {
     })
 }
 
-const getMediasByAnonRelevance = (start, limit) => {
-    return db.getMediasOrderedByImpact(connection, start, limit);
+const getMediasByAnonRelevance = (start, amount) => {
+    return db.getMediasOrderedByImpact(connection, start, amount);
 }
 
-const getMediasByUserRelevance = (start, limit, user) => {
-    const probs = [0.30, 0.20, 0.10, 0.10, 0.5];
-    getUserFavouriteTags(connection, userid, start, end).then((elems) => {
+const getMediasByUserRelevance = (start, amount, userId) => {
+    const probs = [0.30, 0.20, 0.10, 0.10, 0.05];
+    const nums = probs.map(x => Math.round(x * amount));
+    const nRandTags = 3;
+    const rest = Math.round(amount*(1.0 - probs.reduce((s, x) => s + x, 0)) / nRandTags);
+
+    const zipfDist = (amount) => {
+        const max = Math.log(amount);
+        const rnd = Math.round(Math.exp(Math.random() * max));
+        return Math.max(Math.min(rnd, amount-1), 0);
+    }    
+
+    return db.getUserFavouriteTags(connection, userId, 0, 1000000).then((elems) => {
         return elems.map(elem => elem.tag);
     }).then(tags => {
-        
-    })
-    
-    
-
-    return db.getMediasOrderedByImpact(connection, start, limit);
+        const getRandomTag = () => {
+            return tags[Math.floor(tags.length * Math.random())];
+        };
+        const randomTags = Array(nRandTags).fill(0).map(x => getRandomTag());
+        const selectedTags = tags.slice(0, nums.length).concat(randomTags);
+        return Promise.all(selectedTags.map(tag => {
+                return db.getNumberOfMediasByTag(connection, tag).then((tagnum) => {
+                if (tagnum.length > 0) return tagnum[0];
+                else return {};
+            });
+        }));
+    }).then(tags => {
+        return Promise.all(tags.filter(x => x !== {}).map((tag, index) => {
+            const selected = zipfDist(tag.num);
+            const howMany = index < nums.length ? nums[index] : rest;
+            return db.getTagMediasOrderedByImpactForUser(connection, tag.name, userId, selected, howMany);
+        }));
+    }).then(results => {
+        const flattenRes = results.flat();
+        return shuffle(flattenRes);
+    });
 }
 
 const deleteMedia = (id) => {
@@ -71,6 +117,8 @@ const deleteMedia = (id) => {
 }
 
 const uploadMedia = (data) => {
+    data.capturetime = convertUTCDateToLocalDate(data.capturetime);
+    data.uploadtime = convertUTCDateToLocalDate(data.uploadtime);
     return db.uploadMedia(connection, data, (result) => resolve(result));
 }
 
@@ -83,7 +131,7 @@ const likeMedia = (userId, mediaId) => {
         if (liked) {
             return {err: "Already liked"};
         } else {
-            const time = new Date(Date.now());
+            const time = convertUTCDateToLocalDate(new Date());
             return db.likeMedia(connection, mediaId, userId, time);
         }
     });
@@ -94,7 +142,7 @@ const unlikeMedia = (userId, mediaId) => {
 }
 
 const createComment = (text, userID, time, targetMedia) => {
-    return db.createComment(connection, text, userID, time, targetMedia);
+    return db.createComment(connection, text, userID, convertUTCDateToLocalDate(time), targetMedia);
 }
 
 const getUserId = (username) => {
