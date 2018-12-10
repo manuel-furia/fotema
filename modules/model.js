@@ -92,7 +92,7 @@ const deleteMedia = (id) => {
 
 const uploadMedia = (data) => {
     data.capturetime = convertUTCDateToLocalDate(data.capturetime);
-    data.uploadtime = convertUTCDateToLocalDate(data.capturetime);
+    data.uploadtime = convertUTCDateToLocalDate(data.uploadtime);
     return db.uploadMedia(connection, data, (result) => resolve(result));
 }
 
