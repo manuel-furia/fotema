@@ -107,6 +107,7 @@ app.get('/get/wall/:start/:amount', (req, res, next) =>{
 
 app.get('/get/search/:term/:start/:end', upload.single('mediafile'), (req, res, next) => {
   next();
+  //TODO: implement the search function
 });
 
 app.get('/get/comments/:imageID', (req, res, next) =>{

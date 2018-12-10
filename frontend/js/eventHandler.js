@@ -3,12 +3,26 @@
 
 // THE FILE  FUNCTIONS IN THE FOLLOWING WAY:
 // 1. It receives an event.
-// 2. It acts according to whatever that event needs to do (post, get is pretty normal route for refreshing pictures after upload)
+// 2. It acts according to whatever that event needs to do 
 'use strict';
 
 
 let start = 0;
 const amount = 12;
+
+const textParser = (string) => {
+ //we need to find #tags and everything else.
+  let temp = string.split(' ');
+  console.log(temp);
+  const tags = [];
+  const otherTerms = [];
+  for(let i = 0; i < temp.length; i++){
+    if(temp[i].charAt(0) === '#'){tags.push(temp[i])}
+    else{otherTerms.push(temp[i])}
+  }
+
+
+};
 
 const uploadEvent = (event) => {
   console.log('starting the event chain for upload');
@@ -51,21 +65,20 @@ const likeMedia = (id) => {
 };
 
 //search for content
-const onSearch = () => {
-  const searchText = document.querySelector(
-      '#searchForm input[name="search"]').value;
-  get.search(searchText, (json) => {
+const searchFunction = () => {
 
-    renderer.showSearchResults(json);
-  });
+  //find the searchtext
+  const term = document.getElementById('searchBar').value;
+  console.log(term);
+  //now we have the search text, time to parse it
+  term.trim();
+  textParser(term);
 };
 
 //function that runs on fresh page load
 function onPageLoad(t, obj) {
   console.log(t, obj);
-
   updateHeader();
-
   start = 0;
   getImages(start, amount).then((json) => {
     showImages(json);
@@ -125,6 +138,7 @@ const signOut = (event) => {
   });
 };
 
+
 const images = document.querySelectorAll('.clickedMedia');
 console.log(images);
 
@@ -137,6 +151,7 @@ try {
     });
 } catch(ex) {}
 
+
 //event listener function for fileupload
 const mediaForm = document.querySelector('#mediaform');
 if (mediaForm != null) mediaForm.addEventListener('submit', uploadEvent);
@@ -144,7 +159,7 @@ if (mediaForm != null) mediaForm.addEventListener('submit', uploadEvent);
 const searchForm = document.getElementById('searchForm');
 if (searchForm != null) searchForm.addEventListener('submit', (event) => {
   event.preventDefault();
-  search();
+  searchFunction();
 });
 
 onPageLoad(page, document.getElementById('imageTarget'));
