@@ -32,6 +32,26 @@ const adminAction = executableAsUser((actor, owner) => (actor === owner) ? LVL_N
 
 const zipWith = (xs, ys, f) => xs.map((n,i) => f(n, ys[i]))
 
+//Fisher-Yates shuffle algorithm
+function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+function convertUTCDateToLocalDate(date) {
+    var newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
+
+    var offset = date.getTimezoneOffset() / 60;
+    var hours = date.getHours();
+
+    newDate.setHours(hours - offset);
+
+    return newDate;   
+}
+
 const checkConnect = f => (...args) => {
     if (connection === null || connection.status === 'disconnected'){
         connection = db.connect();
@@ -71,6 +91,8 @@ const deleteMedia = (id) => {
 }
 
 const uploadMedia = (data) => {
+    data.capturetime = convertUTCDateToLocalDate(data.capturetime);
+    data.uploadtime = convertUTCDateToLocalDate(data.capturetime);
     return db.uploadMedia(connection, data, (result) => resolve(result));
 }
 
@@ -83,7 +105,7 @@ const likeMedia = (userId, mediaId) => {
         if (liked) {
             return {err: "Already liked"};
         } else {
-            const time = new Date(Date.now());
+            const time = convertUTCDateToLocalDate(new Date());
             return db.likeMedia(connection, mediaId, userId, time);
         }
     });
@@ -94,7 +116,7 @@ const unlikeMedia = (userId, mediaId) => {
 }
 
 const createComment = (text, userID, time, targetMedia) => {
-    return db.createComment(connection, text, userID, time, targetMedia);
+    return db.createComment(connection, text, userID, convertUTCDateToLocalDate(time), targetMedia);
 }
 
 const getUserId = (username) => {
