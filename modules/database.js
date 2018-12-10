@@ -37,11 +37,11 @@ const multipleQueries = (connection, queries, params) => {
 
     const runnables = zipWith(queriesArr, filledParams, (query, param) => () => executeQuery(connection, query, param));
 
-    const start = startTransaction(connection);
+    const start = Promise.resolve({});
 
     const transaction = runnables.reduce((p, fn) => p.then(fn), start);
 
-    return transaction.then(() => commit(connection));
+    return transaction;
 };
 
 
@@ -373,27 +373,27 @@ const getMediasUploadedByUser = (connection, userID) => {
 const deleteMedia = (connection, mediaID) => {
 
     const deleteMediaElem = (id, done) => {
-        return multipleQueries(connection,
-           `DELETE FROM MediaLike WHERE media = ? ;
-            DELETE FROM Tagged WHERE mediaid = ? ;
-            DELETE FROM CommentLike WHERE comment = (
-                SELECT Comment.id 
-                FROM Comment 
-                INNER JOIN Media ON Media.id = Comment.targetmedia 
-                WHERE Comment.targetmedia = ? );
-            DELETE FROM Comment WHERE targetmedia = ? ;
-            DELETE FROM Media WHERE id = ? ;`,
-        [[id], [id], [id], [id], [id]]);
-    }
+        return getCommentsFromMedia(connection, mediaID).then((res) => {
+            res.forEach(comment => executeQuery(connection, 'DELETE FROM CommentLike WHERE comment = ?', [comment.id]));
+            return {};
+        }).then(() => {
+            return multipleQueries(connection,
+               `DELETE FROM MediaLike WHERE media = ? ;
+                DELETE FROM Tagged WHERE mediaid = ? ;
+                DELETE FROM Comment WHERE targetmedia = ? ;
+                DELETE FROM Media WHERE id = ? ;`,
+        [[id], [id], [id], [id]]);
+        });
+    };
 
-    getDataFromAttribute(connection, 'Media', 'id', mediaID).then((imageData) => {
+    startTransaction(connection).then(() => getDataFromAttribute(connection, 'Media', 'id', mediaID).then((imageData) => {
         if (imageData != null && imageData.length > 0 && imageData[0].thumbnail != null){
             return deleteMediaElem(mediaID, false).then(() => //Delete the actual media
             deleteMediaElem(imageData[0].thumbnail, true)); //Then delete the thumbnail and finish (done = true)
         } else {
             return deleteMediaElem(mediaID, true);
         }
-    });    
+    })).then(() => commit(connection));    
 }
 
 /*
