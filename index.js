@@ -110,7 +110,7 @@ app.get('/get/search/:term/:start/:end', upload.single('mediafile'), (req, res, 
 });
 
 app.get('/get/comments/:imageID', (req, res, next) =>{
-
+  const data = model.getCommentsFromMedia(req.params.imageID).then((json) => res.send(json));
 });
 
 
@@ -128,6 +128,10 @@ app.get('/get/loginstate', function(req, res){
   } else {
     res.json({anon: 'anon'});
   }
+});
+
+app.post('/post/comment', (req, res) =>{
+  console.log(req.body.username)
 });
 
 app.post('/post/signup',  (req, res) =>{

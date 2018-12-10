@@ -200,21 +200,16 @@
         </div>
 
         <div class="writecomment" id="writeComment">
-            <form action="/comment" id="commentform">
+            <form action="/comment" id="commentForm">
                 <!--<label>Write a comment</label>-->
                 <!--<input type="text" name="your-comment" maxlength="140" placeholder="your comment here">-->
-                <textarea placeholder="Write your comment here" autofocus></textarea>
+                <textarea id="comment" placeholder="Write your comment here" autofocus></textarea>
                 <input type="submit" id="submitComments" value="submit">
             </form>
         </div>
 
-        <div class="comments">
-            <div class="usercomments">
-                <p class="commentername">commenter name</p>
-                <button class="likecomment"><i class="fa fa-thumbs-up"></i>  5k </button>
-                <p class="commenttime">4 hr </p>
-                <p class="commentcontent">this is great!!</p>
-            </div>
+        <div class="comments" id="commentBlock">
+
         </div>
 </div>
 
@@ -225,9 +220,10 @@
     <a class="report" href="report.html">report </a>
 </div>
 
+
 <script src="../js/conf.js"></script>
+<script src="../js/api/get.js"></script>
 <script src="../js/popup.js"></script>
-<!--<script src="../js/viewMore.js"></script>-->
 <script src="../js/search.js"></script>
 <script src="../js/upload.js"></script>
 <script src="../js/editMedia.js"></script>

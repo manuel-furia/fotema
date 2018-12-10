@@ -96,10 +96,18 @@ const signIn = (event)=> {
   });
 };
 
+const validationCheck =(data) => {
+  console.log(data);
+  return (data.password === data.repeatPassword);
+};
+
 const signUp = (event) => {
   const signUpForm = document.getElementById('signup');
   const data = getFieldsFromForm(signUpForm);
   event.preventDefault();
+  if(!validationCheck(data)){
+    alert('Given passwords don\'t match'); return;
+  }
   postSignUp(data).then((json) => {
     console.log(json);
     if(json.err){
