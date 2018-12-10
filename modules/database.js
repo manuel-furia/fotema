@@ -93,9 +93,10 @@ WHERE Media.id = ? ;`,
 //Get the comments of a media
 const getCommentsFromMedia = (connection, mediaID) => {
     return executeQuery(connection,
-        `SELECT Comment.*, COUNT(CommentLike.comment) AS likes
+        `SELECT Comment.*, UserInfo.username, COUNT(CommentLike.comment) AS likes
 FROM Media
 INNER JOIN Comment ON Media.id = Comment.targetMedia
+INNER JOIN UserInfo ON Comment.user = UserInfo.id
 LEFT JOIN CommentLike ON Comment.id = CommentLike.comment
 WHERE Media.id = ?
 GROUP BY Comment.id
