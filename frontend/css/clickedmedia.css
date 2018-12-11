@@ -117,6 +117,16 @@ div.desc:hover{
     font-size: large;
 }
 
+.desc .likedlikesnumber button{
+    color: #00b500;
+    font-size: large;
+}
+
+.desc .likedcommentsnumber button{
+    color: #00b500;
+    font-size: large;
+}
+
 .writecomment{
     display: block;
     padding: 10px;

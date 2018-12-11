@@ -81,3 +81,25 @@ const postUnlikeMedia = (mediaId, userId) => {
   return fetch(apiroot + 'post/unlike', settings);
 }
 
+const postLikeComment = (commentId, userId) => {
+  const settings= {
+    method: 'POST',
+    body: JSON.stringify({commentId: commentId, userId: userId}),
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  };
+  return fetch(apiroot + 'post/likecomment', settings);
+}
+
+const postUnlikeComment = (commentId, userId) => {
+  const settings= {
+    method: 'POST',
+    body: JSON.stringify({commentId: commentId, userId: userId}),
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  };
+  return fetch(apiroot + 'post/unlikecomment', settings);
+}
+

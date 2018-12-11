@@ -25,7 +25,6 @@ const textParser = (string) => {
 };
 
 const uploadEvent = (event) => {
-  console.log('starting the event chain for upload');
   event.preventDefault();
 //TODO:get the image data here, and pass it forward.
   uploadImages().then((json) => {
@@ -41,22 +40,31 @@ const uploadEvent = (event) => {
 };
 
 const likeMedia = (id) => {
-    const likeBtn = document.getElementById('like' + id);
-    const likesSpan = document.getElementById('nlikes' + id);
+    likeElem(id, 'like', 'nlikes', 'likedlikesnumber', postLikeMedia, postUnlikeMedia);
+};
+
+const likeComment = (id) => {
+    likeElem(id, 'clike', 'nclikes', 'likedcommentsnumber', postLikeComment, postUnlikeComment);
+};
+
+
+const likeElem = (id, btn, span, cssClass, likeAction, unlikeAction) => {
+    const likeBtn = document.getElementById(btn + id);
+    const likesSpan = document.getElementById(span + id);
     
     getUserId().then(userId => {
         if (likeBtn) {
-            const liked = likeBtn.classList.contains('likedlikesnumber');
+            const liked = likeBtn.classList.contains(cssClass);
             const likes = parseInt(likesSpan.textContent, 10);
             
             if (liked) {
-                likeBtn.classList.remove('likedlikesnumber');
+                likeBtn.classList.remove(cssClass);
                 likesSpan.textContent = likes - 1;
-                postUnlikeMedia(id, userId);
+                unlikeAction(id, userId);
             } else {
-                likeBtn.classList.add('likedlikesnumber');
+                likeBtn.classList.add(cssClass);
                 likesSpan.textContent = likes + 1;
-                postLikeMedia(id, userId);
+                likeAction(id, userId);
             }
 
         }

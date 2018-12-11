@@ -126,6 +126,10 @@ const getMediaInfo = (id) => {
     return db.getMediaInfo(connection, id);
 }
 
+const isMediaLikedBy = (userId, mediaId) => {
+    return db.isMediaAlreadyLikedBy(connection, userId, mediaId);
+}
+
 const likeMedia = (userId, mediaId) => {
     return db.isMediaAlreadyLikedBy(connection, userId, mediaId).then((liked) => {
         if (liked) {
@@ -139,6 +143,21 @@ const likeMedia = (userId, mediaId) => {
 
 const unlikeMedia = (userId, mediaId) => {
     return db.unlikeMedia(connection, mediaId, userId);
+}
+
+const likeComment = (userId, commentId) => {
+    return db.isCommentAlreadyLikedBy(connection, userId, commentId).then((liked) => {
+        if (liked) {
+            return {err: "Already liked"};
+        } else {
+            const time = convertUTCDateToLocalDate(new Date());
+            return db.likeComment(connection, commentId, userId, time);
+        }
+    });
+}
+
+const unlikeComment = (userId, commentId) => {
+    return db.unlikeComment(connection, commentId, userId);
 }
 
 const createComment = (text, userID, time, targetMedia) => {
@@ -207,7 +226,7 @@ const getCommentsFromMedia = (mediaID) => {
 }
 
 const getCommentsFromMediaForUser = (mediaID, userID) => {
-    return db.getCommentsFromMedia(connection, mediaID, userID);
+    return db.getCommentsFromMediaForUser(connection, mediaID, userID);
 }
 
 const checkUserLogin = (username, pass) => {
@@ -252,5 +271,8 @@ module.exports = {
     getMediaInfo: checkConnect(getMediaInfo),
     createComment: checkConnect(createComment),
     likeMedia: checkConnect(likeMedia),
-    unlikeMedia: checkConnect(unlikeMedia)
+    unlikeMedia: checkConnect(unlikeMedia),
+    likeComment: checkConnect(likeComment),
+    unlikeComment: checkConnect(unlikeComment),
+    isMediaLikedBy: checkConnect(isMediaLikedBy)
 };

@@ -71,7 +71,7 @@
 <div class="form-popup" id="form-popup">
 
     <div class="signin-popup" id="signin-popup">
-        <form name="signin" action="signin" method="post">
+        <form id="signin" name="signin" method="post">
             <div class="row">
                 <a id="cancelsignin" href="javascript:popup('hidesignin');"><i class="fa fa-times"></i></a>
             </div>
@@ -94,7 +94,7 @@
                 </div>
             </div>
             <div class="row">
-                <input id="signin" type="submit" name="submit" value="sign in">
+                <input type="submit" name="submit" value="sign in">
             </div>
 
             <a href="javascript:popup('showsignup');">no account yet?</a>
@@ -105,7 +105,7 @@
 
 
     <div class="signup-popup" id="signup-popup">
-        <form name="login" action="signup" method="post">
+        <form id="signup" name="login" method="post">
 
             <div class="row">
                 <a id="cancelsignup" href="javascript:popup('hidesignup');"><i class="fa fa-times"></i></a>
@@ -225,14 +225,18 @@
 </script>
 
 <script src="../js/conf.js"></script>
+<script src="../js/utils/form.js"></script>
+<script src="../js/login.js"></script>
+<script src="../js/utils/cookies.js"></script>
 <script src="../js/api/get.js"></script>
+<script src="../js/api/post.js"></script>
+<script src="../js/renderer/renderer.js"></script>
 <script src="../js/popup.js"></script>
 <script src="../js/search.js"></script>
+<script src="../js/viewMore.js"></script>
 <script src="../js/upload.js"></script>
-<script src="../js/editMedia.js"></script>
-<script src="../js/getMediaFile.js"></script>
 <script src="../js/eventHandler.js"></script>
-
+<script src="../js/getMediaFile.js"></script>
 
 </body>
 </html>

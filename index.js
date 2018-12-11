@@ -111,14 +111,30 @@ app.get('/get/search/:term/:start/:end', upload.single('mediafile'), (req, res, 
 });
 
 app.get('/get/comments/:imageID', (req, res, next) =>{
-  const data = model.getCommentsFromMedia(req.params.imageID).then((json) => res.send(json));
+    if (req.user){
+        model.getUserId(req.user.username).then((userId) => {
+            return model.getCommentsFromMediaForUser(req.params.imageID, userId);
+        }).then((json) => res.json(json)).catch(handleError);
+    } else {
+        model.getCommentsFromMedia(req.params.imageID).then((json) => res.send(json));
+    }
 });
 
 
 app.get('/get/media/:imageID', (req, res, next) =>{
-
   const data = model.getMediaInfo(req.params.imageID).then((json) => res.send(json));
 });
+
+app.get('/get/medialiked/:imageID', (req, res, next) =>{
+  if (req.user) {
+    model.getUserId(req.user.username).then((userId) => {
+        return model.isMediaLikedBy(userId, req.params.imageID);
+    }).then(liked => res.json({liked: liked})).catch(err => {res.json({err: err}); console.error(err)});
+  } else {
+    res.json({liked: false});
+  }
+});
+
 
 app.get('/get/loginstate', function(req, res){
   if (req.user) {
@@ -181,6 +197,17 @@ app.post('/post/unlike', (req, res) => {
     }).catch(err => res.send({}));
 });
 
+app.post('/post/likecomment', (req, res) => {
+    model.likeComment(req.body.userId, req.body.commentId).then(() => {
+        res.send({});
+    }).catch(err => res.send({}));
+});
+
+app.post('/post/unlikecomment', (req, res) => {
+    model.unlikeComment(req.body.userId, req.body.commentId).then(() => {
+        res.send({});
+    }).catch(err => res.send({}));
+});
 
 app.post('/post/signin', passport.authenticate('local'), (req, res) => {
     console.log(`User ${req.user.username} signin`);
@@ -223,5 +250,3 @@ http.createServer((req, res)=>{
 
 https.createServer(options, app).listen(3000);
 
-
-//testi kikkeL

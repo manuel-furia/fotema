@@ -6,10 +6,10 @@ function onPageLoad (){
 }
 
 const deleteButton = () => {
-
   const deleteButton = document.getElementById('btnDeleteMedia');
   deleteButton.style.display ='none';
   getLoginState().then(res =>{
+    
     const data= {
       'id' : res.userid,
       'type' : res.type,
@@ -17,6 +17,7 @@ const deleteButton = () => {
     };
     return data;
   }).then((data) => {
+    const deleteButton = document.getElementById('btnDeleteMedia');
     if(data.id === parseInt(data.posterID, 10) || data.type == 'admin'){
       console.log('showing delete button. posterID: '+data.posterID + ' and loginID: ' + data.id);
       deleteButton.style.display = '';
@@ -25,30 +26,44 @@ const deleteButton = () => {
       deleteButton.style.display ='none';
     }
 
-  }).catch((err) => alert(err))};
+  }).catch((err) => console.log(err))};
 
 
 const getImage =() =>{
   const imageID = document.getElementById('userID').value;
-  return fetch(apiroot + 'get/media/' + imageID).then(response => response.json()).then(json => {
-    //   console.log(json);
+  const settings = {
+    method: 'GET'
+  };
+  return fetch(apiroot + 'get/media/' + imageID, settings).then(response => response.json()).then(json => {
     buildImage(json);
   });
 };
 
+const getMediaLiked =() =>{
+  const imageID = document.getElementById('userID').value;
+  const settings = {
+    method: 'GET'
+  };
+  return fetch(apiroot + 'get/medialiked/' + imageID, settings).then(response => response.json());
+};
+
 const getComments = () =>{
   const imageID = document.getElementById('userID').value;
-
-  return fetch(apiroot + 'get/comments/' + imageID).then(response => response.json()).then(json => {
+  const settings = {
+    method: 'GET'
+  };
+  return fetch(apiroot + 'get/comments/' + imageID, settings).then(response => response.json()).then(json => {
     buildComments(json);
   });
 };
 
 const buildImage = (json) =>{
   const div = document.getElementById('mediaTarget');
-  const liked = json.alreadyLiked ? 'likedlikesnumber' : '';
-  div.innerHTML +=
-`
+
+  getMediaLiked().then(likeinfo => {
+    const liked = likeinfo.liked ? 'likedlikesnumber' : '';
+    div.innerHTML +=
+    `
         <div class="gallery">
             <h4 class="media-title"> ${json.title}</h4>
             <input type='hidden' id='posterID' value='${json.user}'>
@@ -63,23 +78,24 @@ const buildImage = (json) =>{
             <p class="likesnumber ${liked}" id="like${json.id}"><button id="btnLike" onclick="likeMedia(${json.id})"><i class="fa fa-heart"></i></button><span class="nlikes" id="nlikes${json.id}">${json.likes}</span></p>
             <p class="commentsnumber"><button id="btnComment"><i class="fa fa-commenting"></i></button> ${json.comments}</p>
         </div>
-
   `
+    });
 };
 
 
 const buildComments = (json) =>{
   const div = document.getElementById('commentBlock');
   div.innerHTML = '';
-  console.log(json);
   for(let comment in json){
     let time = new Date(json[comment].time);
-    console.log(json[comment].time);
+
+ const liked = json[comment].alreadyLiked ? 'likedcommentsnumber' : '';
+
   div.innerHTML += `
       
   <div class="usercomments"
        <p class="commentername">${json[comment].username}</p>
-       <button class="likecomment"><i class="fa fa-thumbs-up"></i> ${json[comment].likes}</button>
+       <button id="clike${json[comment].id}" onclick="likeComment(${json[comment].id})" class="likecomment ${liked}"><i class="fa fa-thumbs-up"></i><span class="nclikes" id="nclikes${json[comment].id}">${json[comment].likes}</span></button>
        <p class="commenttime">${time.getDate()}.${time.getMonth()}.${time.getFullYear()} - ${time.getHours()}:${time.getMinutes()<10?'0':''}${time.getMinutes()} </p>
        <p class="commentcontent">${json[comment].text}</p>
   </div>
