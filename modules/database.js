@@ -107,7 +107,7 @@ ORDER BY time DESC;`,
 
 //Get the comments of a media and mark the ones that the user has already liked
 const getCommentsFromMediaForUser = (connection, mediaID, userID) => {
-    return getCommentsFromMedia.then(comments => markAlreadyLikedBy(connection, userid, comments, isCommentAlreadyLikedBy));
+    return getCommentsFromMedia(connection, mediaID).then(comments => markAlreadyLikedBy(connection, userID, comments, isCommentAlreadyLikedBy));
 }
 
 //Get tags from media
@@ -476,6 +476,12 @@ const unlikeMedia = (connection, mediaID, userID) => {
         [userID, mediaID]);
 }
 
+const unlikeComment = (connection, commentID, userID) => {
+    return executeQuery(connection,
+        'DELETE FROM CommentLike WHERE user = ? and comment = ?;',
+        [userID, commentID]);
+}
+
 const likeComment = (connection, commentID, userID, time) => {
     return executeQuery(connection,
         'INSERT INTO CommentLike (user, comment, time) VALUES (?, ?, ?);',
@@ -502,6 +508,7 @@ module.exports={
     createUser: createUser,
     createComment: createComment,
     likeComment: likeComment,
+    unlikeComment: unlikeComment,
     getMediaInfo: getMediaInfo,
     isMediaAlreadyLikedBy: isMediaAlreadyLikedBy,
     isCommentAlreadyLikedBy: isCommentAlreadyLikedBy,

@@ -42,22 +42,31 @@ const uploadEvent = (event) => {
 
 // function used in liking media. parameter id is the id of the particular piece of media that was interacted with.
 const likeMedia = (id) => {
-    const likeBtn = document.getElementById('like' + id);
-    const likesSpan = document.getElementById('nlikes' + id);
+    likeElem(id, 'like', 'nlikes', 'likedlikesnumber', postLikeMedia, postUnlikeMedia);
+};
+
+const likeComment = (id) => {
+    likeElem(id, 'clike', 'nclikes', 'likedcommentsnumber', postLikeComment, postUnlikeComment);
+};
+
+
+const likeElem = (id, btn, span, cssClass, likeAction, unlikeAction) => {
+    const likeBtn = document.getElementById(btn + id);
+    const likesSpan = document.getElementById(span + id);
     
     getUserId().then(userId => {
         if (likeBtn) {
-            const liked = likeBtn.classList.contains('likedlikesnumber');
+            const liked = likeBtn.classList.contains(cssClass);
             const likes = parseInt(likesSpan.textContent, 10);
             
             if (liked) {
-                likeBtn.classList.remove('likedlikesnumber');
+                likeBtn.classList.remove(cssClass);
                 likesSpan.textContent = likes - 1;
-                postUnlikeMedia(id, userId);
+                unlikeAction(id, userId);
             } else {
-                likeBtn.classList.add('likedlikesnumber');
+                likeBtn.classList.add(cssClass);
                 likesSpan.textContent = likes + 1;
-                postLikeMedia(id, userId);
+                likeAction(id, userId);
             }
 
         }
@@ -156,6 +165,23 @@ document.getElementById('signup').addEventListener('submit', signUp);
 document.querySelector('.signout').addEventListener('click', signOut);
 document.getElementById('btnCloseSearchResult').addEventListener('click', closeSearchResults);
 
+const images = document.querySelectorAll('.clickedMedia');
+console.log(images);
+
+try {
+    document.getElementById('signin').addEventListener('submit', signIn);
+    document.getElementById('signup').addEventListener('submit', signUp);
+    document.querySelector('.signout').addEventListener('click', signOut);
+    document.getElementById('btnViewMore').addEventListener('click', ()=>{
+        viewMoreLoad(page, document.getElementById('imageTarget'))
+    });
+    document.getElementById('btnCloseSearchResult').addEventListener('click', closeSearchResults);
+} catch(ex) {}
+
+
+
+
+
 // event listener function for fileupload
 const mediaForm = document.querySelector('#mediaform');
 if (mediaForm != null) mediaForm.addEventListener('submit', uploadEvent);
@@ -166,6 +192,7 @@ if (searchForm != null) searchForm.addEventListener('submit', (event) => {
   event.preventDefault();
   searchFunction();
 });
+
 
 // eventlistener being set up for view more button
 document.getElementById('btnViewMore').addEventListener('click', ()=>{

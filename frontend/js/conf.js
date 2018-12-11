@@ -1,1 +1,1 @@
-const apiroot = '/node/'
+const apiroot = '/'

@@ -81,6 +81,28 @@ const postUnlikeMedia = (mediaId, userId) => {
   return fetch(apiroot + 'post/unlike', settings);
 }
 
+const postLikeComment = (commentId, userId) => {
+  const settings= {
+    method: 'POST',
+    body: JSON.stringify({commentId: commentId, userId: userId}),
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  };
+  return fetch(apiroot + 'post/likecomment', settings);
+}
+
+const postUnlikeComment = (commentId, userId) => {
+  const settings= {
+    method: 'POST',
+    body: JSON.stringify({commentId: commentId, userId: userId}),
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  };
+  return fetch(apiroot + 'post/unlikecomment', settings);
+}
+
 //for searching content
 const postSearchTerms = (terms) =>{
   console.log(terms[0]);
@@ -93,5 +115,3 @@ const postSearchTerms = (terms) =>{
   };
   return fetch(apiroot + 'post/search', settings);
 };
-
-
