@@ -251,40 +251,6 @@ body{
     display: block;
 }
 
-
-/*.profile{*/
-    /*margin: 3px 10px 0 3%;*/
-    /*overflow-x: hidden;*/
-    /*max-width: content-box;*/
-    /*float: right;*/
-/*}*/
-
-/*.profile a{*/
-    /*display: flex;*/
-    /*flex-direction: row;*/
-    /*flex-wrap: nowrap;*/
-    /*text-decoration: none;*/
-
-/*}*/
-
-/*.profile img{*/
-    /*width: 30px;*/
-    /*height: 30px;*/
-    /*margin-top: 6px;*/
-    /*border-radius: 90%;*/
-/*}*/
-
-/*.profile .username{*/
-    /*float: right;*/
-    /*margin-left: 5px;*/
-    /*margin-top: 6px;*/
-    /*color: whitesmoke;*/
-    /*font-size: 18px;*/
-    /*font-family: sans-serif, Arial, Helvetica, Verdana, cursive;*/
-/*}*/
-
-
-
 .footer {
     margin-top: 50px;
     position: fixed;
@@ -485,7 +451,7 @@ body{
         left: 50%;
         transform: translateX(-50%);
         top: 45px;
-        width: 70%;
+        width: 50%;
         background: #575757;
         padding: 0 0 8px 0;
         z-index: 9;

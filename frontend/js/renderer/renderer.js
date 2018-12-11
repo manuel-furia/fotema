@@ -2,15 +2,22 @@
 
 'use strict';
 const showImages = (images, target = 'imageTarget') => {
-    if(target == 'searchResults'){document.getElementById('searchResultsContainer').style.display = ''}
+    if(target === 'searchResults'){
+        document.getElementById('searchResultsContainer').style.display = 'block';
+        document.getElementById('searchResultsContainer').style.visibility = 'visible';
+    }
     images.forEach(media=>{
-        const myMedia = document.getElementById(target);
+        const search = target === 'searchResults';
+        const mediaTarget = document.getElementById(target);
         const liked = media.alreadyLiked ? 'likedlikesnumber' : '';
-        myMedia.innerHTML +=
+        const present = document.getElementById(`media${media.id}`);
+
+        if (!present || search){
+            mediaTarget.innerHTML +=
         ` <div class="responsive" >
             <a href="media/${media.id}">
               <div class="gallery">
-                <img src="${apiroot + media.thumbpath}" width="" height=""  class="clickedMedia galleryImage" id="${media.id}" >
+                <img src="${apiroot + media.thumbpath}" width="" height=""  class="clickedMedia galleryImage" id="media${media.id}" >
               </div>
             </a>
                   <div class="desc">
@@ -20,19 +27,19 @@ const showImages = (images, target = 'imageTarget') => {
                   </div>
               
           </div>` ;
+        }
     });
-
-
-    console.log('showing images OK???');
 };
 
 //show search results on front end
 const showSearchResults = (images) => {
-  console.log('showing showSearchResults ???');
-  images.forEach(image=>{
+  
+console.log("OOOOOK");
 
-    document.getElementById('showSearchResults').style.display = 'block';
-    document.getElementById('showSearchResults').style.visibility = 'visible';
+  document.getElementById('searchResultContainer').style.display = 'block';
+  document.getElementById('searchResultContainer').style.visibility = 'visible';
+
+  images.forEach(image=>{
 
 
     const searchResults = document.querySelector('#firstBlockSearchResults');

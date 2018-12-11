@@ -31,10 +31,14 @@ const updateHeader = () => {
             document.querySelectorAll('.logged').forEach(x => x.style.display = 'inline');
             document.querySelectorAll('.profile').forEach(x => x.style.display = 'inline');
             document.querySelectorAll('.anon').forEach(x => x.style.display = 'none');
+            getUsername().then(username => {
+                document.getElementById('usernameText').innerText = username;
+            });
         } else {
             document.querySelectorAll('.logged').forEach(x => x.style.display = 'none');
             document.querySelectorAll('.profile').forEach(x => x.style.display = 'none');
             document.querySelectorAll('.anon').forEach(x => x.style.display = 'inline');
+            document.getElementById('usernameText').innerText = 'username';
         }
     });
 };

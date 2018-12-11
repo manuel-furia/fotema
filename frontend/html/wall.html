@@ -36,11 +36,9 @@
     </div>
 
     <div class="dropdown logged" id="headerBtnMore">
-        <button class="dropbtn"> username <img src="../image/f1.jpg" alt="photo"> </button>
+        <button class="dropbtn"><span id="usernameText">username</span> <img src="../image/f1.jpg" alt="photo"> </button>
 
         <div class="dropdown-content">
-            <a class="myfotema" href="profile">my fotema</a>
-            <a class="settings" href="settings">settings</a>
             <a class="signout" href="javascript:;">sign out </a>
         </div>
     </div>
@@ -75,7 +73,7 @@
         </form>
     </div>
 
-    <button id="btnSearchMobile"><i class="fa fa-search"></i></button>
+    <button id="btnSearchMobile" onclick="document.querySelector('.search-container').style.display='inline'"><i class="fa fa-search"></i></button>
 
 </div>
 
@@ -282,10 +280,6 @@
 
     <div class="search-results" id="searchResults">
 
-    </div>
-
-    <div class="divbtnViewMoreSearchResults">
-        <button class="btnViewMoreSearchResults" id="btnViewMoreSearchResults" onclick="viewMoreSearchResults()">view more</button>
     </div>
 
 </div>

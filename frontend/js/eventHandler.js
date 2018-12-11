@@ -78,11 +78,10 @@ const likeElem = (id, btn, span, cssClass, likeAction, unlikeAction) => {
 const searchFunction = () => {
 
   //find the searchtext
-  const term = document.getElementById('searchBar').value;
-  console.log(term);
+  const term = document.getElementById('searchBar').value;;
   //now we have the search text, time to parse it
   term.trim();
-  postSearchTerms(textParser(term)).then((json)  => {
+  postSearchTerms(textParser(term)).then(res => res.json()).then((json)  => {
     //json contains the images returned by the search terms
     showImages(json, 'searchResults');
   });
@@ -90,8 +89,7 @@ const searchFunction = () => {
 };
 
 //function that runs on fresh page load
-function onPageLoad(t, obj) {
-  console.log(t, obj);
+function onPageLoad(t) {
   updateHeader();
   start = 0;
   getImages(start, amount).then((json) => {
@@ -183,4 +181,4 @@ if (searchForm != null) searchForm.addEventListener('submit', (event) => {
   searchFunction();
 });
 
-onPageLoad(page, document.getElementById('imageTarget'));
+onPageLoad(page);

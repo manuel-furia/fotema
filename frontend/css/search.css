@@ -6,7 +6,10 @@
 
 .search-results-container{
     overflow: auto;
-    margin: auto;
+    margin-top: 2em;
+    margin-bottom: 8em;
+    margin-left: 1em;
+    margin-right: 1em;
     position: fixed;
     z-index: 9;
     background-color: #4a5762;
@@ -14,7 +17,7 @@
     width: 80%;
     min-width: 200px;
     max-width: 1400px;
-    height: 700px;
+    height: 80%;
     min-height: 300px;
     max-height: 800px;
     padding: 1%;

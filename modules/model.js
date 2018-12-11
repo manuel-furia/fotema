@@ -253,6 +253,10 @@ const checkUserLogin = (username, pass) => {
     }).catch(err => {if (err === USR_NOT_FOUND) return {err: USR_NOT_FOUND}; else throw(err)});
 }
 
+const searchMedias = (words, tags, users) => {
+    return db.searchMedias(connection, words, tags, users);
+}
+
 module.exports = {
     getMediasByAnonRelevance: checkConnect(getMediasByAnonRelevance),
     getMediasByUserRelevance: checkConnect(getMediasByUserRelevance),
@@ -274,5 +278,6 @@ module.exports = {
     unlikeMedia: checkConnect(unlikeMedia),
     likeComment: checkConnect(likeComment),
     unlikeComment: checkConnect(unlikeComment),
-    isMediaLikedBy: checkConnect(isMediaLikedBy)
+    isMediaLikedBy: checkConnect(isMediaLikedBy),
+    searchMedias: checkConnect(searchMedias)
 };

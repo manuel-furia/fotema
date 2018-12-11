@@ -490,6 +490,54 @@ const likeComment = (connection, commentID, userID, time) => {
 
 
 
+const searchMedias = (connection, words, tags, users) => {
+
+    const toLike = (word) => '%' + word + '%';
+
+    const buildSearchWhereWordsTags = (words, tags) => {
+        const w = (words.length <= 0) ? '' : ' AND (' + words.map(word => 'Media.title LIKE ?').join(' AND ') + ' )';
+        const t = (tags.length <= 0) ? '' : ' AND (' + tags.map(tag => 'Tag.name = ?').join(' OR ') + ' )';
+
+        return w + t;
+    }
+
+    const buildSearchWhereUsers = (users) => {
+        const u = (users.length <= 0) ? '' : 'WHERE ' + users.map(user => 'UserInfo.username = ?').join(' OR ');
+
+        return u;
+    }
+
+    return executeQuery(connection,
+       `
+SELECT L.*, C.comments, (L.likes + C.comments) AS impact
+FROM (
+    SELECT Media.*, Thumbnails.path AS thumbpath, COUNT(MediaLike.media) AS likes
+    FROM Media
+    INNER JOIN MediaType ON Media.type = MediaType.id
+    LEFT JOIN Tagged ON Tagged.mediaid = Media.id
+    LEFT JOIN Tag ON Tag.id = Tagged.tagid
+    LEFT JOIN MediaLike ON Media.id = MediaLike.media
+    LEFT JOIN Media AS Thumbnails ON Media.thumbnail = Thumbnails.id
+    WHERE MediaType.name <> "thumbnail" ${buildSearchWhereWordsTags(words, tags)}
+    GROUP BY Media.id
+) AS L
+INNER JOIN (
+    SELECT Media.id, COUNT(Comment.id) AS comments
+    FROM Media
+    INNER JOIN MediaType ON Media.type = MediaType.id
+    LEFT JOIN Comment ON Media.id = Comment.targetMedia
+    WHERE MediaType.name <> "thumbnail"
+    GROUP BY Media.id
+) AS C
+ON L.id = C.id
+INNER JOIN UserInfo ON UserInfo.id = L.user
+${buildSearchWhereUsers(users)}
+ORDER BY impact DESC
+LIMIT ?, ? ;
+`, words.map(toLike).concat(tags).concat(users).concat([0, 12]));
+};
+
+
 module.exports={
     connect: connect,
     getDataFromAttribute: getDataFromAttribute,
@@ -513,7 +561,8 @@ module.exports={
     isMediaAlreadyLikedBy: isMediaAlreadyLikedBy,
     isCommentAlreadyLikedBy: isCommentAlreadyLikedBy,
     likeMedia: likeMedia,
-    unlikeMedia: unlikeMedia
+    unlikeMedia: unlikeMedia,
+    searchMedias: searchMedias
 };
 
 

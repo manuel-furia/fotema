@@ -77,6 +77,8 @@ div.desc:hover{
     flex: 100%;
     text-align: left;
     padding: 10px;
+    height: 50%;
+    overflow: hidden;
 }
 
 .desc .likesnumber, .commentsnumber{

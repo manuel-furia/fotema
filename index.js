@@ -106,7 +106,6 @@ app.get('/get/wall/:start/:amount', (req, res, next) =>{
 });
 
 
-
 app.get('/get/comments/:imageID', (req, res, next) =>{
     if (req.user){
         model.getUserId(req.user.username).then((userId) => {
@@ -183,7 +182,7 @@ app.post('/post/signup',  (req, res) =>{
 });
 
 app.post('/post/search', (req, res) => {
-  //TODO: implement the search function
+  model.searchMedias(req.body.otherTerms, req.body.tags, req.body.usernames).then(json => res.json(json)).catch(handleError);
   console.log(req.body.tags);
   console.log(req.body.usernames);
   console.log(req.body.otherTerms);

@@ -36,12 +36,10 @@
 
 
     <div class="dropdown logged" id="headerBtnMore">
-        <button class="dropbtn">username <img src="../image/f1.jpg" alt="photo"></i>
+        <button class="dropbtn"><span id="usernameText">username</span> <img src="../image/f1.jpg" alt="photo"></i>
         </button>
         <div class="dropdown-content">
-            <a class="myfotema" href="myfotema.html">my fotema</a>
-            <a class="settings" href="settings.html">settings</a>
-            <a class="signout" href="signout.html">sign out </a>
+            <a class="signout" href="javascript:;">sign out </a>
         </div>
     </div>
 
@@ -50,21 +48,7 @@
         <button id="headerBtnSignup" onclick="popup('showsignup')">sign up</button>
     </div>
 
-    <!--<div class="profile" id="headerUserProfile">
-        <a href="myfotema.html">
-            <img src="../image/f1.jpg" alt="photo">
-            <p class="username">username</p>
-        </a>
-    </div>-->
-
-    <div class="search-container">
-        <form  id="searchForm"><!--action="/search/:value"-->
-            <input type="text" placeholder="Search.." name="search">
-            <button type="submit"><i class="fa fa-search"></i></button>
-        </form>
     </div>
-
-    <button id="btnSearchMobile" onclick="showSearchContainerOnMobile()"><i class="fa fa-search"></i></button>
 
 </div>
 
@@ -169,7 +153,7 @@
                 <button id="btnDeleteMedia"><i class="fa fa-trash-o"></i></button>
             </div>
 
-            <div class="updatemedia">
+            <div class="updatemedia" style="display: none">
 
                 <button id="btnUpdateMedia" onclick="showUpdateForm()"><i class="fa fa-pencil"></i></button>
 
@@ -201,8 +185,6 @@
 
         <div class="writecomment" id="writeComment">
             <form action="/comment" id="commentForm">
-                <!--<label>Write a comment</label>-->
-                <!--<input type="text" name="your-comment" maxlength="140" placeholder="your comment here">-->
                 <textarea id="comment" placeholder="Write your comment here" autofocus></textarea>
                 <input type="submit" id="submitComments" value="submit">
             </form>
@@ -211,13 +193,29 @@
         <div class="comments" id="commentBlock">
 
         </div>
+
+<div id="searchResultsContainer" class="search-results-container">
+
+    <a id="btnCloseSearchResult" >
+        <i class="fa fa-times"></i>
+    </a>
+
+    <div class="search-results" id="searchResults">
+
+    </div>
+
+    <div class="divbtnViewMoreSearchResults">
+        <button class="btnViewMoreSearchResults" id="btnViewMoreSearchResults" onclick="viewMoreSearchResults()">view more</button>
+    </div>
+
+</div>
 </div>
 
 <div class="footer" id="footer">
     <p><i class="fa fa-copyright"></i> FOTEMA</p>
-    <a class="about" href="about.html"> about </a>
-    <a class="rules" href="rules.html"> rules </a>
-    <a class="report" href="report.html">report </a>
+    <a class="about" href="javascript:;"> about </a>
+    <a class="rules" href="javascript:;"> rules </a>
+    <a class="report" href="javascript:;">report </a>
 </div>
 
 <script>
