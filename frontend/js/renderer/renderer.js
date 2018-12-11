@@ -1,18 +1,17 @@
-//import {apiroot} from '../api/apiconf.js';
-
 'use strict';
 const showImages = (images, target = 'imageTarget') => {
-    if(target === 'searchResults'){
+    const isSearch = target === 'searchResults';
+    const mediaTarget = document.getElementById(target);
+    if(isSearch){
+        mediaTarget.innerHTML = ""; //Delete previous searches
         document.getElementById('searchResultsContainer').style.display = 'block';
         document.getElementById('searchResultsContainer').style.visibility = 'visible';
     }
     images.forEach(media=>{
-        const search = target === 'searchResults';
-        const mediaTarget = document.getElementById(target);
         const liked = media.alreadyLiked ? 'likedlikesnumber' : '';
         const present = document.getElementById(`media${media.id}`);
 
-        if (!present || search){
+        if (!present || isSearch){
             mediaTarget.innerHTML +=
         ` <div class="responsive" >
             <a href="media/${media.id}">
@@ -29,38 +28,6 @@ const showImages = (images, target = 'imageTarget') => {
           </div>` ;
         }
     });
-};
-
-//show search results on front end
-const showSearchResults = (images) => {
-  
-console.log("OOOOOK");
-
-  document.getElementById('searchResultContainer').style.display = 'block';
-  document.getElementById('searchResultContainer').style.visibility = 'visible';
-
-  images.forEach(image=>{
-
-
-    const searchResults = document.querySelector('#firstBlockSearchResults');
-    searchResults.innerHTML =
-
-        `<div class="responsive">
-          <div class="gallery">
-            <a  target="_blank" href="uploads/${image.original}">
-            <img src='thumbs/${image.thumbnail}'>
-            </a>
-            <div class="desc">
-                <p class="description">description</p>
-                <p class="likes"><i class="fa fa-heart"></i> ${image.likes}</p>
-                <p class="comments"><i class="fa fa-commenting">${image.comments}</i></p>
-            </div>
-          </div>
-        </div>` + searchResults.innerHTML;
-
-  });
-
-  console.log('showing showSearchResults OK???');
 };
 
 
