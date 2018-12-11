@@ -81,3 +81,17 @@ const postUnlikeMedia = (mediaId, userId) => {
   return fetch(apiroot + 'post/unlike', settings);
 }
 
+//for searching content
+const postSearchTerms = (terms) =>{
+  console.log(terms[0]);
+  const settings = {
+    method: 'POST',
+    body: JSON.stringify({tags: terms[0], usernames: terms[1] , otherTerms: terms[2]}),
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  };
+  return fetch(apiroot + 'post/search', settings);
+};
+
+

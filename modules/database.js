@@ -367,6 +367,7 @@ const getMediasUploadedByUser = (connection, userID) => {
     return executeQuery
 }
 
+
 /*
  * DELETE QUERIES
  */
@@ -480,6 +481,8 @@ const likeComment = (connection, commentID, userID, time) => {
         'INSERT INTO CommentLike (user, comment, time) VALUES (?, ?, ?);',
         [userID, commentID, getMysqlTime(time)]);
 }
+
+
 
 module.exports={
     connect: connect,

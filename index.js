@@ -105,17 +105,13 @@ app.get('/get/wall/:start/:amount', (req, res, next) =>{
     }
 });
 
-app.get('/get/search/:term/:start/:end', upload.single('mediafile'), (req, res, next) => {
-  next();
-  //TODO: implement the search function
-});
 
-app.get('/get/comments/:imageID', (req, res, next) =>{
+app.get('/get/comments/:imageID', (req, res) =>{
   const data = model.getCommentsFromMedia(req.params.imageID).then((json) => res.send(json));
 });
 
 
-app.get('/get/media/:imageID', (req, res, next) =>{
+app.get('/get/media/:imageID', (req, res) =>{
 
   const data = model.getMediaInfo(req.params.imageID).then((json) => res.send(json));
 });
@@ -166,6 +162,14 @@ app.post('/post/signup',  (req, res) =>{
       res.json({err: "both user and email taken"});
     }
   }).catch(handleError);
+
+});
+
+app.post('/post/search', (req, res) => {
+  //TODO: implement the search function
+  console.log(req.body.tags);
+  console.log(req.body.usernames);
+  console.log(req.body.otherTerms);
 
 });
 

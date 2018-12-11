@@ -3,31 +3,33 @@
 
 // THE FILE  FUNCTIONS IN THE FOLLOWING WAY:
 // 1. It receives an event.
-// 2. It acts according to whatever that event needs to do 
+// 2. It acts according to whatever that event needs to do
+
 'use strict';
 
-
+// these variables refer to the amount of images to be loaded into the frontpage. amount = how many more images.
 let start = 0;
 const amount = 12;
 
+// this function is used in search function, when the search terms need to be parsed. It takes the whole search entry and parses it
+// into tags, usernames and otherTerms.
 const textParser = (string) => {
  //we need to find #tags and everything else.
   let temp = string.split(' ');
-  console.log(temp);
   const tags = [];
+  const usernames = [];
   const otherTerms = [];
   for(let i = 0; i < temp.length; i++){
-    if(temp[i].charAt(0) === '#'){tags.push(temp[i])}
+    if(temp[i].charAt(0) === '#'){tags.push(temp[i].replace("#",''))}
+    else if(temp[i].charAt(0) === '@'){usernames.push(temp[i].replace("@", ""))}
     else{otherTerms.push(temp[i])}
   }
-
-
+  return [tags , usernames, otherTerms];
 };
 
+// function used for uploading single images.
 const uploadEvent = (event) => {
-  console.log('starting the event chain for upload');
   event.preventDefault();
-//TODO:get the image data here, and pass it forward.
   uploadImages().then((json) => {
     if (json.err) {
         alert(json.err);
@@ -36,10 +38,9 @@ const uploadEvent = (event) => {
         location.reload();
     }
   }).catch(err => alert(err));
-  //when you upload a photo, you post the form into /bla bla
-
 };
 
+// function used in liking media.
 const likeMedia = (id) => {
     const likeBtn = document.getElementById('like' + id);
     const likesSpan = document.getElementById('nlikes' + id);
@@ -72,7 +73,11 @@ const searchFunction = () => {
   console.log(term);
   //now we have the search text, time to parse it
   term.trim();
-  textParser(term);
+  postSearchTerms(textParser(term)).then((json)  => {
+    //json contains the images returned by the search terms
+    showImages(json, 'searchResults');
+  });
+
 };
 
 //function that runs on fresh page load
@@ -109,6 +114,10 @@ const signIn = (event)=> {
   });
 };
 
+const closeSearchResults = () =>{
+  document.getElementById('searchResultsContainer').style.display = 'none';
+};
+
 const validationCheck =(data) => {
   console.log(data);
   return (data.password === data.repeatPassword);
@@ -143,6 +152,8 @@ document.getElementById('signin').addEventListener('submit', signIn);
 document.getElementById('signup').addEventListener('submit', signUp);
 
 document.querySelector('.signout').addEventListener('click', signOut);
+
+document.getElementById('btnCloseSearchResult').addEventListener('click', closeSearchResults);
 
 //event listener function for fileupload
 const mediaForm = document.querySelector('#mediaform');

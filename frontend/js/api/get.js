@@ -9,15 +9,7 @@ const getImages = (start, amount) =>{
   });
 };
 
-//for searching content
-const search = (term) =>{
-  const settings = {
-    method: 'GET'
-  };
-  return fetch(apiroot + `get/search/:${term}`, settings).then((response) => {
-    return response.json();
-  })
-};
+
 
 const getLoginState = () => {
   const settings = {

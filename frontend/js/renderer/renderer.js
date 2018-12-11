@@ -2,7 +2,7 @@
 
 'use strict';
 const showImages = (images, target = 'imageTarget') => {
-    console.log('showing images???');
+    if(target == 'searchResults'){document.getElementById('searchResultsContainer').style.display = ''}
     images.forEach(media=>{
 //<img src="${apiroot + media.thumbpath}" width="" height=""  class="clickedMedia" id="${media.id}" >
 //<div class="galleryImage" style="background-image: url('${apiroot + media.thumbpath}')" id="${media.id}"></div>
