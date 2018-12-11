@@ -1,6 +1,6 @@
 'use strict';
 
-function onPageLoad (){
+function onMediaPageLoad (){
   getImage().then(() => getComments()).then(() => deleteButton());
 
 }
@@ -160,6 +160,6 @@ document.getElementById('commentForm').addEventListener('submit', postComment);
 document.getElementById('btnDeleteMedia').addEventListener('click', deleteMedia);
 
 
-onPageLoad();
+onMediaPageLoad();
 
 

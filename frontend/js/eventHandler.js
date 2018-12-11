@@ -167,10 +167,11 @@ try {
     document.getElementById('btnViewMore').addEventListener('click', ()=>{
         viewMoreLoad(page, document.getElementById('imageTarget'))
     });
+    document.getElementById('btnCloseSearchResult').addEventListener('click', closeSearchResults);
 } catch(ex) {}
 
 
-document.getElementById('btnCloseSearchResult').addEventListener('click', closeSearchResults);
+
 
 //event listener function for fileupload
 const mediaForm = document.querySelector('#mediaform');
