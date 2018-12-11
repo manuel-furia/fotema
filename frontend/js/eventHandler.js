@@ -160,11 +160,6 @@ const signOut = (event) => {
 
 
 // different event listeners being set up.
-document.getElementById('signin').addEventListener('submit', signIn);
-document.getElementById('signup').addEventListener('submit', signUp);
-document.querySelector('.signout').addEventListener('click', signOut);
-document.getElementById('btnCloseSearchResult').addEventListener('click', closeSearchResults);
-
 const images = document.querySelectorAll('.clickedMedia');
 console.log(images);
 
