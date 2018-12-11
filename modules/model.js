@@ -107,7 +107,7 @@ const getMediasByUserRelevance = (start, amount, userId) => {
             return db.getTagMediasOrderedByImpactForUser(connection, tag.name, userId, selected, howMany);
         }));
     }).then(results => {
-        const flattenRes = results.flat();
+        const flattenRes = [].concat.apply([], results);
         return shuffle(flattenRes);
     });
 }
