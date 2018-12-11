@@ -2,7 +2,7 @@
 
 'use strict';
 const showImages = (images, target = 'imageTarget') => {
-    console.log('showing images???');
+    if(target == 'searchResults'){document.getElementById('searchResultsContainer').style.display = ''}
     images.forEach(media=>{
         const myMedia = document.getElementById(target);
         const liked = media.alreadyLiked ? 'likedlikesnumber' : '';
