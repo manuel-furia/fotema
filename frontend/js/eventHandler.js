@@ -40,7 +40,7 @@ const uploadEvent = (event) => {
   }).catch(err => alert(err));
 };
 
-// function used in liking media.
+// function used in liking media. parameter id is the id of the particular piece of media that was interacted with.
 const likeMedia = (id) => {
     const likeBtn = document.getElementById('like' + id);
     const likesSpan = document.getElementById('nlikes' + id);
@@ -65,46 +65,44 @@ const likeMedia = (id) => {
     }).catch(err => alert(err));
 };
 
-//search for content
+// function used for searching content
 const searchFunction = () => {
-
   //find the searchtext
   const term = document.getElementById('searchBar').value;
   console.log(term);
-  //now we have the search text, time to parse it
+   // parse the text, first remove the whitespace. then send the remaining string into textparser.
   term.trim();
   postSearchTerms(textParser(term)).then((json)  => {
-    //json contains the images returned by the search terms
+    // json contains the images returned by the search terms
     showImages(json, 'searchResults');
   });
 
 };
 
-//function that runs on fresh page load
+// function that runs on fresh page load
 function onPageLoad(t, obj) {
-  console.log(t, obj);
   updateHeader();
   start = 0;
   getImages(start, amount).then((json) => {
     showImages(json);
   });
+}
 
-
-};
-
-//function that runs when view more button is clicked
+// function that runs when view more button is clicked
 function viewMoreLoad(t, obj) {
   start += amount;
   console.log(t, start, amount);
   getImages(start, amount).then((json) =>{
       showImages(json);
   });
-};
+}
 
+// function used when user signs in
 const signIn = (event)=> {
   event.preventDefault();
   const signInForm = document.getElementById('signin');
   const data = getFieldsFromForm(signInForm);
+  // function postSignIn literally posts the signin data. located in /api
   postSignIn(data).then((json) => {
     if (json.user && !json.err){ 
       location.reload();
@@ -114,15 +112,7 @@ const signIn = (event)=> {
   });
 };
 
-const closeSearchResults = () =>{
-  document.getElementById('searchResultsContainer').style.display = 'none';
-};
-
-const validationCheck =(data) => {
-  console.log(data);
-  return (data.password === data.repeatPassword);
-};
-
+// function used when creating a user.
 const signUp = (event) => {
   const signUpForm = document.getElementById('signup');
   const data = getFieldsFromForm(signUpForm);
@@ -140,6 +130,18 @@ const signUp = (event) => {
   });
 };
 
+// a simple function to close the search result pop-up
+const closeSearchResults = () =>{
+  document.getElementById('searchResultsContainer').style.display = 'none';
+};
+
+// a simple signup validation check
+const validationCheck =(data) => {
+  console.log(data);
+  return (data.password === data.repeatPassword);
+};
+
+// function used when signin out.
 const signOut = (event) => {
   postSignOut().then(() => {
     window.location.href = apiroot;
@@ -147,25 +149,25 @@ const signOut = (event) => {
   });
 };
 
+
+// different event listeners being set up.
 document.getElementById('signin').addEventListener('submit', signIn);
-
 document.getElementById('signup').addEventListener('submit', signUp);
-
 document.querySelector('.signout').addEventListener('click', signOut);
-
 document.getElementById('btnCloseSearchResult').addEventListener('click', closeSearchResults);
 
-//event listener function for fileupload
+// event listener function for fileupload
 const mediaForm = document.querySelector('#mediaform');
 if (mediaForm != null) mediaForm.addEventListener('submit', uploadEvent);
 
+// event listener and function call for search function
 const searchForm = document.getElementById('searchForm');
 if (searchForm != null) searchForm.addEventListener('submit', (event) => {
   event.preventDefault();
   searchFunction();
 });
 
-
+// eventlistener being set up for view more button
 document.getElementById('btnViewMore').addEventListener('click', ()=>{
   viewMoreLoad(page, document.getElementById('imageTarget'))
 });
