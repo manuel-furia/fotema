@@ -1,3 +1,4 @@
+//Show the search bar when the user clicks the search button on mobile screen (it's hidden by default)
 const showSearchContainerOnMobile = () => {
         const btnSearchMobile = document.getElementById('btnSearchMobile');
         const searchContainer = document.querySelector('.search-container');
@@ -10,7 +11,3 @@ const showSearchContainerOnMobile = () => {
 
     }
 };
-
-
-
-

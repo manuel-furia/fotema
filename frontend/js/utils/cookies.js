@@ -1,3 +1,6 @@
+//To set and retrieve cookies
+//Not used in the project for now
+
 const setCookie = (cname, cvalue, exdays) => {
   var d = new Date();
   d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));

@@ -14,7 +14,7 @@ const model = require('./model');
   };
 
 
-  //
+  //The login strategy to use (check the correctness of the login from the model module)
   const loginStrategy = new LocalStrategy({
     usernameField: 'username',
     passwordField: 'password',

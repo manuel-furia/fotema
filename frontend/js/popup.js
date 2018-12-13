@@ -1,5 +1,4 @@
-//show pop up form based on the button clicked (sign in / sign up)
-
+//Show pop up form based on the button clicked (sign in / sign up)
 const popup=(showhide)=> {
   if(showhide === "showsignin"){
     document.getElementById('signin-popup').style.visibility="visible";

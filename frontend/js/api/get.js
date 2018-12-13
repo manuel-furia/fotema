@@ -1,8 +1,10 @@
+/*
+Contains generic API calls that issue a GET request
+*/
+
 'use strict';
 
-//for getting images
-// t is for the page type, because it needs to fetch different images depending on the occasion
-//TODO:this needs to be fully implemented for user walls and personal walls
+//Get the images for the main wall
 const getImages = (start, amount) =>{
   return fetch(apiroot +'get/wall/' + start + '/' + amount).then(response=>response.json()).then(json => {
     return json;
@@ -10,7 +12,7 @@ const getImages = (start, amount) =>{
 };
 
 
-
+//Get the login state for the visitor (anonimous or logged in, login id and type)
 const getLoginState = () => {
   const settings = {
     method: 'GET'

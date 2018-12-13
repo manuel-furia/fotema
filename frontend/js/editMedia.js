@@ -1,3 +1,5 @@
+//To edit media informations (Not currently implemented)
+
 
 const showUpdateForm = () =>{
     const updateForm = document.getElementById('updateForm');

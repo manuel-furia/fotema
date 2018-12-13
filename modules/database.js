@@ -2,49 +2,60 @@
 
 const mysql = require('mysql2/promise');
 
+//Transform a javascript date to mysql formatted time string
 const getMysqlTime = (jsdatetime) => {
     return jsdatetime.toISOString().slice(0, 19).replace('T', ' ');
 }
 
+//Execute a query without external parameters and return a promise with the result
 const executePlainQuery = (connection, sql) => {
     return connection.then((con) => con.query(sql)).then(([rows, fields]) => rows);
 };
 
+//Execute a query with external parameters and return a promise with the result
 const executeQuery = (connection, sql, params) => {
     return connection.then((con) => con.execute(sql, params)).then(([rows, fields]) => rows);
 };
 
+//Start a SQL transaction and return a promise
 const startTransaction = (connection) => {
     return connection.then((con) => con.query('START TRANSACTION;')).then(([rows, fields]) => rows);
 };
 
+//Commit an SQL transaction and return a promise
 const commit = (connection) => {
     return connection.then((con) => con.query('COMMIT')).then(([rows, fields]) => rows);
 };
 
+//Rollback an SQL transaction and return a promise
 const rollback = (connection) => {
     return connection.then((con) => con.query('ROLLBACK;')).then(([rows, fields]) => rows);
 };
 
-//Execute multiple queries
+/*
+ * Execute a string composed of multiple queries separated by semicolon
+ * The parameters are passed query by query
+ * params is an array of parameters (which are also arrays)
+ */
 const multipleQueries = (connection, queries, params) => {
-
+    //The zipWith function (transform two list into a list by applying a function for each pair of element at a certain index)
+    //In pseudocode: result[i] := f(x[i], y[i])
     const zipWith = (xs, ys, f) => xs.map((x,i) => f(x, ys[i]));
-
+    //Get all the queries to execute
     const queriesArr = queries.split(';').filter(x => x != '').map(x => x + ";");
-
+    //Fill the array of params arrays to match the amount of queries
     const filledParams = (params.length >= queries.length) ? params : [...params, ...Array(queriesArr.length-params.length).fill([])];
-
+    //Create runnable lambdas that will execute each query with its parameters
     const runnables = zipWith(queriesArr, filledParams, (query, param) => () => executeQuery(connection, query, param));
-
+    //Create an empty promise to start
     const start = Promise.resolve({});
-
-    const transaction = runnables.reduce((p, fn) => p.then(fn), start);
-
-    return transaction;
+    //Concatenate all the runnables in one promise chain
+    const result = runnables.reduce((p, fn) => p.then(fn), start);
+    //Return the promise representing the execution of the queries
+    return result;
 };
 
-
+//Connect to the DB
 const connect = () => {
     return mysql.createConnection({
       host: process.env.DB_HOST,
@@ -123,6 +134,7 @@ const getMediaTags = (connection, id) => {
 
 //Get all media info from id
 const getMediaInfo = (connection, id) => {
+    //Gets all the info that are single objects for each media
     const infoQuery = executeQuery(connection,
        `SELECT L.*, C.comments, UserInfo.username AS ownername
 FROM (
@@ -145,15 +157,16 @@ INNER JOIN (
 ON L.id = C.id
 INNER JOIN UserInfo ON UserInfo.id = L.user;`,
         [id, id]);
-
+    //Get the tags separately (as there is a moltitude of them for each media)
     const tagsQuery = getMediaTags(connection, id);
-
+    //Join the two query promises and return a promise containing the resulting data
     return Promise.all([infoQuery, tagsQuery]).then(([info, tags]) => {
         const tagArray = tags.map(tag => tag.tag);
         return Object.assign(info[0], {tags: tagArray});
     });
 }
 
+//Get the amount of media that are tagged by tag
 const getNumberOfMediasByTag = (connection, tag) => {
     return executeQuery(connection,`
 SELECT Tag.name, COUNT(*) AS num
@@ -166,6 +179,7 @@ WHERE MediaType.name != "thumbnail" && Tag.name = ?;
     [tag]);
 }
 
+//Get the media tagged by tag ordered by decreasing impact (likes + comments)
 const getTaggedMediasOrderedByImpact = (connection, tag, start, amount) => {
     return executeQuery(connection,
        `
@@ -196,6 +210,7 @@ LIMIT ?, ? ;
 `, [tag, start, amount]);
 }
 
+//Get all the medias ordered by decreasing impact (likes + comments)
 const getMediasOrderedByImpact = (connection, start, amount) => {
     return executeQuery(connection,
        `
@@ -223,6 +238,7 @@ LIMIT ?, ? ;
 `, [start, amount]);
 };
 
+//Get a promise of a boolean indicating if a media is already liked by a user
 const isMediaAlreadyLikedBy = (connection, userId, mediaId) => {
     return executeQuery(connection, 
         `SELECT MediaLike.*
@@ -239,6 +255,7 @@ const isMediaAlreadyLikedBy = (connection, userId, mediaId) => {
      });
 }
 
+//Get a promise of a boolean indicating if a comment is already liked by a user
 const isCommentAlreadyLikedBy = (connection, userId, commentId) => {
     return executeQuery(connection, 
         `SELECT CommentLike.*
@@ -255,6 +272,7 @@ const isCommentAlreadyLikedBy = (connection, userId, commentId) => {
      });
 }
 
+//Mark all the medias already liked by a user by adding a alreadyLiked field in the javascript object
 const markAlreadyLikedBy = (connection, userId, results, isAlreadyLikedByFunction) => {
     return Promise.all(results.map(result => {
         return isAlreadyLikedByFunction(connection, userId, result.id).then(liked => {
@@ -266,6 +284,7 @@ const markAlreadyLikedBy = (connection, userId, results, isAlreadyLikedByFunctio
     }));
 };
 
+//Get the medias ordered by the amount of likes and comments a user has issued on them
 const getUserFavouriteMedias = (connection, userid, start, amount) => {
     return executeQuery(connection,
         `SELECT Media.*, IFNULL(L.likes, 0) AS likes, IFNULL(C.comments, 0) AS comments, IFNULL(L.likes + C.comments, 0) AS impact
@@ -296,6 +315,7 @@ LIMIT ?, ? ;`,
     [userid, userid, start, amount]).then(medias => markAlreadyLikedBy(connection, userid, medias, isMediaAlreadyLikedBy));
 }
 
+//Get the favourite tags of a user by counting how many images tagged with each tag the user has liked or commented
 const getUserFavouriteTags = (connection, userid, start, amount) => {
     return executeQuery(connection,
         `SELECT Tag.name AS tag, SUM(IFNULL(L.likes, 0)) AS likes, SUM(IFNULL(C.comments, 0)) AS comments, SUM(IFNULL(L.likes, 0)) + SUM(IFNULL(C.comments, 0)) AS impact
@@ -328,6 +348,7 @@ LIMIT ?, ? ;`,
     [userid, userid, start, amount]);
 }
 
+//Get all the medias tagged with a specific tag and ordered by decreasing impact (likes + comments)
 const getTagMediasOrderedByImpact = (connection, tag, start, amount) => {
     return executeQuery(connection,
        `
@@ -359,20 +380,19 @@ LIMIT ?, ? ;
 `, [tag, tag, start, amount]);
 };
 
+//Get all the medias tagged with a specific tag and ordered by decreasing impact (likes + comments),
+//and mark if the specified user has already liked the or not
 const getTagMediasOrderedByImpactForUser = (connection, tag, userid, start, limit) => {
     return getTagMediasOrderedByImpact(connection, tag, start, limit).then(medias => markAlreadyLikedBy(connection, userid, medias, isMediaAlreadyLikedBy));
 };
 
-const getMediasUploadedByUser = (connection, userID) => {
-    return executeQuery
-}
-
-
 /*
  * DELETE QUERIES
  */
-const deleteMedia = (connection, mediaID) => {
 
+//Delete a media
+const deleteMedia = (connection, mediaID) => {
+    //Delete an element from the media table, and all its references in other tables
     const deleteMediaElem = (id, done) => {
         return getCommentsFromMedia(connection, mediaID).then((res) => {
             res.forEach(comment => executeQuery(connection, 'DELETE FROM CommentLike WHERE comment = ?', [comment.id]));
@@ -386,7 +406,7 @@ const deleteMedia = (connection, mediaID) => {
         [[id], [id], [id], [id]]);
         });
     };
-
+    //The SQL transaction that will delete the tables
     return startTransaction(connection).then(() => getDataFromAttribute(connection, 'Media', 'id', mediaID).then((imageData) => {
         if (imageData != null && imageData.length > 0 && imageData[0].thumbnail != null){
             return deleteMediaElem(mediaID, false).then(() => //Delete the actual media
@@ -404,6 +424,7 @@ const deleteMedia = (connection, mediaID) => {
 //data contains imagepath, thumbpath, title, description, type, capturetime, uploadtime, userid, tags[]
 const uploadMedia = (connection, data) => {
 
+   //Insert a media (or thumbnail) in the media table
    const insertMedia = (path, typeID, thumbID) => {
         return executeQuery(connection,
             `INSERT INTO Media (path, title, description, type, thumbnail, capturetime, uploadtime, user)
@@ -411,6 +432,7 @@ const uploadMedia = (connection, data) => {
             [path, data.title, data.description, typeID, thumbID, getMysqlTime(data.capturetime), getMysqlTime(data.uploadtime), data.userid]);
     }
 
+    //Connect a media to a single tag (N to N relationship)
     const tagMedia = (mediaID, tagID) => {
         return executeQuery(connection,
             `INSERT INTO Tagged (mediaid, tagid)
@@ -418,7 +440,8 @@ const uploadMedia = (connection, data) => {
             [mediaID, tagID]
         );
     }
-
+    
+    //Tag the media with all the specified tags (if they don't exist create them)
     const insertTags = (mediaID) => {
         return data.tags.map(tag => {
             const tagIDPresent = executeQuery(connection, 'SELECT id, name FROM Tag WHERE name = ?;', [tag]);
@@ -489,24 +512,24 @@ const likeComment = (connection, commentID, userID, time) => {
 }
 
 
-
+//Search images by words in title, tags or users
 const searchMedias = (connection, words, tags, users) => {
-
+    //Turn a word into a like pattern in SQL
     const toLike = (word) => '%' + word + '%';
-
+    //Insert an appropriate amount of search conditions for words and tags
     const buildSearchWhereWordsTags = (words, tags) => {
         const w = (words.length <= 0) ? '' : ' AND (' + words.map(word => 'Media.title LIKE ?').join(' AND ') + ' )';
         const t = (tags.length <= 0) ? '' : ' AND (' + tags.map(tag => 'Tag.name = ?').join(' OR ') + ' )';
 
         return w + t;
     }
-
+    //Insert an appropriate amount of search conditions for users
     const buildSearchWhereUsers = (users) => {
         const u = (users.length <= 0) ? '' : 'WHERE ' + users.map(user => 'UserInfo.username = ?').join(' OR ');
 
         return u;
     }
-
+    //Execute the query with the computed search conditions
     return executeQuery(connection,
        `
 SELECT L.*, C.comments, (L.likes + C.comments) AS impact
@@ -534,7 +557,7 @@ INNER JOIN UserInfo ON UserInfo.id = L.user
 ${buildSearchWhereUsers(users)}
 ORDER BY impact DESC
 LIMIT ?, ? ;
-`, words.map(toLike).concat(tags).concat(users).concat([0, 12]));
+`, words.map(toLike).concat(tags).concat(users).concat([0, 12])); //Create the array of parameters to pass to the query, by using words, tags and user arrays
 };
 
 

@@ -1,3 +1,5 @@
+//Used to test new features and functions, run with "sudo node test.js"
+
 Error.stackTraceLimit = Infinity;
 require('dotenv').config();
 const express = require('express');

@@ -2,10 +2,12 @@ const maxLoginDurationInDays = 3;
 const usernameCookie = 'user'
 const userTypeCookie = 'type'
 
+//Return a promise resolving to true if the user is logged in
 const isLoggedIn = () => {
     return getLoginState().then(loginState => loginState.username != undefined && loginState.username != null && loginState.username != '');
 };
 
+//Return a promise resolving to the user's username if the user is logged in
 const getUsername = () => {
     return getLoginState().then((loginState) => {
         if (loginState && loginState.username != null && loginState.username !== "")
@@ -15,6 +17,7 @@ const getUsername = () => {
     });
 };
 
+//Return a promise resolving to the user's id if the user is logged in
 const getUserId = () => {
     return getLoginState().then((loginState) => {
         if (loginState && loginState.userid != null && loginState.userid !== "")
@@ -24,7 +27,7 @@ const getUserId = () => {
     });
 };
 
-
+//Show the appropriate header buttons according to the login state
 const updateHeader = () => {
     isLoggedIn().then(loggedIn => {
         if (loggedIn){

@@ -1,4 +1,7 @@
 'use strict';
+
+//Given an array of image data, generate the html for the wall and assign it to the appropriate container (identified by target)
+//If target is searchResults, show the search result popup before rendering
 const showImages = (images, target = 'imageTarget') => {
     const isSearch = target === 'searchResults';
     const mediaTarget = document.getElementById(target);

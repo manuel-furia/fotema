@@ -1,6 +1,11 @@
+/*
+Contains generic API calls that issue a POST request
+*/
+
 'use strict';
 
-const uploadImages = (callback) => {
+//Upload an image to the server
+const uploadImages = () => {
   const formData = new FormData(mediaForm);
   const settings = {
     method: 'post',
@@ -12,6 +17,7 @@ const uploadImages = (callback) => {
   }).catch(err => {return {err: 'Server internal error.'}});
 };
 
+//Check if a login response was successful or contained an error
 const processLoginResponse = (resPromise) => {
     return resPromise.then(res => {
         if (res.status === 401){
@@ -25,6 +31,7 @@ const processLoginResponse = (resPromise) => {
     });
 };
 
+//Issue a sign in request
 const postSignIn = (userData) =>{
   const settings= {
     method: 'POST',
@@ -37,6 +44,7 @@ const postSignIn = (userData) =>{
   return processLoginResponse(fetch(apiroot + 'post/signin', settings));
 };
 
+//Register a new user
 const postSignUp = (userData) =>{
   const settings= {
     method: 'POST',
@@ -48,6 +56,7 @@ const postSignUp = (userData) =>{
   return processLoginResponse(fetch(apiroot + 'post/signup', settings));
 };
 
+//Sign out a currently logged in user
 const postSignOut = () =>{
   const settings= {
     method: 'POST',
@@ -59,6 +68,7 @@ const postSignOut = () =>{
   return fetch(apiroot + 'post/signout', settings);
 };
 
+//Add a like to a media from a user
 const postLikeMedia = (mediaId, userId) => {
   const settings= {
     method: 'POST',
@@ -70,6 +80,7 @@ const postLikeMedia = (mediaId, userId) => {
   return fetch(apiroot + 'post/like', settings);
 }
 
+//Remove a like from a media issued by a user
 const postUnlikeMedia = (mediaId, userId) => {
   const settings= {
     method: 'POST',
@@ -81,6 +92,7 @@ const postUnlikeMedia = (mediaId, userId) => {
   return fetch(apiroot + 'post/unlike', settings);
 }
 
+//Add a like to a comment from a user
 const postLikeComment = (commentId, userId) => {
   const settings= {
     method: 'POST',
@@ -92,6 +104,7 @@ const postLikeComment = (commentId, userId) => {
   return fetch(apiroot + 'post/likecomment', settings);
 }
 
+//Remove a like from a comment issued by a user
 const postUnlikeComment = (commentId, userId) => {
   const settings= {
     method: 'POST',
@@ -103,7 +116,7 @@ const postUnlikeComment = (commentId, userId) => {
   return fetch(apiroot + 'post/unlikecomment', settings);
 }
 
-//for searching content
+//Issue a search request
 const postSearchTerms = (terms) =>{
   const settings = {
     method: 'POST',

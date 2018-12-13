@@ -1,3 +1,5 @@
+//Profile picture and account settings
+//NOT IMPLEMENTED JET
 
 //show image after user has chosen one for new profile photo, before uploading
 const previewProfileImage = (input) => {
