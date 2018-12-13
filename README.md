@@ -33,23 +33,23 @@ NOTE: The test data in the /sql/fotema_with_test_data.sql does not have image fi
 
 NOTE: All the api calls can also return {err: 'message'} if there has been a server error.  
 
-Pages:  
+- Pages:  
 
-- GET /  
+GET /    
 Return the homepage  
 
-- GET /home/  
+GET /home/    
 Return the image wall  
 
-- GET /media/:imageID  
+GET /media/:imageID    
 Return the page showing info and comments for the image with id :imageID  
 
-- GET /uploads/:path  
+GET /uploads/:path    
 Return the uploaded file with name :path  
 
-Data and actions:  
+- Data and actions:  
 
-- GET /get/wall/:start/:amount  
+GET /get/wall/:start/:amount    
 Return the JSON data for the pictures to be shown in the main wall
 The response is an array of JSON objects with the following fields:  
 
@@ -67,7 +67,7 @@ likes
 comments	  
 impact	(likes + comments)  
 
-- GET /get/media/:imageID
+GET /get/media/:imageID  
 Return the JSON data for the image identified by :imageID. The JSON contains the following fields:
 
 id	  
@@ -84,7 +84,7 @@ likes
 comments  
 ownername   (name of the user owning this media)
 
-- GET /get/comments/:imageID
+GET /get/comments/:imageID  
 Returns an array of JSON object representing the comments of the media identified by :imageID. Each object has the following fields:  
 id  
 text	  
@@ -94,10 +94,10 @@ time
 username (username of the user that made the comment)   
 likes	  
 
-- GET /get/medialiked/:imageID  
+GET /get/medialiked/:imageID  
 Get {liked: true} if the media has been liked, {liked: false} otherwise.
 
-- GET /get/loginstate
+GET /get/loginstate  
 Get a JSON object with the following fields if the user has logged in:  
 username  
 userid  
@@ -105,21 +105,21 @@ type (none, normal, mod, admin)
   
 If the user has not logged in, get {anon: 'anon'}
 
-- POST /post/comment  
+POST /post/comment  
 Create a comment.
 The JSON to be passed to the request should have the following fields:  
 comment (the text of the comment)  
 userID (the id of the issuing user)  
 imageID (the id of the image)  
   
-- POST /post/signup  
+POST /post/signup  
 Register a new user.  
 The JSON to be passed to the request should have the following fields:  
 username  
 email  
 password  
   
-- POST /post/search  
+POST /post/search  
 Executes a search between the images.
 The JSON to be passed to the request should have the following fields:  
 otherTerms (terms to search in the title)  
@@ -129,31 +129,31 @@ usernames (users to search for)
 Returns:  
 array of JSON objects structured like in /get/wall/:start/:amount  
 
-- POST /post/like  
+POST /post/like   
 Like an image. Input: mediaId, userId
 
 
-- POST /post/unlike  
+POST /post/unlike 
 Remove the like for an image. Input: mediaId, userId
 
 
-- POST /post/likecomment  
+POST /post/likecomment  
 Like a comment. Input: commentId, userId
 
 
-- POST /post/unlikecomment  
+POST /post/unlikecomment  
 Remove the like from a coment. Input: commentId, userId
 
 
-- POST /post/signin
+POST /post/signin  
 Sign in as a user. Input: username, password  
 
 
-- POST /post/signout
+POST /post/signout  
 Sign out.
 
 
-- POST /post/upload
+POST /post/upload  
 Upload an image to the server. Input:  
 title  
 tags (array)  
@@ -161,5 +161,5 @@ details
 mediafile (binary file to upload)  
 category (NOT IMPLEMENTED, will be image, audio or video)  
 
-- POST /delete/media/id
+POST /delete/media/id  
 Delete a media from the DB. Input: imageID  
